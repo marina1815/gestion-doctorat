@@ -1,4 +1,3 @@
-// src/controllers/auth.controller.ts
 
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
@@ -19,7 +18,7 @@ export async function login(req: Request, res: Response) {
     try {
         const { username, password } = req.body as LoginInput;
 
-        // 1️⃣ Chercher l'utilisateur
+     
         const result = await pool.query(
             `
       SELECT id, username, email, password, role, created_at 
@@ -30,25 +29,24 @@ export async function login(req: Request, res: Response) {
         );
 
         if (result.rowCount === 0) {
-            return res.status(401).json({ message: "Invalid username or password" });
+            return res.status(401).json({ message: "Nom d'utilisateur ou mot de passe incorrect" });
         }
 
         const user = result.rows[0];
 
-        // 2️⃣ Vérifier le mot de passe hashé
         const ok = await bcrypt.compare(password, user.password);
         if (!ok) {
-            return res.status(401).json({ message: "Invalid username or password" });
+            return res.status(401).json({ message: "Nom d'utilisateur ou mot de passe incorrect" });
         }
 
-        // 3️⃣ Retourner user (sans password)
+        
         return res.json({
-            message: "Login successful",
-            user: mapUserRow(user), // pas de token
+            message: "Login avec succès",
+            user: mapUserRow(user), 
         });
 
     } catch (error) {
         console.error("Login error:", error);
-        return res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: "Erreur serveur" });
     }
 }
