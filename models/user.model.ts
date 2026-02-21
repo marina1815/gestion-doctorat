@@ -6,5 +6,5 @@ export interface User {
   password: string;
   email: string;
   role: UserRole;
-  createdAt: Date;
+  created_at: Date;
 }
