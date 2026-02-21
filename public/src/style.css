@@ -8,6 +8,8 @@
     --color-accent: #0C1154;
     --color-accent-dark: #07093a;
     --color-btn:#ffffff;
+    --color-success: #16a34a;
+    --color-success-soft: #dcfce7;
 
     /* Couleurs secondaires & neutres */
     --color-muted-1: #6b7280;      /* Texte muted */
@@ -302,14 +304,18 @@ body {
     padding-right: 38px;
 }
 
-.password-icon {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 16px;
-    color: var(--color-muted-2);
-    cursor: pointer;
+
+.password-eye {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--color-muted-2);
+}
+
+.password-eye:hover {
+  stroke: var(--color-accent);
 }
 
 
@@ -344,6 +350,114 @@ body {
     margin-top: 18px;
 }
 
+/* ========================================================================== */
+/*  4. MODAL DE SUCCÈS LOGIN                                                  */
+/* ========================================================================== */
+
+.success-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.25); /* overlay sombre mais léger */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 999;
+}
+
+.success-modal.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.success-box {
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-card);
+    padding: 24px 28px 20px;
+    box-shadow: var(--shadow-soft);
+    width: 320px;
+    text-align: center;
+    animation: slideUp 0.3s ease-out;
+}
+
+.success-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 14px;
+    border-radius: 999px;
+    border: 3px solid var(--color-success);
+    background-color: var(--color-success-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+    color: var(--color-success);
+    transform: scale(0);
+}
+
+/* Quand le modal est visible → on fait pop le check */
+.success-modal.is-visible .success-icon {
+    animation: popCheck 0.4s ease-out forwards 0.1s;
+}
+
+.success-title {
+    font-size: 18px;
+    margin-bottom: 4px;
+    color: var(--color-text-main);
+}
+
+.success-text {
+    font-size: 13px;
+    color: var(--color-text-muted);
+    margin-bottom: 12px;
+}
+
+/* Bouton secondaire cohérent avec ton design system */
+.btn.btn-secondary {
+    background-color: #e5e7eb;
+    color: #111827;
+    padding: 9px 16px;
+    border-radius: var(--radius-button);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.btn.btn-secondary:hover {
+    background-color: #d1d5db;
+}
+
+/* Animations */
+@keyframes slideUp {
+    from {
+        transform: translateY(16px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes popCheck {
+    0% {
+        transform: scale(0);
+    }
+    70% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.error-text {
+    font-size: 12px;
+    color: #dc2626;
+    margin-top: 4px;
+    display: none;
+}
 
 @media (max-width: 900px) {
     .page-wrapper {

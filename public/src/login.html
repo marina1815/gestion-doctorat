@@ -13,7 +13,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="login.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="login.js"></script>
 </head>
 
 <body>
@@ -45,9 +46,25 @@
 
             <div class="form-group">
               <div class="password-wrapper">
-                <input id="password" type="password" placeholder="Password">
-                <span class="password-icon">&#128065;</span>
-              </div>
+  <input id="password" type="password" placeholder="Password">
+
+  <!-- Eye (show) -->
+  <svg id="eyeIcon" class="password-eye" xmlns="http://www.w3.org/2000/svg" 
+       width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6b7280" 
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+    <circle cx="12" cy="12" r="3"/>
+  </svg>
+
+  <!-- Eye-Off (hide) -->
+  <svg id="eyeIconOff" class="password-eye" xmlns="http://www.w3.org/2000/svg"
+       width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6b7280"
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.77 21.77 0 0 1 5.06-5.94"/>
+    <path d="M1 1l22 22"/>
+    <path d="M9.53 9.53A3 3 0 0 0 14.47 14.47"/>
+  </svg>
+</div>
             </div>
 
             <div class="forgot-link-small">
@@ -63,6 +80,18 @@
       </div>
     </div>
 
+  </div>
+
+  <div id="successModal" class="success-modal">
+    <div class="success-box">
+      <div class="success-icon">
+        <!-- You can replace ✓ with your image <img src="check.png"> if you want -->
+        ✓
+      </div>
+      <h2>Login Successful</h2>
+      <p>You are now logged in.</p>
+      <button id="closeSuccess" class="btn btn-secondary">Close</button>
+    </div>
   </div>
 </body>
 
