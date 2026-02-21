@@ -17,12 +17,20 @@ function mapUserRow(row: any) {
 export async function createUser(req: Request, res: Response) {
   try {
     const body = req.body as CreateUserInput;
+    const existingName = await pool.query(
+  "SELECT id FROM users WHERE username = $1",
+  [body.username]
+);
+
+if (existingName.rowCount && existingName.rowCount > 0) {
+  return res.status(409).json({ error: "Nom d'utilisateur déjà utilisé" });
+}
     const existing = await pool.query(
       `SELECT id FROM users WHERE email = $1`,
       [body.email]
     );
     if (existing.rowCount && existing.rowCount > 0) {
-      return res.status(409).json({ error: "Email already in use" });
+      return res.status(409).json({ error: "Email déjà utilisé " });
     }
 
     const hashedPassword = await bcrypt.hash(body.password, 12);
@@ -40,7 +48,7 @@ export async function createUser(req: Request, res: Response) {
     return res.status(201).json(user);
   } catch (err) {
     console.error("Error createUser:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Erreur serveur" });
   }
 }
 
@@ -58,7 +66,7 @@ export async function getUsers(req: Request, res: Response) {
     return res.json(users);
   } catch (err) {
     console.error("Error getUsers:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Erreur serveur" });
   }
 }
 
@@ -77,14 +85,14 @@ export async function getUserById(req: Request, res: Response) {
     );
 
     if (result.rowCount === 0) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "Utilisateur non trouvé" });
     }
 
     const user = mapUserRow(result.rows[0]);
     return res.json(user);
   } catch (err) {
     console.error("Error getUserById:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Erreur serveur" });
   }
 }
 
@@ -99,7 +107,7 @@ export async function updateUser(req: Request, res: Response) {
     );
 
     if (existing.rowCount === 0) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "Utilisateur non trouvé" });
     }
 
     const current = existing.rows[0];
@@ -130,7 +138,7 @@ export async function updateUser(req: Request, res: Response) {
     return res.json(user);
   } catch (err) {
     console.error("Error updateUser:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Erreur serveur" });
   }
 }
 
@@ -144,12 +152,12 @@ export async function deleteUser(req: Request, res: Response) {
     );
 
     if (result.rowCount === 0) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "Utilisateur non trouvé" });
     }
 
-    return res.json({ message: "User deleted successfully" });
+    return res.json({ message: "Utilisateur supprimé avec succès" });
   } catch (err) {
     console.error("Error deleteUser:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Erreur serveur" });
   }
 }
