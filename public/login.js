@@ -12,10 +12,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const generalError = document.getElementById("generalError"); // <div id="generalError"></div> (optionnel)
 
-    const API_URL = "http://localhost:4000"; // 🔁 change si besoin
-    const LOGIN_ENDPOINT = "/auth/login";    // 🔁 adapte à ton backend
+    const API_URL = "http://localhost:4000"; // adapte si ton backend est ailleurs
+    const LOGIN_ENDPOINT = "/auth/login";    // adapte si besoin
 
-    // ====== PASSWORD TOGGLE ======
+    // 🧠 On garde l'utilisateur loggé ici pour l'utiliser après (modal, redirection)
+    let loggedUser = null;
+
+    // =========================
+    //   PASSWORD TOGGLE 👁️
+    // =========================
     eyeIcon.addEventListener("click", () => {
         pwdInput.type = "text";
         eyeIcon.style.display = "none";
@@ -28,7 +33,9 @@ document.addEventListener("DOMContentLoaded", () => {
         eyeIcon.style.display = "block";
     });
 
-    // ====== ERROR HANDLING ======
+    // =========================
+    //   GESTION DES ERREURS
+    // =========================
     function showError(input, message) {
         let error = input.parentElement.querySelector(".error-text");
 
@@ -61,7 +68,35 @@ document.addEventListener("DOMContentLoaded", () => {
         generalError.style.display = "none";
     }
 
-    // ====== FORM SUBMIT + API FETCH ======
+    // =========================
+    //   REDIRECTION PAR RÔLE
+    // =========================
+    function redirectByRole() {
+        if (!loggedUser) {
+            // au cas où : si pas d'utilisateur, on va vers une page générique
+            window.location.href = "/dashb.html";
+            return;
+        }
+
+        const role = loggedUser.role;
+
+        if (role === "ADMIN") {
+            window.location.href = "/admin-dashb.html";
+        } else if (role === "CHEFDEPARTEMENT") {
+            window.location.href = "/chef-departement.html";
+        } else if (role === "DOYEN") {
+            window.location.href = "/doyen-dashboard.html";
+        } else if (role === "ANONYMAT") {
+            window.location.href = "/anonymat-dashboard.html";
+        } else {
+            // rôle par défaut (si autre chose)
+            window.location.href = "/dashb.html";
+        }
+    }
+
+    // ===================================
+    //   SUBMIT DU FORMULAIRE + FETCH
+    // ===================================
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -85,7 +120,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!valid) return;
 
-        // Optionnel : désactiver le bouton le temps de l'appel
         const submitBtn = form.querySelector("button[type='submit']");
         if (submitBtn) {
             submitBtn.disabled = true;
@@ -98,8 +132,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                // 🔐 si ton backend met le JWT dans un cookie httpOnly
-               // credentials: "include",
+                // 👉 si ton backend met le JWT dans un cookie httpOnly :
+                // credentials: "include",
                 body: JSON.stringify({
                     username: username.value.trim(),
                     password: password.value.trim(),
@@ -109,13 +143,13 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json().catch(() => null);
 
             if (!response.ok) {
-                // Backend renvoie une erreur (401, 400, etc.)
                 const message =
                     data?.message ||
                     data?.error ||
                     "Invalid username or password";
 
                 showError(password, message);
+
                 if (submitBtn) {
                     submitBtn.disabled = false;
                     submitBtn.textContent = "Login";
@@ -123,19 +157,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // ✅ Succès : le backend a validé le login
-            // Exemple : data peut contenir { user, token } ou juste { user }
-            // -> ici, on ouvre ton modal
+            // ✅ Succès : on sauvegarde l'utilisateur
+            loggedUser = data?.user || null;
+            console.log("Login successful:", loggedUser);
+
+            // Affichage du modal de succès
             successModal.classList.remove("is-visible");
-            void successModal.offsetWidth; // pour relancer l'animation
+            void successModal.offsetWidth; // reset animation
             successModal.classList.add("is-visible");
 
-            // 🎯 Exemple: redirection selon le rôle
-            // if (data.user?.role === "ADMIN") {
-            //     window.location.href = "/admin-dashboard.html";
-            // } else if (data.user?.role === "CHEFDEPARTEMENT") {
-            //     window.location.href = "/chef-departement.html";
-            // }
+            // Redirection automatique après un petit délai (optionnel)
+            setTimeout(() => {
+                redirectByRole();
+            }, 1500);
 
         } catch (err) {
             console.error("Login error:", err);
@@ -143,19 +177,27 @@ document.addEventListener("DOMContentLoaded", () => {
         } finally {
             if (submitBtn) {
                 submitBtn.disabled = false;
-                submitBtn.textContent = "Se connecter";
+                submitBtn.textContent = "Login";
             }
         }
     });
 
-   
+    // =========================
+    //   MODAL : BOUTON FERMER
+    // =========================
     closeBtn.addEventListener("click", () => {
         successModal.classList.remove("is-visible");
+        redirectByRole();
     });
 
+    // =========================
+    //   MODAL : CLIQUE DEHORS
+    // =========================
     successModal.addEventListener("click", (e) => {
+        // si on clique sur l’overlay (pas le contenu)
         if (e.target === successModal) {
             successModal.classList.remove("is-visible");
+            redirectByRole();
         }
     });
 });

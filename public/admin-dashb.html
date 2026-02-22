@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>DoctoralGate - Dashboard Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">
+                    <span>D</span>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">Gestion Doctorat</span>
+                    <span class="logo-subtitle">USTO MB</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <p class="sidebar-section-title">Menu</p>
+                <a href="#" class="nav-item active">
+                    <i class="uil uil-estate"></i>
+                    <span>Accueil</span>
+                </a>
+                <a href="#" class="nav-item ">
+                    <i class="uil uil-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="uil uil-users-alt"></i>
+                    <span>Candidats</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="uil uil-clipboard-alt"></i>
+                    <span>Résultats</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="uil uil-file-alt"></i>
+                    <span>PV</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="uil uil-bell"></i>
+                    <span>Notifications</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="uil uil-shield-check"></i>
+                    <span>Audit </span>
+                </a>
+                <a href="admin-settings.html" class="nav-item">
+                    <i class="uil uil-setting"></i>
+                    <span>Paramètres</span>
+                </a>
+            </nav>
+
+
+
+
+        </aside>
+
+        <!-- ============= MAIN ============= -->
+        <main class="main">
+            <!-- ===== TOPBAR ===== -->
+            <header class="topbar">
+                <div class="search-wrapper">
+                    <i class="uil uil-search"></i>
+                    <input type="text" placeholder="Rechercher" />
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-btn">
+                        <i class="uil uil-envelope"></i>
+                    </button>
+                    <button class="icon-btn notification-btn">
+                        <i class="uil uil-bell"></i>
+                        <span class="badge">2</span>
+                    </button>
+                    <div class="topbar-user">
+                        <img src="https://i.pravatar.cc/80?img=12" alt="Admin" />
+                        <span>Admin</span>
+                        <i class="uil uil-angle-down"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ===== CONTENT ===== -->
+            <section class="content">
+                <div class="content-header">
+                    <h1>Bienvenue, Admin !</h1>
+                    <p class="content-subtitle">Vue globale du concours de doctorat 2024-2025.</p>
+                </div>
+
+                <!-- ===== STAT CARDS ===== -->
+                <section class="stats-grid">
+                    <article class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Nombre de Candidats</span>
+                            <span class="stat-icon icon-blue">
+                                <i class="uil uil-users-alt"></i>
+                            </span>
+                        </div>
+                        <div class="stat-value">438</div>
+                        <div class="stat-footer">
+                            <span class="stat-trend positive">+52</span>
+                            <span class="stat-note">aujourd'hui</span>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Dossiers Anonymisés</span>
+                            <span class="stat-icon icon-purple">
+                                <i class="uil uil-shield-check"></i>
+                            </span>
+                        </div>
+                        <div class="stat-value">275</div>
+                        <div class="stat-footer">
+                            <span class="stat-trend positive">+8%</span>
+                            <span class="stat-note">cette semaine</span>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Salles Affectées</span>
+                            <span class="stat-icon icon-green">
+                                <i class="uil uil-building"></i>
+                            </span>
+                        </div>
+                        <div class="stat-value">15</div>
+                        <div class="stat-footer">
+                            <span class="stat-trend positive">+1</span>
+                            <span class="stat-note">nouvelle</span>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Corrections Terminées</span>
+                            <span class="stat-icon icon-orange">
+                                <i class="uil uil-check-circle"></i>
+                            </span>
+                        </div>
+                        <div class="stat-value">192</div>
+                        <div class="stat-footer">
+                            <span class="stat-trend positive">+21</span>
+                            <span class="stat-note">aujourd'hui</span>
+                        </div>
+                    </article>
+                </section>
+
+                <!-- ===== PROCESS + ACTIVITY ===== -->
+                <section class="two-column">
+                    <!-- Processus -->
+                    <article class="card process-card">
+                        <div class="card-header">
+                            <h2>Vue d’Ensemble du Processus</h2>
+                            <span class="card-subtitle">Suivi temps réel des étapes.</span>
+                        </div>
+
+                        <div class="process-steps">
+                            <div class="process-step completed">
+                                <div class="step-icon">
+                                    <i class="uil uil-file-plus-alt"></i>
+                                </div>
+                                <div class="step-label">Admission</div>
+                                <div class="step-count">438</div>
+                            </div>
+
+                            <div class="process-line"></div>
+
+                            <div class="process-step completed">
+                                <div class="step-icon">
+                                    <i class="uil uil-user-check"></i>
+                                </div>
+                                <div class="step-label">Anonymat</div>
+                                <div class="step-count">275</div>
+                            </div>
+
+                            <div class="process-line"></div>
+
+                            <div class="process-step in-progress">
+                                <div class="step-icon">
+                                    <i class="uil uil-location-point"></i>
+                                </div>
+                                <div class="step-label">Affectation Salles</div>
+                                <div class="step-count">15</div>
+                            </div>
+
+                            <div class="process-line"></div>
+
+                            <div class="process-step pending">
+                                <div class="step-icon">
+                                    <i class="uil uil-pen"></i>
+                                </div>
+                                <div class="step-label">Correction</div>
+                                <div class="step-count">192</div>
+                            </div>
+
+                            <div class="process-line"></div>
+
+                            <div class="process-step pending">
+                                <div class="step-icon">
+                                    <i class="uil uil-trophy"></i>
+                                </div>
+                                <div class="step-label">Classement</div>
+                                <div class="step-count">0</div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Activité récente -->
+                    <article class="card activity-card">
+                        <div class="card-header">
+                            <h2>Activité Récente</h2>
+                            <button class="link-btn">Voir tout</button>
+                        </div>
+
+                        <ul class="activity-list">
+                            <li class="activity-item">
+                                <div class="activity-icon icon-purple">
+                                    <i class="uil uil-pen"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <p>Corrections des copies terminées pour Chimie</p>
+                                    <span class="activity-time">il y a 12 min</span>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon icon-green">
+                                    <i class="uil uil-building"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <p>Salles affectées à 12 candidats</p>
+                                    <span class="activity-time">il y a 1 h</span>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon icon-blue">
+                                    <i class="uil uil-shield-check"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <p>Dossiers anonymisés pour 60 nouveaux candidats</p>
+                                    <span class="activity-time">il y a 3 h</span>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon icon-orange">
+                                    <i class="uil uil-users-alt"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <p>438 nouvelles candidatures reçues</p>
+                                    <span class="activity-time">Aujourd’hui</span>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <button class="secondary-btn full-width">Voir plus</button>
+                    </article>
+                </section>
+
+                <!-- ===== TABLE CANDIDATS ===== -->
+                <section class="card candidates-card">
+                    <div class="card-header">
+                        <div>
+                            <h2>Liste des Candidats</h2>
+                            <span class="card-subtitle">Suivi par spécialité et statut.</span>
+                        </div>
+
+                        <div class="card-header-actions">
+                            <div class="pill-tabs" id="statusTabs">
+                                <button class="pill-tab active" data-filter="all">Tous</button>
+                                <button class="pill-tab" data-filter="new">Nouveaux</button>
+                                <button class="pill-tab" data-filter="progress">En cours</button>
+                            </div>
+
+                            <select class="select-sort">
+                                <option>Trier par : Date d’inscription</option>
+                                <option>Trier par : Nom</option>
+                                <option>Trier par : Spécialité</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nom</th>
+                                    <th>Spécialité</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody id="candidatesTable">
+                                <tr data-status="progress">
+                                    <td>1</td>
+                                    <td>Amina B.</td>
+                                    <td>Informatique</td>
+                                    <td>
+                                        <span class="status-badge status-progress">En cours</span>
+                                    </td>
+                                </tr>
+                                <tr data-status="new">
+                                    <td>2</td>
+                                    <td>Yacine H.</td>
+                                    <td>Génie Civil</td>
+                                    <td>
+                                        <span class="status-badge status-anonymous">Anonymisé</span>
+                                    </td>
+                                </tr>
+                                <tr data-status="assigned">
+                                    <td>3</td>
+                                    <td>Souad K.</td>
+                                    <td>Chimie</td>
+                                    <td>
+                                        <span class="status-badge status-room">Salle 101</span>
+                                    </td>
+                                </tr>
+                                <tr data-status="done">
+                                    <td>4</td>
+                                    <td>Mehdi L.</td>
+                                    <td>Biotechnologie</td>
+                                    <td>
+                                        <span class="status-badge status-corrected">Corrigé</span>
+                                    </td>
+                                </tr>
+                                <tr data-status="waiting">
+                                    <td>5</td>
+                                    <td>Lina M.</td>
+                                    <td>Physique</td>
+                                    <td>
+                                        <span class="status-badge status-waiting">Liste n°1</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+    <script src="theme.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

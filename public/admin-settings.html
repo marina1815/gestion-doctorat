@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>DoctoralGate - Paramètres Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">
+                    <span>D</span>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">Gestion Doctorat</span>
+                    <span class="logo-subtitle">USTO MB</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <p class="sidebar-section-title">Menu</p>
+                <a href="admin-dashb.html" class="nav-item">
+                    <i class="uil uil-estate"></i>
+                    <span>Accueil</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="uil uil-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="uil uil-users-alt"></i>
+                    <span>Candidats</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="uil uil-clipboard-alt"></i>
+                    <span>Résultats</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="uil uil-file-alt"></i>
+                    <span>PV</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="uil uil-bell"></i>
+                    <span>Notifications</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="uil uil-shield-check"></i>
+                    <span>Audit </span>
+                </a>
+                <a href="admin-settings.html" class="nav-item active">
+                    <i class="uil uil-setting"></i>
+                    <span>Paramètres</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- ===== MAIN ===== -->
+        <main class="main">
+            <!-- TOPBAR -->
+            <header class="topbar">
+                <div class="search-wrapper">
+                    <i class="uil uil-search"></i>
+                    <input type="text" placeholder="Rechercher" />
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-btn">
+                        <i class="uil uil-envelope"></i>
+                    </button>
+                    <button class="icon-btn notification-btn">
+                        <i class="uil uil-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                  
+                  
+                    <div class="user-menu">
+    <button class="user-menu-trigger" id="userMenuBtn">
+        <img src="https://i.pravatar.cc/80?img=12" alt="Admin" class="user-avatar">
+        <span class="user-name">Admin</span>
+        <i class="uil uil-angle-down"></i>
+    </button>
+
+    <div class="user-menu-dropdown" id="userMenuDropdown">
+        <button class="user-menu-item" id="logoutBtn">
+            <i class="uil uil-signout"></i>
+            Déconnexion
+        </button>
+    </div>
+</div>
+                </div>
+            </header>
+
+            <!-- ================== PAGE PARAMÈTRES ================== -->
+            <section class="content" id="settingsPage">
+                <div class="content-header">
+                    <h1>Paramètres</h1>
+                    <p class="content-subtitle">
+                        Options et configuration du système DoctoralGate.
+                    </p>
+                </div>
+
+                <!-- Grille des blocs de paramètres -->
+                <section class="settings-grid">
+
+                    <!-- Gestion des comptes -->
+                    <article class="card setting-card" id="openAccountsPage">
+                        <div class="setting-main">
+                            <div class="setting-icon icon-blue">
+                                <i class="uil uil-user-circle"></i>
+                            </div>
+                            <div>
+                                <h2 class="setting-title">Gestion des Comptes</h2>
+                                <p class="setting-desc">
+                                    Créer, gérer et désactiver les comptes (Doyen, Chef de Département, CFD,
+                                    Cellule d’anonymat, Correcteurs…).
+                                </p>
+                            </div>
+                        </div>
+                      
+                    </article>
+
+                    <!-- Changer de langue -->
+                    <article class="card setting-card">
+                        <div class="setting-main">
+                            <div class="setting-icon icon-purple">
+                                <i class="uil uil-globe"></i>
+                            </div>
+                            <div>
+                                <h2 class="setting-title">Changer de Langue</h2>
+                                <p class="setting-desc">
+                                    Choisir la langue de l’interface : Français, Anglais, Arabe…
+                                </p>
+                                <div class="setting-meta">
+                                    <span class="setting-pill">Français</span>
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </article>
+
+                    <!-- Changer de thème -->
+                    <article class="card setting-card">
+                        <div class="setting-main">
+                            <div class="setting-icon icon-orange">
+                                <i class="uil uil-brightness"></i>
+                            </div>
+                            <div>
+                                <h2 class="setting-title">Changer de Thème</h2>
+                                <p class="setting-desc">
+                                    Basculer entre le mode clair et le mode sombre pour tout le portail.
+                                </p>
+                                <div class="setting-meta setting-toggle">
+                                    <span class="setting-pill setting-pill-active" id="themeLight">Clair</span>
+                                    <span class="setting-pill" id="themeDark">Sombre</span>
+                                </div>
+                            </div>
+                        </div>
+                     
+                    </article>
+
+
+
+                    <!-- Workflow concours & règles -->
+                    <article class="card setting-card">
+                        <div class="setting-main">
+                            <div class="setting-icon icon-blue">
+                                <i class="uil uil-process"></i>
+                            </div>
+                            <div>
+                                <h2 class="setting-title">Workflow Concours</h2>
+                                <p class="setting-desc">
+                                    Définir les étapes du processus (Admission, Anonymat, Salles, Correction,
+                                    Classement, Résultats) et les délais.
+                                </p>
+                            </div>
+                        </div>
+                      
+                    </article>
+
+
+
+                    <!-- Notifications -->
+                    <article class="card setting-card">
+                        <div class="setting-main">
+                            <div class="setting-icon icon-blue">
+                                <i class="uil uil-bell"></i>
+                            </div>
+                            <div>
+                                <h2 class="setting-title">Notifications de Doctorat</h2>
+                                <p class="setting-desc">
+                                    Configurer les emails et alertes : ouverture des candidatures, convocation,
+                                    résultats, réclamations…
+                                </p>
+                            </div>
+                        </div>
+                     
+                    </article>
+
+                    <!-- Journal d'audit -->
+                    <article class="card setting-card">
+                        <div class="setting-main">
+                            <div class="setting-icon icon-green">
+                                <i class="uil uil-clipboard-alt"></i>
+                            </div>
+                            <div>
+                                <h2 class="setting-title">Journal d’Audit</h2>
+                                <p class="setting-desc">
+                                    Suivre toutes les actions sensibles (connexion, modification des notes, génération
+                                    de PV…).
+                                </p>
+                            </div>
+                        </div>
+                     
+                    </article>
+
+                    <!-- Aide & Support -->
+                    <article class="card setting-card">
+                        <div class="setting-main">
+                            <div class="setting-icon icon-purple">
+                                <i class="uil uil-question-circle"></i>
+                            </div>
+                            <div>
+                                <h2 class="setting-title">Aide & Support</h2>
+                                <p class="setting-desc">
+                                    Accéder au centre d’aide, FAQ, guide PDF et support technique.
+                                </p>
+                            </div>
+                        </div>
+                     
+                    </article>
+
+                    <!-- À propos / version -->
+                    <article class="card setting-card">
+                        <div class="setting-main">
+                            <div class="setting-icon icon-blue">
+                                <i class="uil uil-info-circle"></i>
+                            </div>
+                            <div>
+                                <h2 class="setting-title">À propos de DoctoralGate</h2>
+                                <p class="setting-desc">
+                                    Informations sur le système, version, équipe, et mentions légales.
+                                </p>
+                            </div>
+                        </div>
+                     
+                    </article>
+
+                </section>
+            </section>
+
+            <!-- ================== PAGE GESTION DES COMPTES ================== -->
+            <section class="content" id="accountsPage" style="display: none;">
+
+
+
+                <!-- Barre d’actions -->
+                <div class="accounts-toolbar card">
+                    <div class="accounts-filters">
+                        <button class="icon-btn" id="backToSettings">
+                            <i class="uil uil-arrow-left"></i>
+                        </button>
+
+                        <div class="content-header">
+                            <h1>Gestion des Comptes</h1>
+
+                        </div>
+
+                        <select id="roleFilter" class="select-sort">
+                            <option value="all">Tous les rôles</option>
+                            <option value="ADMIN">Admin central</option>
+                            <option value="DOYEN">Doyen</option>
+                            <option value="CHEF_DEP">Chef de Département</option>
+                            <option value="CFD">CFD</option>
+                            <option value="ANONYMAT">Cellule d’anonymat</option>
+                            <option value="CORRECTEUR">Correcteur</option>
+                        </select>
+
+                        <select id="statusFilter" class="select-sort">
+                            <option value="all">Tous les statuts</option>
+                            <option value="active">Actif</option>
+                            <option value="disabled">Désactivé</option>
+                        </select>
+                    </div>
+
+                    <button id="btnNewAccount" class="btn btn-primary accounts-new-btn">
+                        <i class="uil uil-plus"></i>
+                        <span>Nouveau compte</span>
+                    </button>
+                </div>
+
+                <!-- Tableau des comptes -->
+                <section class="card">
+                    <div class="card-header accounts-header">
+                        <div>
+                            <h2>Liste des Comptes</h2>
+                            <span class="card-subtitle">
+                                Vue d’ensemble des utilisateurs et de leurs rôles.
+                            </span>
+                        </div>
+                        <span class="accounts-counter">
+                            <span id="accountsCount">6</span> comptes
+                        </span>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table class="data-table" id="accountsTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Email</th>
+                                    <th>Username</th>
+                                    <th>Rôle</th>
+                                    <th>Statut</th>
+                                    <th style="text-align:right;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-role="ADMIN" data-status="active">
+                                    <td>1</td>
+                                    <td>admin@usto.dz</td>
+                                    <td>admin_central</td>
+                                    <td><span class="badge-role badge-admin">Admin central</span></td>
+                                    <td><span class="chip-status chip-active">Actif</span></td>
+                                    <td class="accounts-actions-cell">
+                                        <button class="icon-action btn-toggle" title="Désactiver">
+                                            <i class="uil uil-power"></i>
+                                        </button>
+                                        <button class="icon-action btn-edit" title="Modifier">
+                                            <i class="uil uil-pen"></i>
+                                        </button>
+                                        <button class="icon-action btn-delete" title="Supprimer">
+                                            <i class="uil uil-trash-alt"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr data-role="DOYEN" data-status="active">
+                                    <td>2</td>
+                                    <td>doyen@usto.dz</td>
+                                    <td>doyen_fst</td>
+                                    <td><span class="badge-role badge-doyen">Doyen</span></td>
+                                    <td><span class="chip-status chip-active">Actif</span></td>
+                                    <td class="accounts-actions-cell">
+                                        <button class="icon-action btn-toggle" title="Désactiver">
+                                            <i class="uil uil-power"></i>
+                                        </button>
+                                        <button class="icon-action btn-edit" title="Modifier">
+                                            <i class="uil uil-pen"></i>
+                                        </button>
+                                        <button class="icon-action btn-delete" title="Supprimer">
+                                            <i class="uil uil-trash-alt"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr data-role="CHEF_DEP" data-status="active">
+                                    <td>3</td>
+                                    <td>chefdep.info@usto.dz</td>
+                                    <td>chef_dep_info</td>
+                                    <td><span class="badge-role badge-chefdep">Chef de Département</span></td>
+                                    <td><span class="chip-status chip-active">Actif</span></td>
+                                    <td class="accounts-actions-cell">
+                                        <button class="icon-action btn-toggle" title="Désactiver">
+                                            <i class="uil uil-power"></i>
+                                        </button>
+                                        <button class="icon-action btn-edit" title="Modifier">
+                                            <i class="uil uil-pen"></i>
+                                        </button>
+                                        <button class="icon-action btn-delete" title="Supprimer">
+                                            <i class="uil uil-trash-alt"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr data-role="ANONYMAT" data-status="disabled">
+                                    <td>4</td>
+                                    <td>cellule.anonymat@usto.dz</td>
+                                    <td>anonymat_centre</td>
+                                    <td><span class="badge-role badge-anonymat">Cellule Anonymat</span></td>
+                                    <td><span class="chip-status chip-disabled">Désactivé</span></td>
+                                    <td class="accounts-actions-cell">
+                                        <button class="icon-action btn-toggle" title="Activer">
+                                            <i class="uil uil-power"></i>
+                                        </button>
+                                        <button class="icon-action btn-edit" title="Modifier">
+                                            <i class="uil uil-pen"></i>
+                                        </button>
+                                        <button class="icon-action btn-delete" title="Supprimer">
+                                            <i class="uil uil-trash-alt"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr data-role="CFD" data-status="active">
+                                    <td>5</td>
+                                    <td>cfd@usto.dz</td>
+                                    <td>cfd_sciences</td>
+                                    <td><span class="badge-role badge-cfd">CFD</span></td>
+                                    <td><span class="chip-status chip-active">Actif</span></td>
+                                    <td class="accounts-actions-cell">
+                                        <button class="icon-action btn-toggle" title="Désactiver">
+                                            <i class="uil uil-power"></i>
+                                        </button>
+                                        <button class="icon-action btn-edit" title="Modifier">
+                                            <i class="uil uil-pen"></i>
+                                        </button>
+                                        <button class="icon-action btn-delete" title="Supprimer">
+                                            <i class="uil uil-trash-alt"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr data-role="CORRECTEUR" data-status="active">
+                                    <td>6</td>
+                                    <td>correcteur.chimie@usto.dz</td>
+                                    <td>corr_chimie1</td>
+                                    <td><span class="badge-role badge-correcteur">Correcteur</span></td>
+                                    <td><span class="chip-status chip-active">Actif</span></td>
+                                    <td class="accounts-actions-cell">
+                                        <button class="icon-action btn-toggle" title="Désactiver">
+                                            <i class="uil uil-power"></i>
+                                        </button>
+                                        <button class="icon-action btn-edit" title="Modifier">
+                                            <i class="uil uil-pen"></i>
+                                        </button>
+                                        <button class="icon-action btn-delete" title="Supprimer">
+                                            <i class="uil uil-trash-alt"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </section>
+
+        </main>
+    </div>
+    <script src="theme.js"></script>
+    <script src="settings.js"></script>
+</body>
+
+</html>

@@ -7,6 +7,7 @@
     "dev": "bun --hot ./public/src/main.jsx"
   },
   "dependencies": {
+    "@types/validator": "^13.15.10",
     "bcrypt": "^6.0.0",
     "bun-plugin-tailwind": "^0.1.2",
     "express": "^5.2.1",
@@ -14,6 +15,7 @@
     "react": "^19",
     "react-dom": "^19",
     "tailwindcss": "^4.1.11",
+    "validator": "^13.15.26",
     "zod": "^4.3.6"
   },
   "devDependencies": {
