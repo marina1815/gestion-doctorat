@@ -11,6 +11,7 @@ import {
 import {
     createUserSchema,
     updateUserSchema,
+    deleteUserParamSchema,
 } from "../dto/user.dto";
 import { validateBody, validateParams } from "../middleware/validate";
 // éventuellement un middleware de RBAC
@@ -18,11 +19,17 @@ import { validateBody, validateParams } from "../middleware/validate";
 
 const router = Router();
 
-// Exemple : seulement ADMIN peut créer un user
-// router.post("/", requireRole("ADMIN"), validateBody(createUserSchema), createUser);
-
-router.post("/", validateBody(createUserSchema), createUser);
 router.get("/", getUsers);
+router.post("/", validateBody(createUserSchema), createUser);
+router.put(
+  "/:id",
+  validateBody(updateUserSchema), 
+  updateUser
+);
 
+router.delete("/:id",
+  validateParams(deleteUserParamSchema),
+  deleteUser
+);
 export default router;
 

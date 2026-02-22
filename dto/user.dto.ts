@@ -33,6 +33,11 @@ export const loginSchema = z
   .strict();
 
 
+export const deleteUserParamSchema = z.object({
+  id: z.string().uuid(),
+});
+
+
 export type LoginInput = z.infer<typeof loginSchema>;
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
