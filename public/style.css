@@ -86,6 +86,7 @@
 
 :root[data-theme="dark"] {
     /* fonds */
+    --color-primary: #ffffff;
     --color-bg-page: #050816;
     /* fond global */
     --color-bg-card: #0b1120;
