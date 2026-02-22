@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (role === "ADMIN") {
             window.location.href = "/admin-dashb.html";
         } else if (role === "CHEFDEPARTEMENT") {
-            window.location.href = "/chef-departement.html";
+            window.location.href = "/chef-home.html";
         } else if (role === "DOYEN") {
             window.location.href = "/doyen-dashboard.html";
         } else if (role === "ANONYMAT") {

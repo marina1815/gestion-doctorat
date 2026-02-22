@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Accueil </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+</head>
+
+<body>
+      <div id="toastArea" class="toast-area"></div>
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">
+                    <img id="mainLogo" src="img/iconlight.png" alt="Logo USTO" class="logo-img" />
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">Gestion Doctorale</span>
+                    <span class="logo-subtitle">USTO MB</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <p class="sidebar-section-title">Menu</p>
+
+                <a href="chef-home.html" class="nav-item active">
+                    <i class="uil uil-estate"></i>
+                    <span>Accueil</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <i class="uil uil-building"></i>
+                    <span>Gestion des salles</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <i class="uil uil-users-alt"></i>
+                    <span>Candidats</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <i class="uil uil-user-check"></i>
+                    <span>Correcteurs & Surveillants</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <i class="uil uil-schedule"></i>
+                    <span>Planning du concours</span>
+                </a>
+
+
+
+                <a href="#" class="nav-item">
+                    <i class="uil uil-setting"></i>
+                    <span>Paramètres</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="main">
+
+            <!-- TOPBAR -->
+            <header class="topbar">
+                <div class="search-wrapper">
+                    <i class="uil uil-search"></i>
+                    <input type="text" placeholder="Rechercher…" />
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-btn" type="button">
+                        <i class="uil uil-envelope"></i>
+                    </button>
+                    <button class="icon-btn notification-btn" type="button">
+                        <i class="uil uil-bell"></i>
+                        <span class="badge">4</span>
+                    </button>
+                    <button id="themeToggle" class="icon-btn" type="button">
+                        <i id="themeIcon" class="uil uil-moon"></i>
+                    </button>
+
+                    
+                    <div class="user-menu">
+                        <button class="user-menu-trigger" id="userMenuBtn" type="button">
+                            <img src="img/user.png" alt="Chef de département" class="user-avatar">
+                            <span class="user-name">Chef de dép.</span>
+                            <i class="uil uil-angle-down"></i>
+                        </button>
+
+                        <div class="user-menu-dropdown" id="userMenuDropdown">
+                            <button class="user-menu-item" id="logoutBtn" type="button">
+                                <i class="uil uil-signout"></i>
+                                Déconnexion
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+
+            <section class="content">
+
+                <div class="content-header">
+                    <h1 class="page-title">Bienvenue , Chef de département</h1>
+                    <span class="page-subtitle">
+                        Vue globale du concours de doctorat pour votre département.
+                    </span>
+                </div>
+
+                <section class="stats-grid">
+                    <article class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Candidats inscrits</span>
+                            <span class="stat-icon icon-purple"><i class="uil uil-users-alt"></i></span>
+                        </div>
+                        <div class="stat-value" id="kpiCandidats">184</div>
+                        <div class="stat-foot">Après validation des dossiers</div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Salles configurées</span>
+                            <span class="stat-icon icon-green"><i class="uil uil-building"></i></span>
+                        </div>
+                        <div class="stat-value" id="kpiSalles">12</div>
+                        <div class="stat-foot">Capacité totale : <span id="kpiCapTotale">360</span> places</div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Surveillants affectés</span>
+                            <span class="stat-icon icon-orange"><i class="uil uil-user-check"></i></span>
+                        </div>
+                        <div class="stat-value" id="kpiSurveillants">24</div>
+                        <div class="stat-foot">Ratio moyen : 2 / salle</div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Avancement</span>
+                            <span class="stat-icon icon-blue"><i class="uil uil-schedule"></i></span>
+
+                        </div>
+                        <div class="stat-value" id="kpiProgress">65%</div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-inner" style="width:65%;"></div>
+                        </div>
+                        <div class="stat-foot">Organisation du concours</div>
+                    </article>
+                </section>
+
+
+                <section class="card">
+                    <div class="card-header accounts-header">
+                        <div>
+                            <h2>Liste des Salles Affectées</h2>
+                            <span class="card-subtitle">
+                                Vue d’ensemble des salles et de leurs affectations.
+                            </span>
+                        </div>
+                        <span class="accounts-counter">
+                            <span id="accountsCount">5</span> salles
+                        </span>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Salle</th>
+                                    <th>Nombre de Candidats</th>
+                                    <th>Enseignant</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="badge-salle badge-salle-a">A101</span>
+                                    </td>
+                                    <td>18</td>
+                                    <td>Mme Benali</td>
+                                    <td>
+                                        <button class="btn-small btn-primary" type="button">
+                                            Voir les candidats
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class=" badge-salle badge-salle-warning">A102</span>
+                                    </td>
+                                    <td>20</td>
+                                    <td>Mr Hamid</td>
+                                    <td>
+                                        <button class="btn-small btn-primary" type="button">
+                                            Voir les candidats
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="badge-salle badge-salle-a">A103</span>
+                                    </td>
+                                    <td>15</td>
+                                    <td>Mme Karim</td>
+                                    <td>
+                                        <button class="btn-small btn-primary" type="button">
+                                            Voir les candidats
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="badge-salle badge-salle-b">B201</span>
+                                    </td>
+                                    <td>25</td>
+                                    <td>Mme Bourabaa</td>
+                                    <td>
+                                        <button class="btn-small btn-primary" type="button">
+                                            Voir les candidats
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="badge-salle badge-salle-b muted">B202</span>
+                                    </td>
+                                    <td>10</td>
+                                    <td>Mr Saidi</td>
+                                    <td>
+                                        <button class="btn-small btn-primary" type="button">
+                                            Voir les candidats
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+
+
+
+
+            </section>
+        </main>
+    </div>
+
+    <script src="theme.js"></script>
+
+</body>
+
+</html>
