@@ -132,8 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                // 👉 si ton backend met le JWT dans un cookie httpOnly :
-                // credentials: "include",
+              
                 body: JSON.stringify({
                     username: username.value.trim(),
                     password: password.value.trim(),
@@ -182,17 +181,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // =========================
-    //   MODAL : BOUTON FERMER
-    // =========================
+ 
     closeBtn.addEventListener("click", () => {
         successModal.classList.remove("is-visible");
         redirectByRole();
     });
 
-    // =========================
-    //   MODAL : CLIQUE DEHORS
-    // =========================
+ 
     successModal.addEventListener("click", (e) => {
         // si on clique sur l’overlay (pas le contenu)
         if (e.target === successModal) {
