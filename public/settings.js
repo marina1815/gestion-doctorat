@@ -98,8 +98,17 @@ document.addEventListener("DOMContentLoaded", () => {
     async function apiRequest(path, method = "GET", body = null) {
         const url = API_URL + path;
 
-        const options = { method, headers: { "Content-Type": "application/json" } };
-        if (body) options.body = JSON.stringify(body);
+        const options = {
+            method,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        };
+
+        if (body) {
+            options.body = JSON.stringify(body);
+        }
 
         const res = await fetch(url, options);
 
@@ -121,9 +130,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return res.json();
     }
 
-    /* =========================
-       RÉFÉRENCES DOM
-       ========================= */
     const settingsPage = document.getElementById("settingsPage");
     const accountsPage = document.getElementById("accountsPage");
     const cardManageAccounts = document.getElementById("openAccountsPage");

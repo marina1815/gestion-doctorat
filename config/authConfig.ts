@@ -10,17 +10,17 @@ export const accessCookieName = "access_token";
 export const refreshCookieName = "refresh_token";
 
 export const accessCookieOptions: CookieOptions = {
-  httpOnly: true,
-  secure: isProd,        
-  sameSite: "strict",
-  maxAge: 15 * 60 * 1000,  
-  path: "/",               
+    httpOnly: true,
+    secure: isProd,
+    sameSite: "strict",
+    maxAge: 15 * 60 * 1000,
+    path: "/",
 };
 
 export const refreshCookieOptions: CookieOptions = {
-  httpOnly: true,
-  secure: isProd,
-  sameSite: "strict",
-  maxAge: 7 * 24 * 60 * 60 * 1000, 
-  path: "/auth",            
+    httpOnly: true,
+    secure: isProd,
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    path: "/auth",
 };
