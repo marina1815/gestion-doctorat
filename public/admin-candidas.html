@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Candidats </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+</head>
+
+<body>
+     <div id="toastArea" class="toast-area"></div>
+    <div class="app-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">
+                    <img id="mainLogo" src="img/iconlight.png" alt="Logo USTO" class="logo-img" />
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">Gestion Doctorale </span>
+                    <span class="logo-subtitle">USTO MB</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <p class="sidebar-section-title">Menu</p>
+                <a href="admin-dashb.html" class="nav-item">
+                    <i class="uil uil-estate"></i>
+                    <span>Accueil</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="uil uil-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="admin-candidas.html" class="nav-item active">
+                    <i class="uil uil-users-alt"></i>
+                    <span>Candidats</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="uil uil-clipboard-alt"></i>
+                    <span>Résultats</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="uil uil-file-alt"></i>
+                    <span>PV</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="uil uil-bell"></i>
+                    <span>Notifications</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="uil uil-shield-check"></i>
+                    <span>Audit </span>
+                </a>
+                <a href="admin-settings.html" class="nav-item">
+                    <i class="uil uil-setting"></i>
+                    <span>Paramètres</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main">
+
+            <header class="topbar">
+                <div class="search-wrapper">
+                    <i class="uil uil-search"></i>
+                    <input type="text" placeholder="Rechercher" />
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-btn" type="button">
+                        <i class="uil uil-envelope"></i>
+                    </button>
+                    <button class="icon-btn notification-btn" type="button">
+                        <i class="uil uil-bell"></i>
+                        <span class="badge">2</span>
+                    </button>
+                    <button id="themeToggle" class="icon-btn" type="button">
+                        <i id="themeIcon" class="uil uil-moon"></i>
+                    </button>
+
+                    <!-- Menu utilisateur -->
+                    <div class="user-menu">
+                        <button class="user-menu-trigger" id="userMenuBtn" type="button">
+                            <img src="img/user.png" alt="Admin" class="user-avatar">
+                            <span class="user-name">Admin</span>
+                            <i class="uil uil-angle-down"></i>
+                        </button>
+
+                        <div class="user-menu-dropdown" id="userMenuDropdown">
+                            <button class="user-menu-item" id="logoutBtn" type="button">
+                                <i class="uil uil-signout"></i>
+                                Déconnexion
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="content">
+
+                <div class="content-header">
+                    <h1 class="page-title">Candidats</h1>
+                    <span class="page-subtitle">Gestion des listes de candidats au concours de doctorat.</span>
+                </div>
+
+                <section class="candidates-section">
+
+                    <!-- Gros boutons d’actions -->
+                    <div class="actions-row">
+
+                        <!-- Charger fichier Excel -->
+                        <label class="big-action-card big-action--primary" for="candidatesFile">
+                            <div class="big-action-icon">
+                                <i class="uil uil-file-upload"></i>
+                            </div>
+                            <div class="big-action-content">
+                                <h2>Charger la Liste des Candidats</h2>
+                                <p>Charger la liste des candidats en fichier Excel.</p>
+                                <span class="badge-file">Fichier Excel</span>
+                            </div>
+                        </label>
+                        <input type="file" id="candidatesFile" accept=".xlsx,.xls" style="display: none;" />
+
+                        <!-- Valider + envoyer -->
+                        <button class="big-action-card big-action--success" type="button" id="validateSendBtn">
+                            <div class="big-action-icon">
+                                <i class="uil uil-file-check"></i>
+                            </div>
+                            <div class="big-action-content">
+                                <h2>Valider et Envoyer la Liste</h2>
+                                <p>Valider les informations, signer et envoyer la liste officielle.</p>
+                            </div>
+                        </button>
+
+                    </div>
+
+                    <!-- Recherche -->
+                    <div class="table-toolbar">
+                        <div class="search-wrapper">
+                            <i class="uil uil-search"></i>
+                            <input type="text" placeholder="Rechercher un candidat" id="candidateSearch" />
+                        </div>
+                    </div>
+
+                    <!-- Tableau des candidats -->
+                    <div class="table-wrapper">
+                        <table class="data-table" id="candidatesTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Email</th>
+                                    <th>Sujet de Thèse</th>
+                                    <th>Directeur de Thèse</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Ahmed</td>
+                                    <td>Belkacem</td>
+                                    <td>ahmed.belkacem@exemple.dz</td>
+                                    <td>Optimisation des réseaux sans fil</td>
+                                    <td>Dr. Boudaif Amar</td>
+                                    <td>
+                                        <span class="badge badge-warning">En attente</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Ali</td>
+                                    <td>Khelifa</td>
+                                    <td>ali.khelifa@exemple.dz</td>
+                                    <td>Nanomatériaux et applications</td>
+                                    <td>Dr. Meziri Nadir</td>
+                                    <td>
+                                        <span class="badge badge-warning">En attente</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </section>
+
+            </section>
+        </main>
+    </div>
+
+    <script src="theme.js"></script>
+</body>
+
+</html>

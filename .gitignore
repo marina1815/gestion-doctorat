@@ -21,8 +21,13 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .env.test.local
 .env.production.local
 .env.local
-
-# caches
+package-lock.json
+bun.lock
+tsconfig.json
+package.json
+build.ts
+bun-env.d.ts
+bunfig.toml
 .eslintcache
 .cache
 *.tsbuildinfo
