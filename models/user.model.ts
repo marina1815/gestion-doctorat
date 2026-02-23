@@ -7,4 +7,5 @@ export interface User {
   email: string;
   role: UserRole;
   created_at: Date;
+  tokenVersion?: number;
 }

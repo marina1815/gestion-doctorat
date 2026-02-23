@@ -7,7 +7,7 @@ import {
     updateUser,
     deleteUser,
 } from "../controllers/user.conroller";
-
+import { authMiddleware } from "../middleware/auth.middleware";
 import {
     createUserSchema,
     updateUserSchema,
@@ -19,15 +19,15 @@ import { validateBody, validateParams } from "../middleware/validate";
 
 const router = Router();
 
-router.get("/", getUsers);
-router.post("/", validateBody(createUserSchema), createUser);
+router.get("/",authMiddleware, getUsers);
+router.post("/",authMiddleware, validateBody(createUserSchema), createUser);
 router.put(
   "/:id",
-  validateBody(updateUserSchema), 
+  authMiddleware, validateBody(updateUserSchema), 
   updateUser
 );
 
-router.delete("/:id",
+router.delete("/:id",authMiddleware,
   validateParams(deleteUserParamSchema),
   deleteUser
 );

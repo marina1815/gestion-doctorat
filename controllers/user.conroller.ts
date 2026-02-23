@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { pool } from "../db/pool"; 
+import { pool } from "../db/pool";
 import { CreateUserInput, UpdateUserInput } from "../dto/user.dto";
 
 function mapUserRow(row: any) {
@@ -18,13 +18,13 @@ export async function createUser(req: Request, res: Response) {
   try {
     const body = req.body as CreateUserInput;
     const existingName = await pool.query(
-  "SELECT id FROM users WHERE username = $1",
-  [body.username]
-);
+      "SELECT id FROM users WHERE username = $1",
+      [body.username]
+    );
 
-if (existingName.rowCount && existingName.rowCount > 0) {
-  return res.status(409).json({ error: "Nom d'utilisateur déjà utilisé" });
-}
+    if (existingName.rowCount && existingName.rowCount > 0) {
+      return res.status(409).json({ error: "Nom d'utilisateur déjà utilisé" });
+    }
     const existing = await pool.query(
       `SELECT id FROM users WHERE email = $1`,
       [body.email]
@@ -93,6 +93,44 @@ export async function getUserById(req: Request, res: Response) {
   } catch (err) {
     console.error("Error getUserById:", err);
     return res.status(500).json({ error: "Erreur serveur" });
+  }
+}
+
+export async function findUserById(id: string) {
+  try {
+    const result = await pool.query(
+      `
+      SELECT 
+        id, 
+        username, 
+        email, 
+        role, 
+        created_at,
+        token_version 
+      FROM users
+      WHERE id = $1
+      `,
+      [id]
+    );
+
+    if (result.rowCount === 0) {
+      return null;
+    }
+
+    const row = result.rows[0];
+
+    // ⚠️ Ici on ne passe PAS par mapUserRow
+    return {
+      id: row.id,
+      username: row.username,
+      email: row.email,
+      role: row.role,
+      tokenVersion: row.tokenVersion ?? 0,
+      created_at: row.created_at,
+    };
+  } catch (err) {
+    console.error("Error findUserById:", err);
+    return null;
   }
 }
 
