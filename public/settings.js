@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    async function apiRequest(path, method = "GET", body = null) {
+       async function apiRequest(path, method = "GET", body = null) {
         const url = API_URL + path;
 
         const options = {
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials: "include",
+            credentials: "include", 
         };
 
         if (body) {
@@ -111,6 +111,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const res = await fetch(url, options);
+
+        if (res.status === 401 || res.status === 419) {
+            handleSessionExpired();
+            throw new Error("Session expirée");
+        }
 
         if (res.status === 404) {
             showToast("Route API introuvable (404). Vérifie le backend.", "error", 5000);
@@ -128,6 +133,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (res.status === 204) return null;
         return res.json();
+    }
+
+    function handleSessionExpired() {
+        localStorage.removeItem("user");
+        showToast("Votre session a expiré, veuillez vous reconnecter.", "warning", 4000);
+        setTimeout(() => {
+            window.location.href = "login.html"; 
+        }, 1500);
     }
 
     const settingsPage = document.getElementById("settingsPage");
@@ -296,11 +309,10 @@ document.addEventListener("DOMContentLoaded", () => {
        ========================= */
     const roleMeta = {
         ADMIN: { label: "Admin", badge: "badge-admin" },
-        DOYEN: { label: "Doyen", badge: "badge-doyen" },
-        CHEF_DEP: { label: "Chef de Département", badge: "badge-chefdep" },
-        CHEF_DEPARTEMENT: { label: "Chef de Département", badge: "badge-chefdep" },
+        RESPONSABLE_SALLE: { label: "Responsable Salle", badge: "badge-doyen" },
+        CHEFDEPARTEMENT: { label: "Chef de Département", badge: "badge-chefdep" },
         CFD: { label: "CFD", badge: "badge-cfd" },
-        ANONYMAT: { label: "Cellule Anonymat", badge: "badge-anonymat" },
+        CELLULE_ANONYMAT: { label: "Cellule Anonymat", badge: "badge-anonymat" },
         CORRECTEUR: { label: "Correcteur", badge: "badge-correcteur" },
     };
 
