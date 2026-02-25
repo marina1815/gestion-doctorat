@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Accueil | Cellule d'anonymat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+</head>
+
+<body>
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-icon">
+                <img id="mainLogo" src="img/iconlight.png" alt="Logo USTO" class="logo-img" />
+            </div>
+            <div class="logo-text">
+                <span class="logo-title">Gestion Doctorale</span>
+                <span class="logo-subtitle">USTO MB</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <p class="sidebar-section-title">Cellule d'anonymat</p>
+
+            <a href="cellule-accueil.html" class="nav-item active">
+                <i class="uil uil-estate"></i>
+                <span>Accueil</span>
+            </a>
+
+            <a href="cellule-codes.html" class="nav-item">
+                <i class="uil uil-key-skeleton"></i>
+                <span>Codes anonymes</span>
+            </a>
+
+            <a href="cellule-cle.html" class="nav-item">
+                <i class="uil uil-lock-alt"></i>
+                <span>Clé d'anonymat</span>
+            </a>
+
+            <a href="cellule-etiquettes.html" class="nav-item">
+                <i class="uil uil-label-alt"></i>
+                <span>Étiquettes copies</span>
+            </a>
+
+            <a href="cellule-imports.html" class="nav-item">
+                <i class="uil uil-import"></i>
+                <span>Imports / Exports</span>
+            </a>
+
+            <a href="cellule-audit.html" class="nav-item">
+                <i class="uil uil-shield-check"></i>
+                <span>Journal d'audit</span>
+            </a>
+
+            <a href="cellule-settings.html" class="nav-item">
+                <i class="uil uil-setting"></i>
+                <span>Paramètres</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div class="search-wrapper">
+                <i class="uil uil-search"></i>
+                <input type="text" placeholder="Rechercher…" />
+            </div>
+
+            <div class="topbar-actions">
+                <button class="icon-btn" type="button">
+                    <i class="uil uil-envelope"></i>
+                </button>
+                <button class="icon-btn notification-btn" type="button">
+                    <i class="uil uil-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <button id="themeToggle" class="icon-btn" type="button">
+                    <i id="themeIcon" class="uil uil-moon"></i>
+                </button>
+
+                <!-- USER MENU -->
+                <div class="user-menu">
+                    <button class="user-menu-trigger" id="userMenuBtn" type="button">
+                        <img src="img/user.png" alt="Cellule anonymat" class="user-avatar">
+                        <span class="user-name">Cellule</span>
+                        <i class="uil uil-angle-down"></i>
+                    </button>
+
+                    <div class="user-menu-dropdown" id="userMenuDropdown">
+                        <button class="user-menu-item" id="logoutBtn" type="button">
+                            <i class="uil uil-signout"></i>
+                            Déconnexion
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENT -->
+        <section class="content">
+
+            <!-- EN-TÊTE -->
+            <div class="content-header">
+                <h1 class="page-title">Accueil – Cellule d'anonymat</h1>
+                <span class="page-subtitle">
+                    Gestion de l'anonymat des copies avant et après la correction.
+                </span>
+            </div>
+
+            <!-- KPIs -->
+            <section class="stats-grid">
+                <article class="stat-card">
+                    <div class="stat-card-header">
+                        <span class="stat-title">Candidats à anonymiser</span>
+                        <span class="stat-icon icon-blue"><i class="uil uil-users-alt"></i></span>
+                    </div>
+                    <div class="stat-value">184</div>
+                    <div class="stat-foot">Listes reçues des départements</div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Codes anonymes générés</span>
+                        <i class="uil uil-key-skeleton"></i>
+                    </div>
+                    <div class="stat-value">184</div>
+                    <div class="stat-foot">Tous les candidats ont un code</div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-card-header">
+                        <span class="stat-label">Copies en circulation</span>
+                        <i class="uil uil-file-alt"></i>
+                    </div>
+                    <div class="stat-value">184</div>
+                    <div class="stat-foot">Copies remises aux correcteurs</div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-card-header">
+                        <span class="stat-label">Alertes / incohérences</span>
+                        <i class="uil uil-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-value">2</div>
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner" style="width:25%;"></div>
+                    </div>
+                    <div class="stat-foot">Codes manquants ou doublons</div>
+                </article>
+            </section>
+
+            <!-- PROCESSUS ANONYMAT -->
+            <section class="process-section">
+                <h2 class="section-title">Processus d’anonymat</h2>
+                <div class="steps-timeline">
+                    <div class="step-item done">
+                        <div class="step-icon">
+                            <i class="uil uil-file-import"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3>1. Réception des listes nominatives</h3>
+                            <p>Import depuis les départements (fichiers Excel / CSV).</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item active">
+                        <div class="step-icon">
+                            <i class="uil uil-key-skeleton"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3>2. Génération des codes anonymes</h3>
+                            <p>Un code unique est attribué à chaque candidat (ID anonyme).</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-icon">
+                            <i class="uil uil-label-alt"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3>3. Impression des étiquettes</h3>
+                            <p>Étiquettes anonymes collées sur les copies et feuilles de réponses.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-icon">
+                            <i class="uil uil-file-share-alt"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3>4. Transmission aux correcteurs</h3>
+                            <p>Les copies circulent uniquement avec les codes anonymes.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-icon">
+                            <i class="uil uil-unlock-alt"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3>5. Reconstitution identité / code</h3>
+                            <p>À la fin de la correction, la clé d’anonymat est utilisée pour produire les PV nominaux.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PANEUX PRINCIPAUX -->
+            <section class="grid-2-cols">
+
+                <!-- Bloc Tâches du jour -->
+                <article class="panel-card">
+                    <div class="panel-header">
+                        <h2>Tâches du jour</h2>
+                        <span class="panel-subtitle">Check-list pour sécuriser le processus</span>
+                    </div>
+
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-status task-status-done"></span>
+                            <div class="task-content">
+                                <p class="task-title">Importer la liste nominative du département Informatique</p>
+                                <p class="task-meta">Fichier reçu : <strong>Informatique_2025.xlsx</strong></p>
+                            </div>
+                        </li>
+
+                        <li class="task-item">
+                            <span class="task-status task-status-active"></span>
+                            <div class="task-content">
+                                <p class="task-title">Générer les codes anonymes pour le concours Informatique</p>
+                                <p class="task-meta">184 candidats – clé d’anonymat non exportée</p>
+                            </div>
+                        </li>
+
+                        <li class="task-item">
+                            <span class="task-status"></span>
+                            <div class="task-content">
+                                <p class="task-title">Exporter la clé d’anonymat chiffrée</p>
+                                <p class="task-meta">Vers le doyen (clé USB sécurisée)</p>
+                            </div>
+                        </li>
+
+                        <li class="task-item">
+                            <span class="task-status"></span>
+                            <div class="task-content">
+                                <p class="task-title">Générer les étiquettes anonymes pour les copies</p>
+                                <p class="task-meta">Format PDF / impression bureau concours</p>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="task-actions">
+                        <button class="btn-primary btn-small" type="button">
+                            <i class="uil uil-key-skeleton"></i>
+                            Générer les codes
+                        </button>
+                        <button class="btn-secondary btn-small" type="button">
+                            <i class="uil uil-lock-alt"></i>
+                            Exporter la clé
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Bloc Listes en attente -->
+                <article class="panel-card">
+                    <div class="panel-header">
+                        <h2>Listes en attente d’anonymisation</h2>
+                        <span class="panel-subtitle">Concours / spécialités reçus</span>
+                    </div>
+
+                    <div class="table-wrapper slim">
+                        <table class="data-table no-border">
+                            <thead>
+                                <tr>
+                                    <th>Concours</th>
+                                    <th>Département</th>
+                                    <th>Candidats</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Informatique</td>
+                                    <td>Informatique</td>
+                                    <td>184</td>
+                                    <td>
+                                        <span class="badge-status badge-status-active">
+                                            Codes générés
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Télécom</td>
+                                    <td>Électronique</td>
+                                    <td>96</td>
+                                    <td>
+                                        <span class="badge-status badge-status-pending">
+                                            En attente de codes
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Énergétique</td>
+                                    <td>Génie mécanique</td>
+                                    <td>72</td>
+                                    <td>
+                                        <span class="badge-status badge-status-warning">
+                                            Liste incomplète
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="panel-footer-link">
+                        <button class="link-button" type="button">
+                            Gérer les imports / exports
+                            <i class="uil uil-angle-right"></i>
+                        </button>
+                    </div>
+                </article>
+
+            </section>
+
+        </section>
+    </main>
+</div>
+
+<script src="theme.js"></script>
+</body>
+</html>
