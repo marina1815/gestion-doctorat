@@ -861,7 +861,7 @@ body {
 
 .logo-title {
     font-weight: 700;
-    font-size: 18px;
+    font-size: 17px;
     color: var(--color-primary);
 }
 
@@ -2667,4 +2667,461 @@ body {
 
 .data-table.no-border tbody tr td {
     border-bottom: none;
+}
+/* ----- Page Concours : Carte principale ----- */
+.concours-card {
+    background: var(--card-bg, #fff);
+    padding: 1.5rem 1.8rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    margin-bottom: 2rem;
+}
+
+/* ----- Sous-titres ----- */
+.card-subsection {
+    margin-top: 1.9rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.card-subsection-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.card-subsection-header p {
+    font-size: 0.78rem;
+    color: #64748b;
+    margin-top: 0.2rem;
+}
+
+/* ----- Grille à 2 colonnes ----- */
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem 1.4rem;
+    margin-top: 0.8rem;
+}
+
+/* ----- Groupes formulaire ----- */
+.concours-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.concours-form label {
+    font-size: 0.82rem;
+    color: #475569;
+    font-weight: 500;
+}
+
+/* ----- Inputs / Selects ----- */
+.concours-form input,
+.concours-form select {
+    padding: 0.55rem 0.75rem;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.86rem;
+    background: #fff;
+    color: #0f172a;
+    transition: 0.2s ease;
+}
+
+.concours-form input:focus,
+.concours-form select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59,130,246,0.15);
+}
+
+/* ----- Inputs inline (table spécialités) ----- */
+.input-inline {
+    width: 100%;
+    padding: 0.45rem 0.6rem;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+}
+
+/* ----- Table spécialités ----- */
+.specialties-table input[type="number"] {
+    width: 60px;
+    text-align: center;
+}
+
+/* ----- Contrôles +/- places ----- */
+.places-control {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.places-control input {
+    width: 55px !important;
+    padding: 0.3rem;
+}
+
+.places-btn {
+    border: none;
+    background: #e2e8f0;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #475569;
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+.places-btn:hover {
+    background: #d1d5db;
+}
+
+/* ----- Boutons ----- */
+.primary-btn {
+    background: #0C1154;
+    color: #fff;
+    padding: 0.65rem 1.4rem;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.primary-btn:hover {
+    background: #1e3fae;
+}
+
+.secondary-btn {
+    background: #e2e8f0;
+    color: #1e293b;
+    padding: 0.65rem 1.4rem;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    border: none;
+    cursor: pointer;
+}
+
+.secondary-btn:hover {
+    background: #cbd5e1;
+}
+
+/* ----- Checkbox RGPD ----- */
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: #475569;
+}
+
+.checkbox-row input {
+    width: 17px;
+    height: 17px;
+}
+
+/* ----- Actions en bas ----- */
+.form-actions.end {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8rem;
+    margin-top: 1.8rem;
+}
+
+/* DARK MODE */
+html[data-theme="dark"] .concours-card {
+    background: #1e293b;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+}
+
+html[data-theme="dark"] .card-subsection {
+    border-top-color: #334155;
+}
+
+html[data-theme="dark"] .card-subsection-header h3 {
+    color: #f1f5f9;
+}
+
+html[data-theme="dark"] .card-subsection-header p {
+    color: #94a3b8;
+}
+
+/* Inputs */
+html[data-theme="dark"] .concours-form input,
+html[data-theme="dark"] .concours-form select,
+html[data-theme="dark"] .input-inline {
+    background: #0f172a;
+    color: #f1f5f9;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .concours-form input:focus,
+html[data-theme="dark"] .concours-form select:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 2px rgba(96,165,250,0.25);
+}
+
+/* +/- buttons */
+html[data-theme="dark"] .places-btn {
+    background: #334155;
+    color: #cbd5e1;
+}
+
+html[data-theme="dark"] .places-btn:hover {
+    background: #475569;
+}
+
+/* Secondary button */
+html[data-theme="dark"] .secondary-btn {
+    background: #334155;
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .secondary-btn:hover {
+    background: #475569;
+}
+
+
+html[data-theme="dark"] .checkbox-row span {
+    color: #e2e8f0;
+}
+
+/* ==== Processus du Recteur – version propre ==== */
+
+/* Conteneur timeline */
+.workflow-steps {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.2rem;
+    padding-left: 3.2rem; /* place pour le cercle + ligne */
+}
+
+/* Ligne verticale globale */
+.workflow-steps::before {
+    content: "";
+    position: absolute;
+    left: 24px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e5e7eb;
+}
+
+/* Carte de chaque étape */
+.workflow-step {
+    position: relative;
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+}
+
+/* Supprime la ligne au-dessus de la 1ère carte */
+.workflow-step:first-child::before {
+    display: none;
+}
+
+/* CERCLE icône */
+.step-circle {
+    position: absolute;
+    left: -3.2rem;            /* aligné avec la ligne */
+    top: 1.1rem;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    flex: 0 0 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.15);
+}
+
+/* Zone texte */
+.step-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.step-body h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.step-body p {
+    margin: 0.25rem 0 0.7rem;
+    font-size: 0.88rem;
+    color: #4b5563;
+    line-height: 1.5;
+}
+
+/* Lien “voir plus / configurer” */
+.link-btn.small {
+    font-size: 0.87rem;
+    color: #2563eb;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.link-btn.small i {
+    font-size: 1rem;
+}
+
+/* ==== Couleurs par étape ==== */
+
+/* Étape 1 : verte */
+.workflow-step.completed {
+    background: #ecfdf5;
+    border-color: #bbf7d0;
+}
+
+.workflow-step.completed .step-circle {
+    background: #22c55e;
+}
+
+/* Étape 2 : bleue */
+.workflow-step.active {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+
+.workflow-step.active .step-circle {
+    background: #2563eb;
+}
+
+.workflow-step.neutre {
+    background: #fbefff;
+    border-color: #bfdbfe;
+}
+
+.workflow-step:not(.completed):not(.active) .step-circle {
+    background: #6366f1;
+}
+
+/* ==== DARK MODE ==== */
+html[data-theme="dark"] .workflow-steps::before {
+    background: #334155;
+}
+
+html[data-theme="dark"] .workflow-step {
+    background: #0f172a;
+    border-color: #1f2937;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
+
+html[data-theme="dark"] .workflow-step.completed {
+    background: #052e16;
+    border-color: #16a34a;
+}
+
+html[data-theme="dark"] .workflow-step.active {
+    background: #0b1120;
+    border-color: #1d4ed8;
+}
+html[data-theme="dark"] .workflow-step.neutre {
+    background: #200b18;
+    border-color: #901dd8;
+}
+
+html[data-theme="dark"] .step-body h3 {
+    color: #e5e7eb;
+}
+
+html[data-theme="dark"] .step-body p {
+    color: #cbd5e1;
+}
+
+.table-wrapper.slim {
+    margin-top: 0.6rem;
+}
+/* ===== Donut Chart Card ===== */
+.donut-card .card-header {
+    margin-bottom: 1rem;
+}
+
+/* Wrapper */
+.donut-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+
+.donut-chart {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background:
+        conic-gradient(
+            #ec8f32 0deg 72deg,     /* orange */
+            #b86839 72deg 138deg,   /* brown */
+            #467ecb 138deg 202deg,  /* blue */
+            #74a869 202deg 250deg,  /* green */
+            #447fa0 250deg 310deg,  /* teal */
+            #7eb6d8 310deg 360deg   /* light blue */
+        );
+    position: relative;
+}
+
+.donut-chart::before {
+    content: "";
+    position: absolute;
+    width: 95px;
+    height: 95px;
+    border-radius: 50%;
+    background: var(--card-bg, #fff);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Legend */
+.donut-legend {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.donut-legend li {
+    margin-bottom: 0.45rem;
+    font-size: 0.86rem;
+    color: #334155;
+}
+
+/* Legend dots */
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.dot-orange { background: #ec8f32; }
+.dot-brown { background: #b86839; }
+.dot-blue { background: #467ecb; }
+.dot-green { background: #74a869; }
+.dot-teal { background: #447fa0; }
+.dot-lightblue { background: #7eb6d8; }
+
+/* DARK MODE */
+html[data-theme="dark"] .donut-legend li {
+    color: #cbd5e1;
+}
+
+html[data-theme="dark"] .donut-chart::before {
+    background: #1e293b;
 }

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Configuration du Concours</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+</head>
+
+<body>
+    <div id="toastArea" class="toast-area"></div>
+
+    <div class="app-layout">
+
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">
+                    <img id="mainLogo" src="img/iconlight.png" alt="Logo USTO" class="logo-img" />
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">Gestion Doctorale</span>
+                    <span class="logo-subtitle">USTO MB</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <p class="sidebar-section-title">Menu</p>
+
+                <a href="recteur.html" class="nav-item">
+                    <i class="uil uil-estate"></i>
+                    <span>Accueil</span>
+                </a>
+
+                <a href="recteur-config.html" class="nav-item active">
+                    <i class="uil uil-setting"></i>
+                    <span>Créer un concours</span>
+                </a>
+
+                <a href="recteur-concours.html" class="nav-item ">
+                <i class="uil uil-list-ul"></i>
+                <span>Concours existants</span>
+            </a>
+
+              
+
+               
+
+            </nav>
+        </aside>
+
+        <!-- ===== MAIN ===== -->
+        <main class="main">
+
+            <!-- ===== TOPBAR ===== -->
+            <header class="topbar">
+                <div class="search-wrapper">
+                    <i class="uil uil-search"></i>
+                    <input type="text" placeholder="Rechercher" />
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-btn">
+                        <i class="uil uil-envelope"></i>
+                    </button>
+                    <button class="icon-btn notification-btn">
+                        <i class="uil uil-bell"></i>
+                        <span class="badge">2</span>
+                    </button>
+                    <button id="themeToggle" class="icon-btn">
+                        <i id="themeIcon" class="uil uil-moon"></i>
+                    </button>
+
+                    <div class="user-menu">
+                        <button class="user-menu-trigger" id="userMenuBtn">
+                            <img src="img/user.png" alt="Recteur" class="user-avatar">
+                            <span class="user-name">Recteur</span>
+                            <i class="uil uil-angle-down"></i>
+                        </button>
+
+                        <div class="user-menu-dropdown" id="userMenuDropdown">
+                            <button class="user-menu-item" id="logoutBtn">
+                                <i class="uil uil-signout"></i>
+                                Déconnexion
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+      
+            <section class="content">
+
+                <!-- En-tête -->
+                <div class="content-header">
+                    <h1>Lancer un Concours de Doctorat</h1>
+                    <p class="content-subtitle">
+                        Configuration des paramètres du concours de doctorat .
+                    </p>
+                </div>
+
+         
+                <section class="card concours-card">
+                    <div class="card-header">
+                        <h2>Détails du concours</h2>
+                       
+                    </div>
+
+                    <form class="concours-form">
+                 
+                        <div class="form-grid-2">
+              
+
+                            <div class="form-group">
+                                <label for="faculte">Faculté</label>
+                                <select id="faculte">
+                                    <option>Faculté des Sciences</option>
+                                    <option>Faculté des Sciences Exactes et Informatique</option>
+                                    <option>Faculté de Génie Électrique</option>
+                                    <option>Faculté de Technologie</option>
+                                    <option>Autre</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="departement">Département</label>
+                                <select id="departement">
+                                    <option>Informatique</option>
+                                    <option>Électronique</option>
+                                    <option>Génie Civil</option>
+                                    <option>Chimie</option>
+                                    <option>Physique</option>
+                                    <option>Autre</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="concoursNom">Nom du concours</label>
+                                <input type="text" id="concoursNom"
+                                       placeholder="Doctorat – Informatique">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="anneeFormation">Année de formation</label>
+                                <select id="anneeFormation">
+                                    <option>2024/2025</option>
+                                    <option>2025/2026</option>
+                                    <option>2026/2027</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="filiere">Filière</label>
+                                <select id="filiere">
+                                    <option>ST – Sciences et Techniques</option>
+                                    <option>MI – Mathématiques & Informatique</option>
+                                    <option>SM – Sciences de la Matière</option>
+                                    <option>SNV – Sciences de la Nature et de la Vie</option>
+                                    <option>Autre</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+ 
+                        <div class="card-subsection">
+                            <div class="card-subsection-header">
+                                <h3>Spécialités et capacités</h3>
+                                <p>Définissez les spécialités ouvertes au concours et le nombre de places par spécialité.</p>
+                            </div>
+
+                            <div class="table-wrapper slim">
+                                <table class="data-table no-border specialties-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Spécialité</th>
+                                            <th>Places</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <input type="text" class="input-inline"
+                                                       placeholder="Ex : Systèmes Informatiques">
+                                            </td>
+                                            <td>
+                                                <div class="places-control">
+                                                    <button type="button" class="places-btn">−</button>
+                                                    <input type="number" min="0" value="8">
+                                                    <button type="button" class="places-btn">+</button>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="icon-btn ghost">
+                                                    <i class="uil uil-trash-alt"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                  
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <button type="button" class="link-btn">
+                                <i class="uil uil-plus"></i>
+                                Ajouter une spécialité
+                            </button>
+                        </div>
+
+                
+                        <div class="form-actions end">
+                            <button type="button" class="secondary-btn">Annuler</button>
+                            <button type="submit" class="primary-btn">
+                                <i class="uil uil-plus"></i>
+                                Cree le concours
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+            </section>
+        </main>
+    </div>
+
+    <script src="theme.js"></script>
+   
+</body>
+
+</html>

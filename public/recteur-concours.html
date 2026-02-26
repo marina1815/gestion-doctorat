@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Concours | Liste des concours</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+</head>
+
+<body>
+    <div id="toastArea" class="toast-area"></div>
+
+    <div class="app-layout">
+
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">
+                    <img id="mainLogo" src="img/iconlight.png" alt="Logo USTO" class="logo-img" />
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">Gestion Doctorale</span>
+                    <span class="logo-subtitle">USTO MB</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <p class="sidebar-section-title">Menu</p>
+
+                <a href="recteur.html" class="nav-item">
+                    <i class="uil uil-estate"></i>
+                    <span>Accueil</span>
+                </a>
+
+                <a href="recteur-config.html" class="nav-item ">
+                    <i class="uil uil-setting"></i>
+                    <span>Créer un concours</span>
+                </a>
+
+                <a href="recteur-concours.html" class="nav-item active">
+                    <i class="uil uil-list-ul"></i>
+                    <span>Concours existants</span>
+                </a>
+            </nav>
+        </aside>
+
+    
+        <main class="main">
+
+    
+            <header class="topbar">
+                <div class="search-wrapper">
+                    <i class="uil uil-search"></i>
+                    <input type="text" placeholder="Rechercher" />
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-btn">
+                        <i class="uil uil-envelope"></i>
+                    </button>
+                    <button class="icon-btn notification-btn">
+                        <i class="uil uil-bell"></i>
+                        <span class="badge">2</span>
+                    </button>
+                    <button id="themeToggle" class="icon-btn">
+                        <i id="themeIcon" class="uil uil-moon"></i>
+                    </button>
+
+                    <div class="user-menu">
+                        <button class="user-menu-trigger" id="userMenuBtn">
+                            <img src="img/user.png" alt="Recteur" class="user-avatar">
+                            <span class="user-name">Recteur</span>
+                            <i class="uil uil-angle-down"></i>
+                        </button>
+
+                        <div class="user-menu-dropdown" id="userMenuDropdown">
+                            <button class="user-menu-item" id="logoutBtn">
+                                <i class="uil uil-signout"></i>
+                                Déconnexion
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ===== CONTENT ===== -->
+            <section class="content">
+
+                <!-- En-tête -->
+                <div class="content-header">
+                    <h1>Concours existants</h1>
+                    <p class="content-subtitle">
+                        Vue d’ensemble des concours de doctorat par faculté, département et année de formation.
+                    </p>
+                </div>
+
+
+              
+                <section class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2>Liste des concours</h2>
+                            <span class="card-subtitle">Chaque ligne représente un concours unique (faculté +
+                                département + filière).</span>
+                                
+                        </div>
+                          <select class="select-sort" id="filterAnnee">
+                                <option value="all">Toutes les années</option>
+                                <option>2024/2025</option>
+                                <option>2025/2026</option>
+                                <option>2026/2027</option>
+                            </select>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table class="data-table" id="concoursTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Concours</th>
+                                    <th>Faculté</th>
+                                    <th>Département</th>
+                                    <th>Année</th>
+                                    <th>Filière</th>
+                                    <th>Places totales</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            
+                                <tr data-annee="2024/2025" data-statut="open">
+                                    <td>1</td>
+                                    <td>Doctorat – Informatique</td>
+                                    <td>Sciences Exactes et Informatique</td>
+                                    <td>Informatique</td>
+                                    <td>2024/2025</td>
+                                    <td>MI – Mathématiques & Informatique</td>
+                                  
+                                    <td>23</td>
+                                  
+                                    <td>
+                                      
+                                        <button class="icon-btn" type="button" title="Détails">
+                                            <i class="uil uil-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                             
+                                <tr data-annee="2024/2025" data-statut="closed">
+                                    <td>2</td>
+                                    <td>Doctorat – Génie Civil</td>
+                                    <td>Faculté de Technologie</td>
+                                    <td>Génie Civil</td>
+                                    <td>2024/2025</td>
+                                    <td>ST – Sciences et Techniques</td>
+                                 
+                                    <td>12</td>
+                                  
+                                    <td>
+                                        <button class="icon-btn" type="button" title="Détails">
+                                            <i class="uil uil-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            
+                                <tr data-annee="2025/2026" data-statut="draft">
+                                    <td>3</td>
+                                    <td>Doctorat – Électronique</td>
+                                    <td>Faculté des Sciences</td>
+                                    <td>Électronique</td>
+                                    <td>2025/2026</td>
+                                    <td>ST – Sciences et Techniques</td>
+    
+                                    <td>10</td>
+                                   
+                                    <td>
+                                        <button class="icon-btn" type="button" title="Détails">
+                                            <i class="uil uil-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                              
+
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+
+            </section>
+        </main>
+    </div>
+
+    <script src="theme.js"></script>
+
+
+</body>
+
+</html>

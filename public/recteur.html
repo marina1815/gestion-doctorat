@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Accueil Recteur | Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet"
+          href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+</head>
+
+<body>
+<div id="toastArea" class="toast-area"></div>
+
+<div class="app-layout">
+
+    <!-- ===== SIDEBAR ===== -->
+     <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">
+                    <img id="mainLogo" src="img/iconlight.png" alt="Logo USTO" class="logo-img" />
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">Gestion Doctorale</span>
+                    <span class="logo-subtitle">USTO MB</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <p class="sidebar-section-title">Menu</p>
+
+                <a href="recteur.html" class="nav-item  active">
+                    <i class="uil uil-estate"></i>
+                    <span>Accueil</span>
+                </a>
+
+                <a href="recteur-config.html" class="nav-item ">
+                    <i class="uil uil-setting"></i>
+                    <span>Créer un concours</span>
+                </a>
+
+                <a href="recteur-concours.html" class="nav-item ">
+                <i class="uil uil-list-ul"></i>
+                <span>Concours existants</span>
+            </a>
+
+              
+
+               
+
+            </nav>
+        </aside>
+
+    <!-- ===== MAIN ===== -->
+    <main class="main">
+
+        <!-- ===== TOPBAR ===== -->
+        <header class="topbar">
+            <div class="search-wrapper">
+                <i class="uil uil-search"></i>
+                <input type="text" placeholder="Rechercher" />
+            </div>
+
+            <div class="topbar-actions">
+                <button class="icon-btn">
+                    <i class="uil uil-envelope"></i>
+                </button>
+                <button class="icon-btn notification-btn">
+                    <i class="uil uil-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <button id="themeToggle" class="icon-btn">
+                    <i id="themeIcon" class="uil uil-moon"></i>
+                </button>
+
+                <div class="user-menu">
+                    <button class="user-menu-trigger" id="userMenuBtn">
+                        <img src="img/user.png" alt="Recteur" class="user-avatar">
+                        <span class="user-name">Recteur</span>
+                        <i class="uil uil-angle-down"></i>
+                    </button>
+
+                    <div class="user-menu-dropdown" id="userMenuDropdown">
+                        <button class="user-menu-item" id="logoutBtn">
+                            <i class="uil uil-signout"></i>
+                            Déconnexion
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ===== CONTENT ===== -->
+        <section class="content">
+
+            <!-- En-tête -->
+            <div class="content-header">
+                <h1>Bienvenue, Recteur</h1>
+                <p class="content-subtitle">
+                    Vue globale du workflow des concours de doctorat : création, suivi et validation.
+                </p>
+            </div>
+
+            <!-- ===== STATS / KPIs ===== -->
+            <section class="stats-grid">
+                <article class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Concours actifs</span>
+                        <span class="stat-icon icon-blue">
+                            <i class="uil uil-clipboard-alt"></i>
+                        </span>
+                    </div>
+                    <div class="stat-value">4</div>
+                    <div class="stat-footer">
+                        <span class="stat-note">Année universitaire 2024/2025</span>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Candidats inscrits</span>
+                        <span class="stat-icon icon-purple">
+                            <i class="uil uil-users-alt"></i>
+                        </span>
+                    </div>
+                    <div class="stat-value">1 238</div>
+                    <div class="stat-footer">
+                        <span class="stat-note">toutes facultés confondues</span>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Concours en préparation</span>
+                        <span class="stat-icon icon-orange">
+                            <i class="uil uil-edit-alt"></i>
+                        </span>
+                    </div>
+                    <div class="stat-value">2</div>
+                    <div class="stat-footer">
+                        <span class="stat-note">en attente de validation</span>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">PV validés</span>
+                        <span class="stat-icon icon-green">
+                            <i class="uil uil-check-circle"></i>
+                        </span>
+                    </div>
+                    <div class="stat-value">6</div>
+                    <div class="stat-footer">
+                        <span class="stat-note">sur les 3 dernières années</span>
+                    </div>
+                </article>
+            </section>
+
+       
+            <section class="two-column">
+                
+        <article class="card donut-card">
+    <div class="card-header">
+        <h2>Statut des concours</h2>
+    </div>
+
+    <div class="donut-wrapper">
+        <div class="donut-chart"></div>
+
+        <ul class="donut-legend">
+            <li><span class="dot dot-orange"></span> Concours en préparation <strong>90,918</strong></li>
+            <li><span class="dot dot-brown"></span> Concours validés <strong>71,268</strong></li>
+            <li><span class="dot dot-blue"></span> Concours terminés <strong>73,266</strong></li>
+            <li><span class="dot dot-green"></span> Concours en cours <strong>43,770</strong></li>
+            <li><span class="dot dot-teal"></span> Concours expirés <strong>83,160</strong></li>
+            <li><span class="dot dot-lightblue"></span> Concours en attente <strong>74,916</strong></li>
+        </ul>
+    </div>
+</article>
+<article class="card process-card">
+                <div class="card-header">
+                    <div>
+                        <h2>Processus du Recteur</h2>
+                        <span class="card-subtitle">
+Gérez les concours en trois étapes : création, suivi et consultation du workflow détaillé.                        </span>
+                    </div>
+                </div>
+
+                <div class="workflow-steps">
+                    <div class="workflow-step completed">
+                        <div class="step-circle">
+                            <i class="uil uil-file-plus-alt"></i>
+                        </div>
+                        <div class="step-body">
+                            <h3>1. Création du concours</h3>
+                            <p>Définir la faculté, le département, la filière et les spécialités avec leurs places.</p>
+                            <button type="button"
+                                    class="link-btn small"
+                                    onclick="window.location.href='recteur-concours.html'">
+                                Configurer un nouveau concours
+                                <i class="uil uil-angle-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step active">
+                        <div class="step-circle">
+                            <i class="uil uil-users-alt"></i>
+                        </div>
+                        <div class="step-body">
+                            <h3>2. Voir la liste des concours </h3>
+                            <p>Consulter tous les concours existants par faculté, département et année de formation.</p>
+                             <button type="button"
+                                    class="link-btn small"
+                                    onclick="window.location.href='recteur-concours.html'">
+                                voir plus 
+                                <i class="uil uil-angle-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step neutre ">
+                        <div class="step-circle">
+                            <i class="uil uil-calendar-alt"></i>
+                        </div>
+                        <div class="step-body">
+                            <h3>3. Voir le workflow d’un concours</h3>
+                            <p>Depuis la liste des concours, cliquez sur l’icône
+                                <i class="uil uil-eye"></i> pour afficher le workflow détaillé du concours sélectionné
+                                (étapes d’anonymat, affectation des salles, correction, PV, etc.).</p>
+                        </div>
+                    </div>
+
+                
+                </div>
+                </article>
+            </section>
+
+    
+
+        </section>
+    </main>
+</div>
+
+<script src="theme.js"></script>
+
+</body>
+</html>
