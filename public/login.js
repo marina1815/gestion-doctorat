@@ -86,17 +86,15 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = "/chef-home.html";
         } else if (role === "DOYEN") {
             window.location.href = "/doyen-dashboard.html";
-        } else if (role === "ANONYMAT") {
-            window.location.href = "/anonymat-dashboard.html";
+        } else if (role === "CELLULE_ANONYMAT") {
+            window.location.href = "/cellule-accueil.html";
         } else {
             // rôle par défaut (si autre chose)
             window.location.href = "/dashb.html";
         }
     }
 
-    // ===================================
-    //   SUBMIT DU FORMULAIRE + FETCH
-    // ===================================
+
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -132,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-              
+
                 body: JSON.stringify({
                     username: username.value.trim(),
                     password: password.value.trim(),
@@ -181,13 +179,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
- 
+
     closeBtn.addEventListener("click", () => {
         successModal.classList.remove("is-visible");
         redirectByRole();
     });
 
- 
+
     successModal.addEventListener("click", (e) => {
         // si on clique sur l’overlay (pas le contenu)
         if (e.target === successModal) {

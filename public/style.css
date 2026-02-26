@@ -2574,3 +2574,97 @@ body {
     color: #334155;
     box-shadow: none;
 }
+
+
+/* Tâches (checklist) */
+.task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.6rem;
+}
+
+.task-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.6rem;
+    padding: 0.55rem 0.4rem;
+    border-radius: 10px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+}
+
+.task-status {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    margin-top: 0.3rem;
+    background: #cbd5e1;
+}
+
+.task-status-done {
+    background: #22c55e;
+}
+
+.task-status-active {
+    background: #2563eb;
+}
+
+.task-content .task-title {
+    font-size: 0.88rem;
+    color: #0f172a;
+    margin-bottom: 0.1rem;
+}
+
+.task-content .task-meta {
+    font-size: 0.78rem;
+    color: #6b7280;
+}
+
+/* Boutons petits */
+.btn-small {
+    padding: 0.35rem 0.8rem;
+    font-size: 0.8rem;
+}
+
+.task-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.9rem;
+}
+
+/* Badges de statut anonymat */
+.badge-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.22rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.badge-status-active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge-status-pending {
+    background: #e0f2fe;
+    color: #1d4ed8;
+}
+
+.badge-status-warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* Variante table plus "fine" */
+.table-wrapper.slim {
+    margin-top: 0.5rem;
+}
+
+.data-table.no-border tbody tr td {
+    border-bottom: none;
+}
