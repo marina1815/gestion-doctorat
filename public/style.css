@@ -1837,7 +1837,8 @@ body {
     border-radius: var(--radius-card);
     box-shadow: var(--shadow-soft);
     padding: 20px 22px 18px;
-    animation: slideUp 0.25s ease-out;
+
+           /* 🔥 scroll interne si contenu trop long */
 }
 
 .account-modal-header {
@@ -1868,6 +1869,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 14px;
+    max-height: 70vh;       
+    overflow-y: auto; 
 }
 
 .account-form .form-group input,
@@ -3124,4 +3127,94 @@ html[data-theme="dark"] .donut-legend li {
 
 html[data-theme="dark"] .donut-chart::before {
     background: #1e293b;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Header détail + bouton retour */
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.detail-title-block h2 {
+  margin: 0;
+}
+
+.btn-back {
+  border: none;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #e5e7eb;
+  color: #111827;
+  cursor: pointer;
+}
+
+.btn-back i {
+  font-size: 1rem;
+}
+
+.btn-back:hover {
+  background: #d1d5db;
+}
+
+/* Métadonnées */
+.detail-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.8rem;
+  margin-bottom: 1.4rem;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.meta-label {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #576d94;
+}
+
+.meta-value {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Deux colonnes en bas */
+.detail-grid-2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 1.4rem;
+}
+
+@media (max-width: 992px) {
+  .detail-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Dark mode */
+html[data-theme="dark"] .btn-back {
+  background: #111827;
+  color: #e5e7eb;
+}
+
+html[data-theme="dark"] .btn-back:hover {
+  background: #1f2937;
+}
+
+html[data-theme="dark"] .meta-label {
+  color: #6b7280;
 }
