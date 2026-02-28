@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Gestion Doctorale – Doyen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+</head>
+
+<body>
+  <div class="app-layout">
+
+    <!-- =============== SIDEBAR =============== -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-icon">
+          <img id="mainLogo" src="img/iconlight.png" alt="Logo USTO" class="logo-img" />
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">Gestion Doctorale</span>
+          <span class="logo-subtitle">USTO MB</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <p class="sidebar-section-title">Doyen</p>
+
+        <a href="#" class="nav-item nav-item-active" data-view="dashboard">
+          <i class="uil uil-estate"></i>
+          <span>Accueil</span>
+        </a>
+
+        <a href="#" class="nav-item" data-view="cfd">
+          <i class="uil uil-briefcase"></i>
+          <span>Comité CFD</span>
+        </a>
+
+        <a href="#" class="nav-item" data-view="correcteurs">
+          <i class="uil uil-edit"></i>
+          <span>Correcteurs</span>
+        </a>
+
+        <a href="#" class="nav-item" data-view="anonymat">
+          <i class="uil uil-shield-check"></i>
+          <span>Cellule d’anonymat</span>
+        </a>
+
+        <a href="#" class="nav-item" data-view="surveillants">
+          <i class="uil uil-users-alt"></i>
+          <span>Surveillants & salles</span>
+        </a>
+
+        <a href="#" class="nav-item" data-view="pv">
+          <i class="uil uil-file-alt"></i>
+          <span>Génération des PV</span>
+        </a>
+      </nav>
+
+    
+    </aside>
+
+    <!-- =============== MAIN CONTENT =============== -->
+    <main class="main-content">
+
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <div class="search-wrapper">
+          <i class="uil uil-search"></i>
+          <input type="text" placeholder="Rechercher…" />
+        </div>
+
+        <div class="topbar-actions">
+          <button class="icon-btn" type="button">
+            <i class="uil uil-envelope"></i>
+          </button>
+          <button class="icon-btn notification-btn" type="button">
+            <i class="uil uil-bell"></i>
+            <span class="badge">3</span>
+          </button>
+          <button id="themeToggle" class="icon-btn" type="button">
+            <i id="themeIcon" class="uil uil-moon"></i>
+          </button>
+
+          <div class="user-menu">
+            <button class="user-menu-trigger" id="userMenuBtn" type="button">
+              <img src="img/user.png" alt="Doyen" class="user-avatar">
+              <span class="user-name">Doyen</span>
+              <i class="uil uil-angle-down"></i>
+            </button>
+
+            <div class="user-menu-dropdown" id="userMenuDropdown">
+              <button class="user-menu-item" id="logoutBtn" type="button">
+                <i class="uil uil-signout"></i>
+                Déconnexion
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- BARRE D’AVANCEMENT (vue globale) -->
+      <section class="steps-bar card">
+        <div class="step-item step-item-active" data-step="cfd">
+          <span class="step-index">1</span>
+          <span>CFD</span>
+        </div>
+        <div class="step-item" data-step="correcteurs">
+          <span class="step-index">2</span>
+          <span>Correcteurs</span>
+        </div>
+        <div class="step-item" data-step="anonymat">
+          <span class="step-index">3</span>
+          <span>Anonymat</span>
+        </div>
+        <div class="step-item" data-step="surveillants">
+          <span class="step-index">4</span>
+          <span>Surveillants</span>
+        </div>
+        <div class="step-item" data-step="pv">
+          <span class="step-index">5</span>
+          <span>PV & décision finale</span>
+        </div>
+
+        <div class="progress-bar">
+          <div class="progress-bar-inner" id="globalProgress" style="width: 10%;"></div>
+        </div>
+      </section>
+
+      <!-- ============ VIEW: DASHBOARD / ACCUEIL ============ -->
+      <div class="view view-active" id="view-dashboard" data-view="dashboard">
+        <section class="card">
+          <div class="card-header">
+            <h2>Bienvenue, Doyen</h2>
+            <p class="text-muted">
+              Suivez les étapes : commencer par le comité CFD, puis les correcteurs, anonymat, surveillants & salles,
+              et enfin générer les PV et la décision finale.
+            </p>
+          </div>
+          <div class="card-body dashboard-grid">
+            <div class="mini-card">
+              <h3>1. Comité CFD</h3>
+              <p>Créer les membres CFD et leurs comptes.</p>
+              <button class="btn btn-primary" data-go-view="cfd">Configurer le CFD</button>
+            </div>
+            <div class="mini-card">
+              <h3>2. Correcteurs</h3>
+              <p>Enregistrer les correcteurs et leurs comptes.</p>
+              <button class="btn btn-secondary" data-go-view="correcteurs">Configurer les correcteurs</button>
+            </div>
+            <div class="mini-card">
+              <h3>3. Anonymat</h3>
+              <p>Créer la cellule d’anonymat et ses comptes.</p>
+              <button class="btn btn-secondary" data-go-view="anonymat">Configurer anonymat</button>
+            </div>
+            <div class="mini-card">
+              <h3>4. Surveillants & salles</h3>
+              <p>Gérer les salles, surveillants et responsables.</p>
+              <button class="btn btn-secondary" data-go-view="surveillants">Configurer surveillants</button>
+            </div>
+            <div class="mini-card">
+              <h3>5. PV & décision finale</h3>
+              <p>Générer les PV en arabe, modifier les dates et imprimer.</p>
+              <button class="btn btn-secondary" data-go-view="pv">Générer les PV</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============ VIEW: COMITÉ CFD ============ -->
+      <!-- ============ VIEW: COMITÉ CFD ============ -->
+<!-- ============ VIEW: COMITÉ CFD ============ -->
+<div class="view" id="view-cfd" data-view="cfd">
+  <!-- Membres CFD -->
+  <section class="card cfd-card">
+    <div class="card-header cfd-header">
+      <div class="cfd-header-main">
+        <h2>Comité de formation doctorale (CFD)</h2>
+        <span class="card-subtitle">
+          Crée les membres et leurs comptes.
+        </span>
+        <div class="cfd-meta-row">
+          <span class="badge-role badge-cfd">CFD</span>
+          <span class="cfd-meta-text">Étape 1 / 5 – obligatoire avant les autres étapes</span>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary cfd-add-btn" id="btnOpenModalCfdMembre">
+        <i class="uil uil-plus"></i>
+        <span>Ajouter un membre CFD</span>
+      </button>
+    </div>
+
+    <div class="card-body">
+      <div class="cfd-toolbar">
+        <div class="accounts-search cfd-search">
+          <i class="uil uil-search"></i>
+          <input type="text" id="cfdSearchInput" placeholder="Rechercher dans les membres CFD…" />
+        </div>
+        <div class="cfd-chip">
+          <span id="cfdCount">0</span> membre(s)
+        </div>
+      </div>
+
+      <div class="table-wrapper slim">
+        <table class="table data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nom & prénom (FR)</th>
+              <th>الاسم و اللقب (AR)</th>
+              <th>Grade</th>
+              <th>Sexe</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th class="col-actions"></th>
+            </tr>
+          </thead>
+          <tbody id="cfdMembersBody">
+            <!-- rempli par JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Responsable CFD pour un concours -->
+  <section class="card cfd-card">
+    <div class="card-header">
+      <div>
+        <h2>Responsable CFD du concours</h2>
+        <span class="card-subtitle">
+          Lien avec la table <code>cfd (id_concours, id_user)</code>.
+        </span>
+      </div>
+    </div>
+
+    <form id="formCfdResponsable" class="card-body form-grid cfd-resp-form">
+      <div class="form-group">
+        <label>Concours</label>
+        <select id="cfdConcoursSelect">
+          <option value="">-- Sélectionner un concours --</option>
+          <option value="concours-2024-info">Concours 2024 - Informatique</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Membre CFD responsable</label>
+        <select id="cfdResponsableSelect">
+          <option value="">-- Sélectionner un membre CFD --</option>
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          <i class="uil uil-save"></i> Enregistrer le responsable CFD
+        </button>
+      </div>
+    </form>
+  </section>
+</div>
+
+      <!-- ============ VIEW: CORRECTEURS (SQUELETTE) ============ -->
+      <div class="view" id="view-correcteurs" data-view="correcteurs">
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <h2>Correcteurs</h2>
+              <p class="text-muted">
+                Enregistre les correcteurs (membres + users rôle CORRECTEUR).
+              </p>
+            </div>
+            <button type="button" class="btn btn-primary" id="btnOpenModalCorrecteur">
+              <i class="uil uil-plus"></i> Ajouter un correcteur
+            </button>
+          </div>
+          <div class="card-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nom & prénom</th>
+                  <th>Grade</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th class="col-actions"></th>
+                </tr>
+              </thead>
+              <tbody id="correcteursBody">
+                <!-- à remplir en JS (même logique que CFD) -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============ VIEW: CELLULE D’ANONYMAT (SQUELETTE) ============ -->
+      <div class="view" id="view-anonymat" data-view="anonymat">
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <h2>Cellule d’anonymat</h2>
+              <p class="text-muted">Membres avec rôle CELLULE_ANONYMAT.</p>
+            </div>
+            <button type="button" class="btn btn-primary" id="btnOpenModalAnonymat">
+              <i class="uil uil-plus"></i> Ajouter un membre anonymat
+            </button>
+          </div>
+          <div class="card-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nom & prénom</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th class="col-actions"></th>
+                </tr>
+              </thead>
+              <tbody id="anonymatBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============ VIEW: SURVEILLANTS & SALLES (SQUELETTE) ============ -->
+      <div class="view" id="view-surveillants" data-view="surveillants">
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <h2>Salles</h2>
+              <p class="text-muted">Gestion des salles du concours.</p>
+            </div>
+            <button type="button" class="btn btn-primary" id="btnOpenModalSalle">
+              <i class="uil uil-plus"></i> Ajouter une salle
+            </button>
+          </div>
+          <div class="card-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nom salle</th>
+                  <th>Capacité</th>
+                  <th>Responsable</th>
+                  <th class="col-actions"></th>
+                </tr>
+              </thead>
+              <tbody id="sallesBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-header">
+            <h2>Surveillants par salle</h2>
+          </div>
+          <div class="card-body">
+            <p class="text-muted">Plus tard : assigner plusieurs surveillants (users rôle RESPONSABLE_SALLE / SURVEILLANT) par salle.</p>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============ VIEW: GENERATION DES PV / DECISION FINALE ============ -->
+      <div class="view" id="view-pv" data-view="pv">
+        <section class="card">
+          <div class="card-header">
+            <h2>Génération des PV & décision finale</h2>
+            <p class="text-muted">
+              Génération automatique (en arabe) à partir des données (CFD, correcteurs, anonymat, surveillants, classement, etc.),
+              tout en te laissant modifier les dates, numéros et détails avant impression.
+            </p>
+          </div>
+
+          <div class="card-body form-grid">
+            <div class="form-group">
+              <label>Concours</label>
+              <select id="pvConcoursSelect">
+                <option value="">-- Sélectionner un concours --</option>
+                <option value="concours-2024-info">Concours 2024 - Informatique</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Date de la décision / المقرر بتاريخ</label>
+              <input type="date" id="pvDateDecision" />
+            </div>
+
+            <div class="form-group">
+              <label>N° de la décision / المقرر رقم</label>
+              <input type="text" id="pvNumDecision" placeholder="…/…/1445 هـ / 2024 م" />
+            </div>
+          </div>
+        </section>
+
+        <!-- Un exemple de PV généré (décision finale en arabe) -->
+        <section class="card">
+          <div class="card-header">
+            <h2>نص المقرر النهائي (قابل للتعديل)</h2>
+            <button type="button" class="btn btn-secondary" id="btnRegenererPv">
+              إعادة توليد النص
+            </button>
+          </div>
+          <div class="card-body">
+            <textarea id="pvTexteAr" rows="12" class="pv-textarea" dir="rtl">
+سيتم توليد نص المقرر هنا اعتمادا على:
+- الجامعة والكلية والقسم
+- لجنة التكوين في الدكتوراه (CFD)
+- أعضاء خلية إخفاء الهوية
+- المراقبين ومسؤولي القاعات
+- محاضر التصحيح والترتيب النهائي للمترشحين
+
+يمكنك تعديل هذا النص يدويا قبل الطباعة.
+            </textarea>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-primary" id="btnValiderPv">
+                <i class="uil uil-check-circle"></i> Valider le PV
+              </button>
+              <button type="button" class="btn btn-secondary" id="btnImprimerPv">
+                <i class="uil uil-print"></i> Imprimer
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ================== MODAL : MEMBRE CFD ================== -->
+<!-- ================== MODAL : MEMBRE CFD ================== -->
+<div class="modal" id="modalCfdMembre">
+  <div class="modal-backdrop" data-close-modal></div>
+
+  <div class="modal-dialog modal-dialog-large">
+    <div class="modal-header">
+      <h3>Nouveau membre CFD</h3>
+      <button class="btn-icon" data-close-modal>
+        <i class="uil uil-times"></i>
+      </button>
+    </div>
+
+    <form id="formCfdMembre" class="modal-body account-form">
+    <form id="formCfdMembre" class="account-form">
+  <!-- Ligne Nom / Prénom FR -->
+  <div class="form-row">
+    <div class="form-group">
+      <label>Nom (FR)</label>
+      <div class="input-wrapper">
+        <span class="field-icon"><i class="uil uil-user"></i></span>
+        <input type="text" id="nomMembreFr" placeholder="Ex : Djabar" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Prénom (FR)</label>
+      <div class="input-wrapper">
+        <span class="field-icon"><i class="uil uil-user"></i></span>
+        <input type="text" id="prenomMembreFr" placeholder="Ex : Bensalem" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Ligne Nom / Prénom AR -->
+  <div class="form-row">
+    <div class="form-group">
+      <label dir="rtl">(AR) اللقب</label>
+      <div class="input-wrapper" dir="rtl">
+        <span class="field-icon"><i class="uil uil-user"></i></span>
+        <input type="text" id="nomMembreAr" placeholder="مثال: جبار" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label dir="rtl">(AR) الاسم</label>
+      <div class="input-wrapper" dir="rtl">
+        <span class="field-icon"><i class="uil uil-user"></i></span>
+        <input type="text" id="prenomMembreAr" placeholder="مثال: بن سالم" />
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔹 LIGNE Grade + Sexe (bien alignés) -->
+  <div class="form-row">
+    <!-- Grade = select classique -->
+    <div class="form-group">
+      <label>Grade</label>
+      <div class="input-wrapper">
+        <span class="field-icon"><i class="uil uil-graduation-cap"></i></span>
+        <select id="gradeMembre">
+          <option value="">Professeur, MCA, MCB…</option>
+          <option value="PROF">Professeur</option>
+          <option value="MCA">MCA</option>
+          <option value="MCB">MCB</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Sexe = boutons, mais dans la largeur de la colonne -->
+    <div class="form-group form-group-sex">
+      <label>Sexe</label>
+      <div class="sex-toggle" id="sexeToggle">
+        <button type="button"
+                class="sex-option sex-option-active"
+                data-sex-value="FEMME">
+          <span class="sex-icon-circle">
+            <i class="uil uil-female"></i>
+          </span>
+          <span>Femme</span>
+        </button>
+
+        <button type="button"
+                class="sex-option"
+                data-sex-value="HOMME">
+          <span class="sex-icon-circle">
+            <i class="uil uil-male"></i>
+          </span>
+          <span>Homme</span>
+        </button>
+      </div>
+      <input type="hidden" id="sexeMembre" value="FEMME" />
+    </div>
+  </div>
+      <!-- Ligne 4 : Email + Username -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="emailUser">Email institutionnel</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-at"></i></span>
+            <input type="email" id="emailUser" placeholder="exemple@univ.dz" />
+          </div>
+          <div class="field-hint">Utilise l’email universitaire officiel.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="usernameUser">Nom d’utilisateur</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-user-circle"></i></span>
+            <input type="text" id="usernameUser" placeholder="username_cfd" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Ligne 5 : Mot de passe -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="passwordUser">Mot de passe provisoire</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-lock"></i></span>
+            <input type="password" id="passwordUser" placeholder="••••••••" />
+          </div>
+          <div class="field-hint">
+            Il pourra être changé par le membre CFD à la première connexion.
+          </div>
+        </div>
+      </div>
+
+      <div class="account-modal-footer modal-footer-full">
+        <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
+        <button type="submit" class="btn btn-primary">Enregistrer le membre CFD</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<script src="theme.js"></script>
+  <!-- ================== JS : Navigation + CFD (exemple complet) ================== -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+            // ===== SEXE : toggle Femme / Homme =====
+    const sexeHidden = document.getElementById("sexeMembre");
+    const sexeToggle = document.getElementById("sexeToggle");
+
+    if (sexeHidden && sexeToggle) {
+      const sexButtons = sexeToggle.querySelectorAll(".sex-option");
+
+      sexButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const value = btn.dataset.sexValue || "FEMME";
+
+          // 1) mettre à jour le hidden
+          sexeHidden.value = value;
+
+          // 2) switch visuel active
+          sexButtons.forEach((b) =>
+            b.classList.toggle(
+              "sex-option-active",
+              b === btn
+            )
+          );
+        });
+      });
+    }
+  /* ===== NAVIGATION SIDEBAR ===== */
+  const navItems = document.querySelectorAll(".sidebar-nav .nav-item");
+  const views = document.querySelectorAll(".view");
+
+  function showView(viewName) {
+    views.forEach(v => v.classList.toggle("view-active", v.dataset.view === viewName));
+    navItems.forEach(i => i.classList.toggle("nav-item-active", i.dataset.view === viewName));
+  }
+
+  navItems.forEach(item => {
+    item.addEventListener("click", (e) => {
+      e.preventDefault();
+      const target = item.dataset.view;
+      showView(target);
+    });
+  });
+
+  document.querySelectorAll("[data-go-view]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const target = btn.getAttribute("data-go-view");
+      showView(target);
+    });
+  });
+
+  /* ===== MODALS ===== */
+  const modalCfd = document.getElementById("modalCfdMembre");
+  const btnOpenModalCfdMembre = document.getElementById("btnOpenModalCfdMembre");
+
+  function openModal(modal) {
+    if (!modal) return;
+    modal.classList.add("modal-open");
+  }
+
+  function closeModal(modal) {
+    if (!modal) return;
+    modal.classList.remove("modal-open");
+  }
+
+  // Bouton + pour ouvrir la modale CFD
+  if (btnOpenModalCfdMembre) {
+          btnOpenModalCfdMembre.addEventListener("click", () => {
+        formCfdMembre.reset();
+
+        // reset sexe par défaut : FEMME
+        if (sexeHidden && sexeToggle) {
+          sexeHidden.value = "FEMME";
+          sexeToggle.querySelectorAll(".sex-option").forEach((btn) => {
+            btn.classList.toggle(
+              "sex-option-active",
+              btn.dataset.sexValue === "FEMME"
+            );
+          });
+        }
+
+        openModal(modalCfd);
+      });
+  }
+
+  
+
+  // Tout élément avec data-close-modal ferme la modale parente
+  document.querySelectorAll("[data-close-modal]").forEach(el => {
+    el.addEventListener("click", () => {
+      const m = el.closest(".modal");
+      closeModal(m);
+    });
+  });
+
+  /* ===== ÉTAT FRONT CFD ===== */
+  let cfdMembers = [];
+
+  const cfdMembersBody = document.getElementById("cfdMembersBody");
+  const cfdResponsableSelect = document.getElementById("cfdResponsableSelect");
+  const formCfdMembre = document.getElementById("formCfdMembre");
+
+  if (formCfdMembre) {
+    formCfdMembre.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const nomFr = document.getElementById("nomMembreFr").value.trim();
+      const prenomFr = document.getElementById("prenomMembreFr").value.trim();
+      const nomAr = document.getElementById("nomMembreAr").value.trim();
+      const prenomAr = document.getElementById("prenomMembreAr").value.trim();
+      const grade = document.getElementById("gradeMembre").value.trim();
+      const sexe = document.getElementById("sexeMembre").value;
+      const email = document.getElementById("emailUser").value.trim();
+      const username = document.getElementById("usernameUser").value.trim();
+      const password = document.getElementById("passwordUser").value; // côté backend
+
+      if (!nomFr || !prenomFr || !username) {
+        alert("Nom, prénom et username sont obligatoires.");
+        return;
+      }
+
+      const idMembre = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-m";
+      const idUser = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-u";
+
+      cfdMembers.push({
+        idMembre,
+        idUser,
+        nomFr,
+        prenomFr,
+        nomAr,
+        prenomAr,
+        grade,
+        sexe,
+        email,
+        username
+      });
+
+      renderCfdMembers();
+      closeModal(modalCfd);
+    });
+  }
+
+  function renderCfdMembers() {
+    if (!cfdMembersBody || !cfdResponsableSelect) return;
+
+    cfdMembersBody.innerHTML = "";
+    cfdResponsableSelect.innerHTML = '<option value="">-- Sélectionner un membre CFD --</option>';
+
+    cfdMembers.forEach((m, index) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${m.nomFr} ${m.prenomFr}</td>
+        <td dir="rtl">${(m.prenomAr || "")} ${(m.nomAr || "")}</td>
+        <td>${m.grade || ""}</td>
+        <td>${m.sexe}</td>
+        <td>${m.username}</td>
+        <td>${m.email || ""}</td>
+        <td class="table-actions">
+          <button class="btn-icon btn-icon-danger" data-remove="${m.idUser}">
+            <i class="uil uil-trash"></i>
+          </button>
+        </td>
+      `;
+      cfdMembersBody.appendChild(tr);
+
+      const opt = document.createElement("option");
+      opt.value = m.idUser;
+      opt.textContent = `${m.nomFr} ${m.prenomFr} (${m.username})`;
+      cfdResponsableSelect.appendChild(opt);
+    });
+
+    cfdMembersBody.querySelectorAll("[data-remove]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const idUser = btn.getAttribute("data-remove");
+        cfdMembers = cfdMembers.filter(m => m.idUser !== idUser);
+        renderCfdMembers();
+      });
+    });
+  }
+
+  renderCfdMembers();
+
+  /* ===== PV : génération simple + impression ===== */
+  const pvTexteAr = document.getElementById("pvTexteAr");
+  const btnRegenererPv = document.getElementById("btnRegenererPv");
+  const btnImprimerPv = document.getElementById("btnImprimerPv");
+  const btnValiderPv = document.getElementById("btnValiderPv");
+
+  if (btnRegenererPv && pvTexteAr) {
+    btnRegenererPv.addEventListener("click", () => {
+      const concoursLabel = document.getElementById("pvConcoursSelect").value || "مسابقة الدكتوراه";
+      const dateDecision = document.getElementById("pvDateDecision").value || "....";
+      const numDecision = document.getElementById("pvNumDecision").value || "…/…/…";
+
+      pvTexteAr.value =
+`بمقتضى القوانين والتنظيمات السارية، 
+وبناء على محاضر لجان التكوين في الدكتوراه (CFD) ولجان التصحيح والترتيب،
+يقرر ما يلي:
+
+المادة 1: يعلن عن نتائج مسابقة الالتحاق بالتكوين في الطور الثالث (دكتوراه) بعنوان السنة الجامعية ${concoursLabel}.
+المادة 2: تضبط قائمة المترشحين الناجحين نهائيا كما هو مبين في الملحق المرفق بهذا المقرر.
+المادة 3: يكلف السيد/السيدة عميد الكلية بتنفيذ هذا المقرر الذي يسري ابتداء من تاريخ ${dateDecision} 
+تحت رقم ${numDecision}.
+
+يمكنك تعديل هذا النص قبل الطباعة.`;
+    });
+  }
+
+  if (btnImprimerPv) {
+    btnImprimerPv.addEventListener("click", () => window.print());
+  }
+
+  if (btnValiderPv) {
+    btnValiderPv.addEventListener("click", () => {
+      alert("PV validé (plus tard : sauvegarde en base + génération PDF).");
+    });
+  }
+});
+  </script>
+
+</body>
+</html>
