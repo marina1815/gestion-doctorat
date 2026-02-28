@@ -1,17 +1,17 @@
 
 import { Router } from "express";
 import {
-    createUser,
-    getUsers,
-    getUserById,
-    updateUser,
-    deleteUser,
+  createUser,
+  getUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
 } from "../controllers/user.conroller";
 import { authMiddleware } from "../middleware/auth.middleware";
 import {
-    createUserSchema,
-    updateUserSchema,
-    deleteUserParamSchema,
+  createUserSchema,
+  updateUserSchema,
+  userIdParamSchema,
 } from "../dto/user.dto";
 import { validateBody, validateParams } from "../middleware/validate";
 // éventuellement un middleware de RBAC
@@ -19,16 +19,16 @@ import { validateBody, validateParams } from "../middleware/validate";
 
 const router = Router();
 
-router.get("/",authMiddleware, getUsers);
-router.post("/",authMiddleware, validateBody(createUserSchema), createUser);
+router.get("/", authMiddleware, getUsers);
+router.post("/", validateBody(createUserSchema), createUser);
 router.put(
   "/:id",
-  authMiddleware, validateBody(updateUserSchema), 
+  authMiddleware, validateBody(updateUserSchema),
   updateUser
 );
 
-router.delete("/:id",authMiddleware,
-  validateParams(deleteUserParamSchema),
+router.delete("/:id", authMiddleware,
+  validateParams(userIdParamSchema),
   deleteUser
 );
 export default router;

@@ -7,16 +7,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const API_URL = window.API_URL || "http://localhost:4000";
     const ENDPOINTS = {
         users: "/users",
+        membres: "/membres"
     };
 
-    /* =========================
-       TOASTS
-       ========================= */
+     async function refreshSession() {
+        const res = await fetch(`${API_URL}/auth/refresh`, {
+            method: "POST",
+            credentials: "include",
+        });
 
-    // ================================================
-    //   CONFIRMATION MODERNE (default / warning / danger)
-    //   type = "default" | "warning" | "danger"
-    // ================================================
+        if (!res.ok) {
+          
+            throw new Error("Refresh token invalide");
+        }
+
+       
+    }
+
+
     function showConfirm(message, title = "Confirmation", type = "default") {
         return new Promise((resolve) => {
             const modal = document.getElementById("confirmModal");
@@ -27,15 +35,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const btnOk = document.getElementById("confirmOk");
             const btnCancel = document.getElementById("confirmCancel");
 
-            // Texte
             msg.textContent = message;
             ttl.textContent = title;
 
-            // Reset classes
             dialog.classList.remove("default", "warning", "danger");
             dialog.classList.add(type || "default");
 
-            // Icône selon type
             if (type === "danger") {
                 icon.textContent = "!";
             } else if (type === "warning") {
@@ -59,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
             };
         });
     }
+
     const toastArea = document.getElementById("toastArea");
 
     function showToast(message, type = "info", duration = 3000) {
@@ -94,8 +100,10 @@ document.addEventListener("DOMContentLoaded", () => {
         return showToast(msg, "loading");
     }
 
-
-       async function apiRequest(path, method = "GET", body = null) {
+    /* =========================
+       APPEL API GÉNÉRIQUE
+       ========================= */
+        async function apiRequest(path, method = "GET", body = null) {
         const url = API_URL + path;
 
         const options = {
@@ -103,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials: "include", 
+            credentials: "include",
         };
 
         if (body) {
@@ -139,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.removeItem("user");
         showToast("Votre session a expiré, veuillez vous reconnecter.", "warning", 4000);
         setTimeout(() => {
-            window.location.href = "login.html"; 
+            window.location.href = "login.html";
         }, 1500);
     }
 
@@ -155,7 +163,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnUserMenu = document.getElementById("userMenuBtn");
     const dropdownUserMenu = document.getElementById("userMenuDropdown");
 
-
     const btnNewAccount = document.getElementById("btnNewAccount");
     const accountModal = document.getElementById("accountCreateModal");
     const closeAccountModal = document.getElementById("closeAccountModal");
@@ -166,7 +173,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const roleFilter = document.getElementById("roleFilter");
     const statusFilter = document.getElementById("statusFilter");
 
-    // champs du modal (Create / Edit)
     const inputEmail = document.getElementById("newEmail");
     const inputUsername = document.getElementById("newUsername");
     const inputPassword = document.getElementById("newPassword");
@@ -174,7 +180,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalTitle = accountModal?.querySelector(".account-modal-header h2");
     const modalSubmitBtn = accountForm?.querySelector('button[type="submit"]');
 
-    // mode du modal : null => création, sinon => édition
     let currentEditUserId = null;
     let allUsers = [];
 
@@ -215,18 +220,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-
-
-
-
     /* =========================
        MODAL CRÉATION / ÉDITION COMPTE
        ========================= */
     function openCreateModal() {
         if (!accountModal) return;
-        currentEditUserId = null; // mode création
-        modalTitle && (modalTitle.textContent = "Créer un nouveau compte");
-        modalSubmitBtn && (modalSubmitBtn.textContent = "Créer");
+        currentEditUserId = null;
+        if (modalTitle) modalTitle.textContent = "Créer un nouveau compte";
+        if (modalSubmitBtn) modalSubmitBtn.textContent = "Créer";
 
         accountForm?.reset();
         accountModal.classList.add("is-visible");
@@ -234,14 +235,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function openEditModalWithUser(user) {
         if (!accountModal || !accountForm) return;
-        currentEditUserId = user.id;
+        currentEditUserId = user.idUser;
 
-        modalTitle && (modalTitle.textContent = "Modifier le compte");
-        modalSubmitBtn && (modalSubmitBtn.textContent = "Mettre à jour");
+        if (modalTitle) modalTitle.textContent = "Modifier le compte";
+        if (modalSubmitBtn) modalSubmitBtn.textContent = "Mettre à jour";
 
         inputEmail.value = user.email || "";
         inputUsername.value = user.username || "";
-        // Pour le mot de passe, soit tu laisses vide, soit tu met "********"
         inputPassword.value = "";
         selectRole.value = user.role || "";
 
@@ -267,11 +267,21 @@ document.addEventListener("DOMContentLoaded", () => {
     accountForm?.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const payload = {
+        // 1️⃣ Construire payload membre
+        const membrePayload = {
+            nomMembre: lastName.value.trim(),
+            prenomMembre: firstName.value.trim(),
+            nomAr: lastNameAr.value.trim(),
+            prenomAr: firstNameAr.value.trim(),
+            sexe: gender.value,
+            grade: grade.value
+        };
+
+        const userPayload = {
             email: inputEmail.value.trim(),
             username: inputUsername.value.trim(),
             password: inputPassword.value,
-            role: selectRole.value,
+            role: selectRole.value
         };
 
         const loading = showLoadingToast(
@@ -279,23 +289,39 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
         try {
-            if (!payload.email || !payload.username || !payload.role) {
-                throw new Error("Veuillez remplir tous les champs obligatoires.");
+            if (!userPayload.username || !userPayload.role || !userPayload.password) {
+                throw new Error("Veuillez remplir les champs obligatoires.");
             }
 
+            let idMembreCree;
+
+            // 3️⃣ Créer membre SEULEMENT en mode création
+            if (!currentEditUserId) {
+                const membreResponse = await apiRequest(ENDPOINTS.membres, "POST", membrePayload);
+
+
+                idMembreCree = membreResponse.idMembre;
+
+                if (!idMembreCree) throw new Error("Impossible de récupérer l’id du membre.");
+            }
+
+            // 4️⃣ Ajouter id_membre au payload user
+            if (!currentEditUserId) {
+                userPayload.idMembre = idMembreCree;
+            }
+
+            // 5️⃣ Créer ou mettre à jour le user
             if (currentEditUserId) {
-
-
-                await apiRequest(`${ENDPOINTS.users}/${currentEditUserId}`, "PUT", payload);
+                await apiRequest(`${ENDPOINTS.users}/${currentEditUserId}`, "PUT", userPayload);
                 showToast("Compte mis à jour avec succès.", "success");
             } else {
-                // CREATE
-                await apiRequest(ENDPOINTS.users, "POST", payload);
+                await apiRequest(ENDPOINTS.users, "POST", userPayload);
                 showToast("Compte créé avec succès.", "success");
             }
 
             closeAccountModalFn();
             await refreshUsersTable();
+
         } catch (err) {
             console.error(err);
             showToast(err.message || "Erreur lors de l’enregistrement du compte.", "error", 5000);
@@ -314,6 +340,9 @@ document.addEventListener("DOMContentLoaded", () => {
         CFD: { label: "CFD", badge: "badge-cfd" },
         CELLULE_ANONYMAT: { label: "Cellule Anonymat", badge: "badge-anonymat" },
         CORRECTEUR: { label: "Correcteur", badge: "badge-correcteur" },
+        DOYEN: { label: "Doyen", badge: "badge-role" },
+        VICEDOYEN: { label: "Vice-Doyen", badge: "badge-role" },
+        RECTEUR: { label: "Recteur", badge: "badge-role" },
     };
 
     function renderUsersTable(users) {
@@ -326,7 +355,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const matchesRole =
                 roleFilterValue === "all" || u.role === roleFilterValue;
 
-            const isActive = u.is_active ?? u.active ?? u.enabled ?? false;
+            const isActive = u.isActive ?? u.is_active ?? u.active ?? u.enabled ?? false;
+
             const matchesStatus =
                 statusFilterValue === "all" ||
                 (statusFilterValue === "active" && isActive) ||
@@ -348,7 +378,7 @@ document.addEventListener("DOMContentLoaded", () => {
             accountsTableBody.appendChild(tr);
         } else {
             filtered.forEach((user, index) => {
-                const isActive = user.is_active ?? user.active ?? user.enabled ?? false;
+                const isActive = user.isActive ?? false;
                 const meta = roleMeta[user.role] || {
                     label: user.role,
                     badge: "badge-role",
@@ -360,30 +390,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 tr.innerHTML = `
           <td>${index + 1}</td>
-          <td>${user.email}</td>
+          <td>${user.email ?? ""}</td>
           <td>${user.username}</td>
           <td><span class="badge-role ${meta.badge}">${meta.label}</span></td>
           <td>
-            <span class="chip-status ${isActive ? "chip-active" : "chip-disabled"
-                    }">
+            <span class="chip-status ${isActive ? "chip-active" : "chip-disabled"}">
               ${isActive ? "Actif" : "Désactivé"}
             </span>
           </td>
           <td class="accounts-actions-cell">
             <button class="icon-action action-btn action-toggle" 
-                    data-id="${user.id}" 
+                    data-id="${user.idUser}" 
                     data-action="toggle" 
                     title="${isActive ? "Désactiver" : "Activer"}">
               <i class="uil uil-power"></i>
             </button>
             <button class="icon-action action-btn action-edit" 
-                    data-id="${user.id}" 
+                    data-id="${user.idUser}" 
                     data-action="edit" 
                     title="Modifier">
               <i class="uil uil-pen"></i>
             </button>
             <button class="icon-action action-btn action-delete" 
-                    data-id="${user.id}" 
+                    data-id="${user.idUser}" 
                     data-action="delete" 
                     title="Supprimer">
               <i class="uil uil-trash-alt"></i>
@@ -420,7 +449,9 @@ document.addEventListener("DOMContentLoaded", () => {
     roleFilter?.addEventListener("change", () => renderUsersTable(allUsers));
     statusFilter?.addEventListener("change", () => renderUsersTable(allUsers));
 
-
+    /* =========================
+       ACTIONS EDIT / DELETE / TOGGLE
+       ========================= */
     document.addEventListener("click", async (e) => {
         const btn = e.target.closest("[data-action]");
         if (!btn) return;
@@ -431,8 +462,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!id || !action) return;
 
         if (action === "edit") {
-
-            const user = allUsers.find((u) => String(u.id) === String(id));
+            const user = allUsers.find((u) => String(u.idUser) === String(id));
 
             if (!user) {
                 showToast("Utilisateur introuvable dans la liste.", "error");
@@ -446,7 +476,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (action === "toggle") {
             const loading = showLoadingToast("Mise à jour du statut…");
             try {
-                // await apiRequest(`${ENDPOINTS.users}/${id}/toggle`, "PATCH");
+                // TODO: appeler une vraie route PATCH /users/:id/toggle
                 showToast("Statut mis à jour.", "success");
                 await refreshUsersTable();
             } catch (err) {
@@ -459,7 +489,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (action === "delete") {
-            // Fenêtre de confirmation custom (danger)
             const confirmed = await showConfirm(
                 "Voulez-vous vraiment supprimer ce compte ?",
                 "Suppression du compte",
@@ -469,7 +498,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const loading = showLoadingToast("Suppression du compte…");
             try {
-
                 await apiRequest(`${ENDPOINTS.users}/${id}`, "DELETE");
                 showToast("Compte supprimé.", "success");
                 await refreshUsersTable();

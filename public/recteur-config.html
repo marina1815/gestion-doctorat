@@ -40,13 +40,13 @@
                 </a>
 
                 <a href="recteur-concours.html" class="nav-item ">
-                <i class="uil uil-list-ul"></i>
-                <span>Concours existants</span>
-            </a>
+                    <i class="uil uil-list-ul"></i>
+                    <span>Concours existants</span>
+                </a>
 
-              
 
-               
+
+
 
             </nav>
         </aside>
@@ -90,7 +90,7 @@
                 </div>
             </header>
 
-      
+
             <section class="content">
 
                 <!-- En-tête -->
@@ -101,74 +101,78 @@
                     </p>
                 </div>
 
-         
+
                 <section class="card concours-card">
                     <div class="card-header">
                         <h2>Détails du concours</h2>
-                       
+
                     </div>
 
                     <form class="concours-form">
-                 
+
                         <div class="form-grid-2">
-              
+
 
                             <div class="form-group">
                                 <label for="faculte">Faculté</label>
-                                <select id="faculte">
-                                    <option>Faculté des Sciences</option>
-                                    <option>Faculté des Sciences Exactes et Informatique</option>
-                                    <option>Faculté de Génie Électrique</option>
-                                    <option>Faculté de Technologie</option>
-                                    <option>Autre</option>
+                                <select id="faculte" data-custom-target="faculteCustom">
+                                    <option value="Faculté des Sciences">Faculté des Sciences</option>
+                                    <option value="Faculté des Sciences Exactes et Informatique">Faculté des Sciences
+                                        Exactes et Informatique</option>
+                                    <option value="Faculté de Génie Électrique">Faculté de Génie Électrique</option>
+                                    <option value="Faculté de Technologie">Faculté de Technologie</option>
+                                    <option value="autre">Autre</option>
                                 </select>
+
+                                <!-- Champ libre pour "Autre" -->
+                                <input type="text" id="faculteCustom" class="input-inline custom-field"
+                                    placeholder="Saisir le nom de la faculté" style="display:none;">
                             </div>
 
                             <div class="form-group">
                                 <label for="departement">Département</label>
-                                <select id="departement">
-                                    <option>Informatique</option>
-                                    <option>Électronique</option>
-                                    <option>Génie Civil</option>
-                                    <option>Chimie</option>
-                                    <option>Physique</option>
-                                    <option>Autre</option>
+                                <select id="departement" data-custom-target="departementCustom">
+                                    <option value="">Sélectionner un département</option>
+                                    <!-- Ces options seront remplacées par l'API -->
+                                    <option value="1">Informatique</option>
+                                    <option value="2">Électronique</option>
+                                    <option value="autre">Autre</option>
                                 </select>
+
+                                <!-- Affiché seulement si on choisit "Autre" -->
+                                <input type="text" id="departementCustom" class="input-inline custom-field"
+                                    placeholder="Saisir le nom du département" style="display:none;" />
                             </div>
 
                             <div class="form-group">
                                 <label for="concoursNom">Nom du concours</label>
-                                <input type="text" id="concoursNom"
-                                       placeholder="Doctorat – Informatique">
+                                <input type="text" id="concoursNom" placeholder="Doctorat – Informatique">
                             </div>
 
                             <div class="form-group">
                                 <label for="anneeFormation">Année de formation</label>
-                                <select id="anneeFormation">
-                                    <option>2024/2025</option>
-                                    <option>2025/2026</option>
-                                    <option>2026/2027</option>
-                                </select>
+                                <input type="text" id="anneeFormation" placeholder="2025">
+
+                            </div>
+                            <div class="form-group">
+                                <label for="dateConcours">Date du concours</label>
+                                <input type="date" id="dateConcours">
                             </div>
 
                             <div class="form-group">
-                                <label for="filiere">Filière</label>
-                                <select id="filiere">
-                                    <option>ST – Sciences et Techniques</option>
-                                    <option>MI – Mathématiques & Informatique</option>
-                                    <option>SM – Sciences de la Matière</option>
-                                    <option>SNV – Sciences de la Nature et de la Vie</option>
-                                    <option>Autre</option>
-                                </select>
+                                <label for="filiereCustom">Filière</label>
+
+                                <input type="text" id="filiereCustom" placeholder="Saisir le nom de la filière">
                             </div>
 
                         </div>
 
- 
+
                         <div class="card-subsection">
                             <div class="card-subsection-header">
                                 <h3>Spécialités et capacités</h3>
-                                <p>Définissez les spécialités ouvertes au concours et le nombre de places par spécialité.</p>
+                                <p>Définissez les spécialités ouvertes au concours et le nombre de places par
+                                    spécialité.</p>
                             </div>
 
                             <div class="table-wrapper slim">
@@ -184,33 +188,32 @@
                                         <tr>
                                             <td>
                                                 <input type="text" class="input-inline"
-                                                       placeholder="Ex : Systèmes Informatiques">
+                                                    placeholder="Ex : Systèmes Informatiques">
                                             </td>
                                             <td>
                                                 <div class="places-control">
-                                                    <button type="button" class="places-btn">−</button>
+                                                    <button type="button" class="places-btn places-minus">−</button>
                                                     <input type="number" min="0" value="8">
-                                                    <button type="button" class="places-btn">+</button>
+                                                    <button type="button" class="places-btn places-plus">+</button>
                                                 </div>
                                             </td>
                                             <td>
-                                                <button type="button" class="icon-btn ghost">
+                                                <button type="button" class="icon-btn ghost btn-delete-row">
                                                     <i class="uil uil-trash-alt"></i>
                                                 </button>
                                             </td>
                                         </tr>
-                                  
                                     </tbody>
                                 </table>
                             </div>
 
-                            <button type="button" class="link-btn">
+                            <button type="button" class="link-btn" id="addSpecialtyBtn">
                                 <i class="uil uil-plus"></i>
                                 Ajouter une spécialité
                             </button>
                         </div>
 
-                
+
                         <div class="form-actions end">
                             <button type="button" class="secondary-btn">Annuler</button>
                             <button type="submit" class="primary-btn">
@@ -226,7 +229,8 @@
     </div>
 
     <script src="theme.js"></script>
-   
+    <script src="recteur.js"></script>
+
 </body>
 
 </html>

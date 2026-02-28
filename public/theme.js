@@ -3,27 +3,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const logo = document.getElementById("mainLogo");
     const toggleBtn = document.getElementById("themeToggle");
     const toggleIcon = document.getElementById("themeIcon");
-    // ----------------------
-// Menu utilisateur
-// ----------------------
-const userMenuBtn = document.getElementById("userMenuBtn");
-const userMenuDropdown = document.getElementById("userMenuDropdown");
 
-if (userMenuBtn && userMenuDropdown) {
-    userMenuBtn.addEventListener("click", () => {
-        userMenuDropdown.classList.toggle("open");
-    });
+    /* =========================
+       CONFIG API
+       ========================= */
+    const API_URL = window.API_URL || "http://localhost:4000";
+    const LOGOUT_ENDPOINT = "/auth/logout";
 
-    // Fermer le menu si on clique en dehors
-    document.addEventListener("click", (e) => {
-        if (!userMenuBtn.contains(e.target) && !userMenuDropdown.contains(e.target)) {
-            userMenuDropdown.classList.remove("open");
-        }
-    });
-}
+    /* =========================
+       TOASTS
+       ========================= */
+    const toastArea = document.getElementById("toastArea");
 
-
- function showToast(message, type = "info", duration = 3000) {
+    function showToast(message, type = "info", duration = 3000) {
         if (!toastArea) {
             console.warn("toastArea introuvable, fallback alert");
             alert(message);
@@ -46,33 +38,96 @@ if (userMenuBtn && userMenuDropdown) {
         return toast;
     }
 
-const logoutBtn = document.getElementById("logoutBtn");
+    function removeToast(t) {
+        if (!t) return;
+        t.classList.remove("visible");
+        setTimeout(() => t.remove(), 200);
+    }
 
-  logoutBtn?.addEventListener("click", () => {
-      
-        //localStorage.removeItem("user");
-        showToast("Déconnexion…", "info");
-        setTimeout(() => {
-            window.location.href = "login.html";
-        }, 600);
+    function showLoadingToast(msg = "Chargement…") {
+        return showToast(msg, "loading");
+    }
+
+    /* =========================
+       MENU UTILISATEUR
+       ========================= */
+    const userMenuBtn = document.getElementById("userMenuBtn");
+    const userMenuDropdown = document.getElementById("userMenuDropdown");
+
+    if (userMenuBtn && userMenuDropdown) {
+        userMenuBtn.addEventListener("click", () => {
+            userMenuDropdown.classList.toggle("open");
+        });
+
+        // Fermer le menu si on clique en dehors
+        document.addEventListener("click", (e) => {
+            if (
+                !userMenuBtn.contains(e.target) &&
+                !userMenuDropdown.contains(e.target)
+            ) {
+                userMenuDropdown.classList.remove("open");
+            }
+        });
+    }
+
+    /* =========================
+       LOGOUT
+       ========================= */
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    logoutBtn?.addEventListener("click", async () => {
+        const loading = showLoadingToast("Déconnexion…");
+
+        try {
+            // Appel à ton backend pour révoquer les tokens + is_active = FALSE
+            await fetch(API_URL + LOGOUT_ENDPOINT, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            // Nettoyage côté front
+            localStorage.removeItem("user");
+
+            showToast("Déconnexion réussie", "success", 1500);
+
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 800);
+        } catch (err) {
+            console.error("Erreur de déconnexion:", err);
+            showToast("Erreur lors de la déconnexion.", "error", 4000);
+        } finally {
+            removeToast(loading);
+        }
     });
+
+    /* =========================
+       THÈME + LOGO
+       ========================= */
     function applyLogo(theme) {
         if (!logo) return;
 
         if (theme === "dark") {
-            logo.src = "img/icondark.png";   // ton logo dark
+            logo.src = "img/icondark.png";   // logo dark
         } else {
-            logo.src = "img/iconlight.png";  // ton logo clair
+            logo.src = "img/iconlight.png";  // logo clair
         }
     }
 
     function applyTheme(theme) {
         if (theme === "dark") {
             root.setAttribute("data-theme", "dark");
-            toggleIcon.className = "uil uil-sun"; // en sombre → soleil
+            if (toggleIcon) {
+                toggleIcon.className = "uil uil-sun";
+            }
         } else {
             root.removeAttribute("data-theme");
-            toggleIcon.className = "uil uil-moon"; // en clair → lune
+            if (toggleIcon) {
+                toggleIcon.className = "uil uil-moon";
+            }
         }
 
         localStorage.setItem("dg-theme", theme);

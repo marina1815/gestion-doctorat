@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const eyeIcon = document.getElementById("eyeIcon");
     const eyeIconOff = document.getElementById("eyeIconOff");
 
-    const generalError = document.getElementById("generalError"); // <div id="generalError"></div> (optionnel)
+    const generalError = document.getElementById("generalError"); 
 
     const API_URL = "http://localhost:4000"; // adapte si ton backend est ailleurs
     const LOGIN_ENDPOINT = "/auth/login";    // adapte si besoin
@@ -18,9 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 🧠 On garde l'utilisateur loggé ici pour l'utiliser après (modal, redirection)
     let loggedUser = null;
 
-    // =========================
-    //   PASSWORD TOGGLE 👁️
-    // =========================
+   
     eyeIcon.addEventListener("click", () => {
         pwdInput.type = "text";
         eyeIcon.style.display = "none";
@@ -33,9 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
         eyeIcon.style.display = "block";
     });
 
-    // =========================
-    //   GESTION DES ERREURS
-    // =========================
+   
     function showError(input, message) {
         let error = input.parentElement.querySelector(".error-text");
 
@@ -74,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function redirectByRole() {
         if (!loggedUser) {
             // au cas où : si pas d'utilisateur, on va vers une page générique
-            window.location.href = "/dashb.html";
+            window.location.href = "/login.html";
             return;
         }
 
@@ -88,9 +84,11 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = "/doyen-dashboard.html";
         } else if (role === "CELLULE_ANONYMAT") {
             window.location.href = "/cellule-accueil.html";
-        } else {
-            // rôle par défaut (si autre chose)
-            window.location.href = "/dashb.html";
+        } else if (role === "RECTEUR") {
+          
+            window.location.href = "/recteur.html";
+        }else {
+            window.location.href = "/login.html"; 
         }
     }
 

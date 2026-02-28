@@ -278,7 +278,7 @@
                 </section>
             </section>
 
-            <!-- ================== PAGE GESTION DES COMPTES ================== -->
+
             <section class="content" id="accountsPage" style="display: none;">
 
 
@@ -297,12 +297,19 @@
 
                         <select id="roleFilter" class="select-sort">
                             <option value="all">Tous les rôles</option>
+
                             <option value="ADMIN">Admin</option>
-                            <option value="RESPONSABLE_SALLE">Responsable de Salle</option>
                             <option value="CHEFDEPARTEMENT">Chef de Département</option>
                             <option value="CFD">CFD</option>
+
                             <option value="CELLULE_ANONYMAT">Cellule d’anonymat</option>
                             <option value="CORRECTEUR">Correcteur</option>
+
+                            <option value="RESPONSABLE_SALLE">Responsable de Salle</option>
+
+                            <option value="DOYEN">Doyen</option>
+                            <option value="VICEDOYEN">Vice-Doyen</option>
+                            <option value="RECTEUR">Recteur</option>
                         </select>
 
                         <select id="statusFilter" class="select-sort">
@@ -351,55 +358,107 @@
                     </div>
                 </section>
             </section>
-            <!-- ================= MODAL NOUVEAU COMPTE ================= -->
+
             <div id="accountCreateModal" class="account-modal">
                 <div class="account-modal-backdrop"></div>
 
                 <div class="account-modal-dialog">
-                    <div class="account-modal-header">
-                        <h2>Créer un nouveau compte</h2>
-                        <button id="closeAccountModal" class="icon-btn">
-                            <i class="uil uil-times"></i>
-                        </button>
-                    </div>
+    <div class="account-modal-header">
+        <h2>Créer un nouveau compte</h2>
+        <button id="closeAccountModal" class="icon-btn">
+            <i class="uil uil-times"></i>
+        </button>
+    </div>
 
-                    <form id="accountForm" class="account-form">
+    <form id="accountForm" class="account-form">
 
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="newEmail" placeholder="ex: user@usto.dz" required>
-                        </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label>Nom</label>
+            <input type="text" id="lastName" required>
+        </div>
 
-                        <div class="form-group">
-                            <label>Nom d’utilisateur</label>
-                            <input type="text" id="newUsername" placeholder="username" required>
-                        </div>
+        <div class="form-group">
+            <label>Prénom</label>
+            <input type="text" id="firstName" required>
+        </div>
+    </div>
 
-                        <div class="form-group">
-                            <label>Mot de passe</label>
-                            <input type="password" id="newPassword" placeholder="********" required>
-                        </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label>اللقب</label>
+            <input type="text" id="lastNameAr" dir="rtl" required>
+        </div>
 
-                        <div class="form-group">
-                            <label>Rôle</label>
-                            <select id="newRole" required>
-                                <option value="" disabled selected>Choisir un rôle</option>
-                                <option value="ADMIN">Admin</option>
-                                <option value="RESPONSABLE_SALLE">Responsable de Salle</option>
-                                <option value="CHEFDEPARTEMENT">Chef de Département</option>
-                                <option value="CFD">CFD</option>
-                                <option value="CELLULE_ANONYMAT">Cellule d’anonymat</option>
-                                <option value="CORRECTEUR">Correcteur</option>
-                            </select>
-                        </div>
+        <div class="form-group">
+            <label>الاسم</label>
+            <input type="text" id="firstNameAr" dir="rtl" required>
+        </div>
+    </div>
 
-                        <div class="account-modal-footer">
+    <div class="form-row">
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="newEmail" required>
+        </div>
 
-                            <button type="submit" class="btn btn-primary accounts-new-btn">Créer</button>
-                        </div>
+        <div class="form-group">
+            <label>Nom d’utilisateur</label>
+            <input type="text" id="newUsername" required>
+        </div>
+    </div>
 
-                    </form>
-                </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label>Mot de passe</label>
+            <input type="password" id="newPassword" required>
+        </div>
+
+        <div class="form-group">
+            <label>Sexe</label>
+            <select id="gender" required>
+                <option value="HOMME">Homme</option>
+                <option value="FEMME">Femme</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group">
+            <label>Grade</label>
+            <select id="grade" required>
+                <option value="MAITRE_ASSISTANT_A">Maître Assistant A</option>
+                <option value="MAITRE_ASSISTANT_A">Maître Assistant B</option>
+                <option value="MAITRE_DE_CONFERENCES_A">Maître de Conférences A</option>
+                <option value="MAITRE_DE_CONFERENCES_A">Maître de Conférences B</option>
+                <option value="PROFESSEUR">Professeur</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Rôle</label>
+            <select id="newRole" required>
+                <option value="ADMIN">Admin</option>
+                            <option value="CHEFDEPARTEMENT">Chef de Département</option>
+                            <option value="CFD">CFD</option>
+
+                            <option value="CELLULE_ANONYMAT">Cellule d’anonymat</option>
+                            <option value="CORRECTEUR">Correcteur</option>
+
+                            <option value="RESPONSABLE_SALLE">Responsable de Salle</option>
+
+                            <option value="DOYEN">Doyen</option>
+                            <option value="VICEDOYEN">Vice-Doyen</option>
+                            <option value="RECTEUR">Recteur</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="account-modal-footer">
+        <button type="submit" class="btn btn-primary accounts-new-btn">Créer</button>
+    </div>
+</form>
+</div>
             </div>
 
         </main>

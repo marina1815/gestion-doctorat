@@ -1,3 +1,4 @@
+
 import { z } from "zod";
 
 export const userRoleSchema = z.enum([
@@ -7,37 +8,43 @@ export const userRoleSchema = z.enum([
   "CELLULE_ANONYMAT",
   "CORRECTEUR",
   "RESPONSABLE_SALLE",
+  "DOYEN",
+  "VICEDOYEN",
+  "RECTEUR",
 ]);
 
-export const createUserSchema = z.object({
-  username: z.string().min(3).max(50),
-  email: z.string().email(),
-  password: z.string().min(4),
-  role: userRoleSchema,
-}).strict();
-
-export const updateUserSchema = createUserSchema
-  .partial()
-  .strict();
-
-
-export const loginSchema = z
+export const createUserSchema = z
   .object({
-    username: z
-      .string()
-      .min(3, "Username must be at least 3 characters")
-      .max(50, "Username too long"),
-
-    password: z.string().min(1, "Password is required"),
+    username: z.string().min(3).max(50),
+    email: z.string().email(),
+    password: z.string().min(4),
+    role: userRoleSchema,
+    // ✅ camelCase comme dans ton controller
+    idMembre: z.string().uuid(),
   })
   .strict();
 
+export const updateUserSchema = z
+  .object({
+    username: z.string().min(3).max(50).optional(),
+    email: z.string().email().optional(),
+    password: z.string().min(4).optional(),
+    role: userRoleSchema.optional(),
+    idMembre: z.string().uuid().optional(),
+  })
+  .strict();
 
-export const deleteUserParamSchema = z.object({
+export const userIdParamSchema = z.object({
   id: z.string().uuid(),
 });
 
+export const loginSchema = z
+  .object({
+    username: z.string().min(3).max(50),
+    password: z.string().min(1),
+  })
+  .strict();
 
-export type LoginInput = z.infer<typeof loginSchema>;
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
+export type LoginInput = z.infer<typeof loginSchema>;
