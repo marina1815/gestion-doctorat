@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Organisation concours de doctorat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+</head>
+
+<body>
+  <div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-icon">
+          <img id="mainLogo" src="img/iconlight.png" alt="Logo USTO" class="logo-img" />
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">Gestion Doctorale</span>
+          <span class="logo-subtitle">USTO MB</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <p class="sidebar-section-title">Menu Doyen</p>
+
+        <a href="#" class="nav-item nav-item-active">
+          <i class="uil uil-clipboard-alt"></i>
+          <span>Organisation concours</span>
+        </a>
+
+        <a href="#" class="nav-item">
+          <i class="uil uil-users-alt"></i>
+          <span>Enseignants</span>
+        </a>
+
+        <a href="#" class="nav-item">
+          <i class="uil uil-file-alt"></i>
+          <span>Arrêtés générés</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span class="sidebar-user">Doyen</span>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- HEADER -->
+      <!-- TOPBAR -->
+        <header class="topbar">
+            <div class="search-wrapper">
+                <i class="uil uil-search"></i>
+                <input type="text" placeholder="Rechercher…" />
+            </div>
+
+            <div class="topbar-actions">
+                <button class="icon-btn" type="button">
+                    <i class="uil uil-envelope"></i>
+                </button>
+                <button class="icon-btn notification-btn" type="button">
+                    <i class="uil uil-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <button id="themeToggle" class="icon-btn" type="button">
+                    <i id="themeIcon" class="uil uil-moon"></i>
+                </button>
+
+                <!-- USER MENU -->
+                <div class="user-menu">
+                    <button class="user-menu-trigger" id="userMenuBtn" type="button">
+                        <img src="img/user.png" alt="Doyen" class="user-avatar">
+                        <span class="user-name">Doyen</span>
+                        <i class="uil uil-angle-down"></i>
+                    </button>
+
+                    <div class="user-menu-dropdown" id="userMenuDropdown">
+                        <button class="user-menu-item" id="logoutBtn" type="button">
+                            <i class="uil uil-signout"></i>
+                            Déconnexion
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+
+      <!-- ETAPES -->
+      <section class="steps-bar card">
+        <div class="step-item step-item-active">
+          <span class="step-index">1</span>
+          <span>Infos générales</span>
+        </div>
+        <div class="step-item">
+          <span class="step-index">2</span>
+          <span>Textes réglementaires</span>
+        </div>
+        <div class="step-item">
+          <span class="step-index">3</span>
+          <span>Comités &amp; membres</span>
+        </div>
+        <div class="step-item">
+          <span class="step-index">4</span>
+          <span>Comptes utilisateurs</span>
+        </div>
+        <div class="step-item">
+          <span class="step-index">5</span>
+          <span>Aperçu arrêté</span>
+        </div>
+
+        <div class="progress-bar">
+          <div class="progress-bar-inner" style="width:25%;"></div>
+        </div>
+      </section>
+
+      <!-- SECTION 1 : INFOS GENERALES -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <h2>Fiche d&#39;organisation</h2>
+            <p class="text-muted">Informations générales sur le concours de doctorat</p>
+          </div>
+        </div>
+
+        <form id="formOrganisation" class="card-body form-grid">
+          <!-- Bloc établissement -->
+          <div class="form-group">
+            <label>Université (FR)</label>
+            <input type="text" name="univ_fr" placeholder="Université des sciences et de la technologie d'Oran" />
+          </div>
+          <div class="form-group">
+            <label dir="rtl">الجامعة (AR)</label>
+            <input type="text" name="univ_ar" dir="rtl" />
+          </div>
+
+          <div class="form-group">
+            <label>Faculté (FR)</label>
+            <input type="text" name="faculte_fr" placeholder="Faculté des Mathématiques et Informatique" />
+          </div>
+          <div class="form-group">
+            <label dir="rtl">الكلية (AR)</label>
+            <input type="text" name="faculte_ar" dir="rtl" />
+          </div>
+
+          <div class="form-group">
+            <label>Département (FR)</label>
+            <input type="text" name="departement_fr" placeholder="Département d'Informatique" />
+          </div>
+          <div class="form-group">
+            <label dir="rtl">القسم (AR)</label>
+            <input type="text" name="departement_ar" dir="rtl" />
+          </div>
+
+          <!-- Concours -->
+          <div class="form-group">
+            <label>Année universitaire</label>
+            <input type="text" name="annee_univ" placeholder="2023-2024" />
+          </div>
+
+          <div class="form-group">
+            <label>Spécialité (FR)</label>
+            <input type="text" name="specialite_fr" placeholder="Informatique - Système d'information" />
+          </div>
+
+          <div class="form-group">
+            <label dir="rtl">التخصص (AR)</label>
+            <input type="text" name="specialite_ar" dir="rtl" />
+          </div>
+
+          <div class="form-group">
+            <label>Nombre de places</label>
+            <input type="number" name="nb_places" min="0" />
+          </div>
+
+          <!-- Décision -->
+          <div class="form-group">
+            <label>N° de la décision / المقرر رقم</label>
+            <input type="text" name="num_decision" placeholder="…/…/2023" />
+          </div>
+
+          <div class="form-group">
+            <label>Date de la décision</label>
+            <input type="date" name="date_decision" />
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+              <i class="uil uil-save"></i> Enregistrer
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- SECTION 2 : TEXTES REGLEMENTAIRES -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <h2>Textes réglementaires de référence</h2>
+            <p class="text-muted">Lois, décrets, arrêtés… (FR &amp; AR)</p>
+          </div>
+          <button type="button" class="btn btn-primary" id="btnAddTexte">
+            <i class="uil uil-plus"></i> Ajouter un texte
+          </button>
+        </div>
+
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Référence</th>
+                <th>Texte (FR)</th>
+                <th>النص (AR)</th>
+                <th class="col-actions"></th>
+              </tr>
+            </thead>
+            <tbody id="listeTextes">
+              <!-- Exemple de ligne -->
+              <tr>
+                <td>Décret</td>
+                <td>Décret exécutif n° 98-253 du 17/08/1998</td>
+                <td class="col-ellipsis">Portant mission et règles particulières d'organisation et de fonctionnement de l'université</td>
+                <td class="col-ellipsis" dir="rtl">المتضمن تحديد مهام الجامعة وقواعد تنظيمها وسيرها</td>
+                <td class="table-actions">
+                  <button class="btn-icon" title="Modifier">
+                    <i class="uil uil-pen"></i>
+                  </button>
+                  <button class="btn-icon btn-icon-danger" title="Supprimer">
+                    <i class="uil uil-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <!-- autres lignes générées par JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 3 : COMITES -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <h2>Comités du concours</h2>
+            <p class="text-muted">CFD, comité d&#39;organisation, cellule d&#39;anonymat, correcteurs…</p>
+          </div>
+          <button type="button" class="btn btn-primary" id="btnAddComite">
+            <i class="uil uil-plus"></i> Nouveau comité
+          </button>
+        </div>
+
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Libellé (FR)</th>
+                <th>التسمية (AR)</th>
+                <th>Type</th>
+                <th>Membres</th>
+                <th class="col-actions"></th>
+              </tr>
+            </thead>
+            <tbody id="listeComites">
+              <!-- Exemple -->
+              <tr>
+                <td>Comité d&#39;organisation du concours</td>
+                <td dir="rtl">لجنة الإشراف على مسابقة الدكتوراه</td>
+                <td>Supervision</td>
+                <td>5</td>
+                <td class="table-actions">
+                  <button class="btn-icon" title="Gérer les membres">
+                    <i class="uil uil-users-alt"></i>
+                  </button>
+                  <button class="btn-icon" title="Modifier">
+                    <i class="uil uil-pen"></i>
+                  </button>
+                  <button class="btn-icon btn-icon-danger" title="Supprimer">
+                    <i class="uil uil-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 4 : MEMBRES DU COMITE SELECTIONNE (EXEMPLE) -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <h2>Membres du comité sélectionné</h2>
+            <p class="text-muted">Nom FR &amp; AR, sexe, grade, fonction</p>
+          </div>
+          <button type="button" class="btn btn-primary" id="btnAddMembre">
+            <i class="uil uil-plus"></i> Ajouter un membre
+          </button>
+        </div>
+
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nom &amp; prénom (FR)</th>
+                <th>الاسم و اللقب (AR)</th>
+                <th>Sexe</th>
+                <th>Grade</th>
+                <th>Fonction</th>
+                <th class="col-actions"></th>
+              </tr>
+            </thead>
+            <tbody id="listeMembresComite">
+              <!-- lignes générées par JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MODAL TEXTE REGLEMENTAIRE -->
+  <div class="modal" id="modalTexte">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Texte réglementaire</h3>
+        <button class="btn-icon" data-close-modal>
+          <i class="uil uil-times"></i>
+        </button>
+      </div>
+      <form id="formTexte" class="modal-body">
+        <div class="form-group">
+          <label>Type</label>
+          <select name="type">
+            <option value="loi">Loi</option>
+            <option value="décret">Décret</option>
+            <option value="arrêté">Arrêté</option>
+            <option value="note">Note</option>
+            <option value="circulaire">Circulaire</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Référence</label>
+          <input type="text" name="reference" placeholder="Décret exécutif n° … du …" />
+        </div>
+
+        <div class="form-group">
+          <label>Texte en français</label>
+          <textarea name="texte_fr" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label dir="rtl">النص بالعربية</label>
+          <textarea name="texte_ar" rows="3" dir="rtl"></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL COMITE -->
+  <div class="modal" id="modalComite">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Comité</h3>
+        <button class="btn-icon" data-close-modal>
+          <i class="uil uil-times"></i>
+        </button>
+      </div>
+      <form id="formComite" class="modal-body">
+        <div class="form-group">
+          <label>Libellé (FR)</label>
+          <input type="text" name="libelle_fr" />
+        </div>
+        <div class="form-group">
+          <label dir="rtl">التسمية (AR)</label>
+          <input type="text" name="libelle_ar" dir="rtl" />
+        </div>
+        <div class="form-group">
+          <label>Type de comité</label>
+          <select name="type">
+            <option value="supervision">Supervision</option>
+            <option value="cfd">CFD</option>
+            <option value="anonymat">Cellule d&#39;anonymat</option>
+            <option value="correction">Correcteurs</option>
+            <option value="recours">Recours</option>
+          </select>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL ENSEIGNANT / MEMBRE -->
+  <div class="modal" id="modalEnseignant">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-dialog modal-dialog-large">
+      <div class="modal-header">
+        <h3>Nouveau membre / enseignant</h3>
+        <button class="btn-icon" data-close-modal>
+          <i class="uil uil-times"></i>
+        </button>
+      </div>
+      <form id="formEnseignant" class="modal-body form-grid">
+        <div class="form-group">
+          <label>Nom (FR)</label>
+          <input type="text" name="nom_fr" />
+        </div>
+        <div class="form-group">
+          <label>Prénom (FR)</label>
+          <input type="text" name="prenom_fr" />
+        </div>
+        <div class="form-group">
+          <label dir="rtl">الاسم (AR)</label>
+          <input type="text" name="prenom_ar" dir="rtl" />
+        </div>
+        <div class="form-group">
+          <label dir="rtl">اللقب (AR)</label>
+          <input type="text" name="nom_ar" dir="rtl" />
+        </div>
+
+        <div class="form-group">
+          <label>Sexe</label>
+          <select name="sexe">
+            <option value="F">Femme</option>
+            <option value="M">Homme</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Grade</label>
+          <select name="grade">
+            <option value="MCB">Maitre de conférences B</option>
+            <option value="MCA">Maitre de conférences A</option>
+            <option value="PR">Professeur</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Département</label>
+          <input type="text" name="departement_fr" />
+        </div>
+
+        <div class="form-group">
+          <label>Email institutionnel</label>
+          <input type="email" name="email" />
+        </div>
+
+        <div class="form-group">
+          <label>Nom d&#39;utilisateur</label>
+          <input type="text" name="username" />
+        </div>
+
+        <div class="form-group">
+          <label>Rôle(s) dans le système</label>
+          <select name="roles" multiple>
+            <option value="doyen">Doyen</option>
+            <option value="cfd">Membre CFD</option>
+            <option value="anonymat">Cellule d&#39;anonymat</option>
+            <option value="correcteur">Correcteur</option>
+            <option value="recours">Commission recours</option>
+          </select>
+          <small>Utiliser Ctrl + clic pour sélectionner plusieurs rôles.</small>
+        </div>
+
+        <div class="modal-footer modal-footer-full">
+          <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer le membre</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
