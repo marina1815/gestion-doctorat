@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Import candidats | Vice Doyen | Gestion Doctorale</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+</head>
+
+<body>
+    <div id="toastArea" class="toast-area"></div>
+
+    <div class="app-layout">
+
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">
+                    <img id="mainLogo" src="img/iconlight.png" alt="Logo USTO" class="logo-img" />
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">Gestion Doctorale</span>
+                    <span class="logo-subtitle">USTO MB</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <p class="sidebar-section-title">Menu</p>
+
+                <a href="vice-doyen.html" class="nav-item">
+                    <i class="uil uil-estate"></i>
+                    <span>Accueil</span>
+                </a>
+
+                <a href="vice-doyen-import.html" class="nav-item active nav-item-active">
+                    <i class="uil uil-upload-alt nav-icon"></i>
+                    <span>Import candidats</span>
+                </a>
+
+                <a href="vice-doyen-calendrier.html" class="nav-item ">
+        <i class="uil uil-calendar-alt"></i>
+        <span>Calendrier des concours</span>    
+
+                <a href="vice-doyen-historique.html" class="nav-item">
+                    <i class="uil uil-history nav-icon"></i>
+                    <span>Historique des actions</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- ===== MAIN ===== -->
+        <main class="main">
+
+            <!-- ===== TOPBAR ===== -->
+            <header class="topbar">
+                <div class="search-wrapper">
+                    <i class="uil uil-search"></i>
+                    <input type="text" placeholder="Rechercher" />
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-btn">
+                        <i class="uil uil-envelope"></i>
+                    </button>
+                    <button class="icon-btn notification-btn">
+                        <i class="uil uil-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                    <button id="themeToggle" class="icon-btn">
+                        <i id="themeIcon" class="uil uil-moon"></i>
+                    </button>
+
+                    <div class="user-menu">
+                        <button class="user-menu-trigger" id="userMenuBtn">
+                            <img src="img/user.png" alt="Vice Doyen" class="user-avatar">
+                            <span class="user-name">Vice Doyen</span>
+                            <i class="uil uil-angle-down"></i>
+                        </button>
+
+                        <div class="user-menu-dropdown" id="userMenuDropdown">
+                            <button class="user-menu-item" id="logoutBtn">
+                                <i class="uil uil-signout"></i>
+                                Déconnexion
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </header>
+            <div class="progress-bar" style="width: auto;">
+                <div class="progress-bar-inner" id="importProgress" style="width:50%;"></div>
+            </div>
+
+
+            <section class="content">
+
+
+                <div class="content-header">
+                    <h1>Import des candidats</h1>
+                    <p class="content-subtitle">
+                        Sélectionnez un concours, chargez le fichier Excel des candidats, puis validez l’envoi aux chefs
+                        de département.
+                    </p>
+                </div>
+
+
+
+                <section id="step1Section" class="one-column">
+                    <article class="card">
+                        <div class="card-header">
+                            <div>
+                                <h2>Étape 1 — Choisir le concours</h2>
+                                <span class="card-subtitle">
+                                    Sélectionnez le concours sur lequel vous souhaitez importer la liste des candidats.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-wrapper">
+                                <table class="table" id="concoursTable">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Concours</th>
+                                            <th>Faculté</th>
+                                            <th>Département</th>
+                                            <th>Specialite</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody >
+                                        <tr data-id="c1">
+                                            <td>
+                                                <input type="radio" name="concoursSelect" />
+                                            </td>
+                                            <td>Doctorat 2024 – Informatique</td>
+                                            <td>Sciences Exactes</td>
+                                            <td>Informatique</td>
+                                            <td><span class="status-pill status-open">Actif</span></td>
+                                        </tr>
+                                        <tr data-id="c2">
+                                            <td>
+                                                <input type="radio" name="concoursSelect" />
+                                            </td>
+                                            <td>Doctorat 2024 – Électronique</td>
+                                            <td>Sciences et Technologie</td>
+                                            <td>Électronique</td>
+                                            <td><span class="status-pill status-prep">En préparation</span></td>
+                                        </tr>
+                                        <tr data-id="c3">
+                                            <td>
+                                                <input type="radio" name="concoursSelect" />
+                                            </td>
+                                            <td>Doctorat 2024 – Génie Civil</td>
+                                            <td>Génie Civil</td>
+                                            <td>Structures</td>
+                                            <td><span class="status-pill status-wait">En attente</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="form-actions" style="margin-top: 16px;">
+                                <button id="nextStepBtn" class="primary-btn">
+                                    Étape suivante
+                                    <i class="uil uil-angle-right"></i>
+                                </button>
+                            </div>
+
+                            <p class="helper-text" style="color: rgb(222, 5, 5); margin-top: 3%;">
+                                <i class="uil uil-exclamation-circle"></i>
+                                Sélectionnez une ligne puis cliquez sur <strong>Étape suivante</strong> pour passer à
+                                l’import de la liste des candidats.
+                            </p>
+                        </div>
+                    </article>
+                </section>
+
+                <!-- ÉTAPE 2 : IMPORT CANDIDATS -->
+                <section id="step2Section" class="one-column hidden">
+                    <article class="card">
+                        <div class="card-header">
+                            <div>
+                                <h2>Étape 2 — Importer et vérifier la liste des candidats</h2>
+                                <span class="card-subtitle">
+                                    Charger le fichier Excel, contrôler les informations, puis valider l’envoi.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+
+                            <!-- Résumé concours sélectionné -->
+                            <div class="preview-meta" style="margin-bottom: 12px;">
+                                <span id="selectedConcoursLabel" class="tag">Concours : —</span>
+                                <span id="selectedFaculteLabel" class="tag">Faculté : —</span>
+                                <span id="selectedDepartementLabel" class="tag">Département : —</span>
+                                <span id="selectedSpecialiteLabel" class="tag">Specialite: —</span>
+                            </div>
+
+                            <!-- Upload fichier -->
+                            <div class="form-group">
+                                <label for="excelInput">Fichier Excel des candidats</label>
+                                <div class="file-drop-zone" id="fileDropZone">
+                                    <i class="uil uil-file-exclamation-alt file-icon"></i>
+                                    <p class="file-title">Glissez-déposez votre fichier ici</p>
+                                    <p class="file-subtitle">ou cliquez pour parcourir (.xlsx, .xls)</p>
+                                    <input type="file" id="excelInput" accept=".xlsx,.xls" />
+                                </div>
+                                <p class="file-info" id="fileInfo">Aucun fichier sélectionné.</p>
+                            </div>
+
+                            <div class="form-actions">
+                                <button id="loadCandidatesBtn" class="btn btn-secondary" disabled>
+                                    Charger la liste des candidats
+                                </button>
+                            </div>
+
+                            <!-- Tableau des candidats -->
+                            <div class="table-wrapper" style="margin-top: 20px;">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nom</th>
+                                            <th>Prénom</th>
+                                            <th>Matricule</th>
+                                            <th>Date de NAISSANCE</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="candidatsTableBody" class="table-body-scroll">
+                                        <tr class="empty-row">
+                                            <td colspan="5">
+                                                Aucune donnée à afficher. Sélectionnez un concours, importez le fichier
+                                                Excel puis cliquez sur
+                                                <strong>Charger la liste des candidats</strong>.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Bouton Valider & Envoyer -->
+                            <div class="form-actions" style="margin-top: 16px;">
+                                <button id="validateSendBtn" class="primary-btn" disabled>
+                                    Valider et envoyer au chef de département
+                                    <i class="uil uil-message"></i>
+                                </button>
+                            </div>
+
+                            <div class="status-zone" id="statusZone" style="margin-top: 8px;">
+                                <p class="status-message" style="color: rgb(172, 117, 7);">
+                                    <i class="uil uil-info-circle"></i>
+                                    En attente de chargement de la liste.
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+                </section>
+
+            </section>
+
+        </main>
+    </div>
+
+    <script src="theme.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+    <script>
+        const API_BASE = "http://localhost:4000"; // adapte à ton backend si besoin
+
+        let selectedConcours = null; // {id, concours, faculte, departement}
+
+        const step1Section = document.getElementById("step1Section");
+        const step2Section = document.getElementById("step2Section");
+
+        const concoursTable = document.getElementById("concoursTable");
+        const nextStepBtn = document.getElementById("nextStepBtn");
+
+        const selectedConcoursLabel = document.getElementById("selectedConcoursLabel");
+        const selectedFaculteLabel = document.getElementById("selectedFaculteLabel");
+        const selectedDepartementLabel = document.getElementById("selectedDepartementLabel");
+        const selectedSpecialiteLabel = document.getElementById("selectedSpecialiteLabel");
+
+        const fileDropZone = document.getElementById("fileDropZone");
+        const excelInput = document.getElementById("excelInput");
+        const fileInfo = document.getElementById("fileInfo");
+        const loadCandidatesBtn = document.getElementById("loadCandidatesBtn");
+        const candidatsTableBody = document.getElementById("candidatsTableBody");
+        const validateSendBtn = document.getElementById("validateSendBtn");
+        const statusZone = document.getElementById("statusZone");
+
+        const progressBarInner = document.getElementById("importProgress");
+
+        /* ========== TOAST ========== */
+        function showToast(message, type = "info", duration = 3000) {
+            const area = document.getElementById("toastArea");
+            if (!area) {
+                alert(message);
+                return;
+            }
+            const div = document.createElement("div");
+            div.className = `toast toast-${type}`;
+            div.textContent = message;
+            area.appendChild(div);
+
+            requestAnimationFrame(() => div.classList.add("visible"));
+            setTimeout(() => {
+                div.classList.remove("visible");
+                setTimeout(() => div.remove(), 200);
+            }, duration);
+        }
+
+        /* ========== ÉTAPE 1 : SÉLECTION DU CONCOURS ========== */
+        concoursTable.addEventListener("change", (e) => {
+            if (e.target && e.target.name === "concoursSelect") {
+                const row = e.target.closest("tr");
+                const id = row.getAttribute("data-id");
+                const cells = row.querySelectorAll("td");
+
+                selectedConcours = {
+                    id,
+                    concours: cells[1].textContent.trim(),
+                    faculte: cells[2].textContent.trim(),
+                    departement: cells[3].textContent.trim(),
+                    specialite: cells[4].textContent.trim()
+                };
+
+                // surligner la ligne sélectionnée
+                [...concoursTable.querySelectorAll("tbody tr")].forEach(tr =>
+                    tr.classList.remove("row-selected")
+                );
+                row.classList.add("row-selected");
+
+            }
+        });
+
+        nextStepBtn.addEventListener("click", () => {
+            console.log(selectedConcours);
+            if (!selectedConcours) {
+                showToast("Veuillez sélectionner un concours.", "error");
+                return;
+            }
+
+            // 🔹 cacher l'étape 1, afficher l'étape 2
+            step1Section.classList.add("hidden");
+            step2Section.classList.remove("hidden");
+
+            // 🔹 remplir le résumé du concours
+            selectedConcoursLabel.textContent = `Concours : ${selectedConcours.concours}`;
+            selectedFaculteLabel.textContent = `Faculté : ${selectedConcours.faculte}`;
+            selectedDepartementLabel.textContent = `Département : ${selectedConcours.departement}`;
+            selectedSpecialiteLabel.textContent = `Specialite : ${selectedConcours.specialite}`;
+            // 🔹 passer la barre de progression à 100 %
+            if (progressBarInner) {
+                progressBarInner.style.width = "100%";
+            }
+
+            showToast(
+                "Concours sélectionné. Vous pouvez maintenant importer la liste des candidats.",
+                "success"
+            );
+        });
+
+        /* ========== DRAG & DROP FICHIER ========== */
+        fileDropZone.addEventListener("click", () => excelInput.click());
+
+        fileDropZone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            fileDropZone.classList.add("drag-over");
+        });
+
+        fileDropZone.addEventListener("dragleave", () => {
+            fileDropZone.classList.remove("drag-over");
+        });
+
+        fileDropZone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            fileDropZone.classList.remove("drag-over");
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                excelInput.files = e.dataTransfer.files;
+                handleFileChange();
+            }
+        });
+
+        excelInput.addEventListener("change", handleFileChange);
+
+        function handleFileChange() {
+            const file = excelInput.files[0];
+            if (!file) {
+                fileInfo.textContent = "Aucun fichier sélectionné.";
+                loadCandidatesBtn.disabled = true;
+                return;
+            }
+            fileInfo.textContent = `${file.name} (${Math.round(file.size / 1024)} Ko)`;
+            loadCandidatesBtn.disabled = false;
+        }
+
+        /* ========== CHARGER LA LISTE DES CANDIDATS (FRONT ONLY) ========== */
+        loadCandidatesBtn.addEventListener("click", () => {
+            const file = excelInput.files[0];
+
+            if (!selectedConcours) {
+                showToast("Veuillez d'abord sélectionner un concours.", "warning");
+                return;
+            }
+
+            if (!file) {
+                showToast("Veuillez sélectionner un fichier Excel.", "warning");
+                return;
+            }
+
+            statusZone.innerHTML =
+                `<p class="status-message"><i class="uil uil-spinner-alt"></i> Chargement de la liste...</p>`;
+
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: "array" });
+
+                    const firstSheetName = workbook.SheetNames[0];
+                    const sheet = workbook.Sheets[firstSheetName];
+
+                    // 🔹 On commence à la LIGNE 5 (index 4) : là où il y a N°, Matricule, NOM, PRENOM, DATE DE NAISSANCE
+                    const rows = XLSX.utils.sheet_to_json(sheet, {
+
+                        defval: "",
+                        raw: false,
+                    });
+
+
+                    const candidats = rows
+                        .map((row) => {
+                            let matricule = "";
+                            let nom = "";
+                            let prenom = "";
+                            let dateNaissance = "";
+
+                            for (const [key, value] of Object.entries(row)) {
+                                const k = key.toString().toLowerCase().trim();
+                                const v = (value ?? "").toString().trim();
+
+                                if (k.includes("matricule")) {
+                                    matricule = v;
+                                } else if (k === "nom") {
+                                    nom = v;
+                                } else if (k.includes("prenom") || k.includes("prénom")) {
+                                    prenom = v;
+                                } else if (k.includes("date") && k.includes("naissance")) {
+                                    dateNaissance = v;
+                                }
+                            }
+
+                            return { matricule, nom, prenom, dateNaissance };
+                        })
+                        // on ignore les lignes vides
+                        .filter((c) => c.matricule && c.nom && c.prenom);
+
+                    // 🔹 Remplir le tableau
+                    candidatsTableBody.innerHTML = "";
+
+                    if (candidats.length === 0) {
+                        candidatsTableBody.innerHTML = `
+          <tr class="empty-row">
+            <td colspan="5">
+              Aucun candidat trouvé dans le fichier. Vérifiez que la ligne 5 contient bien les en-têtes :
+              <strong>N°, Matricule, NOM, PRENOM, DATE DE NAISSANCE</strong>.
+            </td>
+          </tr>
+        `;
+                        validateSendBtn.disabled = true;
+                        statusZone.innerHTML = `
+          <p class="status-message warning">
+            <i class="uil uil-exclamation-triangle"></i>
+            Aucun candidat valide importé.
+          </p>
+        `;
+                        return;
+                    }
+
+                    candidats.forEach((c, index) => {
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${c.nom}</td>
+          <td>${c.prenom}</td>
+          <td>${c.matricule}</td>
+          <td>${c.dateNaissance || "-"}</td>
+        `;
+                        candidatsTableBody.appendChild(tr);
+                    });
+
+                    validateSendBtn.disabled = false;
+                    statusZone.innerHTML = `
+        <p class="status-message success" style="color: rgb(7, 172, 62); " >
+          <i class="uil uil-check-circle"></i>
+          ${candidats.length} candidat(s) importé(s) depuis le fichier Excel.
+        </p>
+      `;
+                    showToast("Liste des candidats chargée depuis le fichier Excel.", "success");
+
+                } catch (err) {
+                    console.error(err);
+                    statusZone.innerHTML = `
+        <p class="status-message warning">
+          <i class="uil uil-exclamation-triangle"></i>
+          Erreur lors de la lecture du fichier. Vérifiez le format (.xls/.xlsx).
+        </p>
+      `;
+                    showToast("Erreur lors de la lecture du fichier Excel.", "danger");
+                }
+            };
+
+            reader.readAsArrayBuffer(file);
+        });
+
+        validateSendBtn.addEventListener("click", async () => {
+            if (!selectedConcours) {
+                showToast("Aucun concours sélectionné.", "warning");
+                return;
+            }
+
+            statusZone.innerHTML =
+                `<p class="status-message"><i class="uil uil-spinner-alt"></i> Envoi en cours aux chefs de département...</p>`;
+
+            // TODO : appel API réel
+            setTimeout(() => {
+                statusZone.innerHTML =
+                    `<p class="status-message success"><i class="uil uil-check-circle"></i> Liste envoyée au chef de département.</p>`;
+                showToast("Liste envoyée au chef de département.", "success");
+                validateSendBtn.disabled = true;
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>

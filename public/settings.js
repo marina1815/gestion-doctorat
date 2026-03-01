@@ -1,30 +1,27 @@
-// settings.js
+
 
 document.addEventListener("DOMContentLoaded", () => {
-    /* =========================
-       CONFIG API
-       ========================= */
+
     const API_URL = window.API_URL || "http://localhost:4000";
     const ENDPOINTS = {
         users: "/users",
-        membres: "/membres"
+        membres: "/membres",
+        facultes: "/facultes",
+        vice_doyen: "/vice-doyens",
     };
 
-     async function refreshSession() {
+    async function refreshSession() {
         const res = await fetch(`${API_URL}/auth/refresh`, {
             method: "POST",
             credentials: "include",
         });
 
         if (!res.ok) {
-          
             throw new Error("Refresh token invalide");
         }
-
-       
     }
 
-
+  
     function showConfirm(message, title = "Confirmation", type = "default") {
         return new Promise((resolve) => {
             const modal = document.getElementById("confirmModal");
@@ -41,9 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
             dialog.classList.remove("default", "warning", "danger");
             dialog.classList.add(type || "default");
 
-            if (type === "danger") {
-                icon.textContent = "!";
-            } else if (type === "warning") {
+            if (type === "danger" || type === "warning") {
                 icon.textContent = "!";
             } else {
                 icon.textContent = "i";
@@ -65,6 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+   
     const toastArea = document.getElementById("toastArea");
 
     function showToast(message, type = "info", duration = 3000) {
@@ -101,9 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* =========================
-       APPEL API GÉNÉRIQUE
+       APPEL API GÉNÉRIQUE + REFRESH TOKEN
        ========================= */
-        async function apiRequest(path, method = "GET", body = null) {
+    async function apiRequest(path, method = "GET", body = null) {
         const url = API_URL + path;
 
         const options = {
@@ -118,15 +114,38 @@ document.addEventListener("DOMContentLoaded", () => {
             options.body = JSON.stringify(body);
         }
 
-        const res = await fetch(url, options);
-
-        if (res.status === 401 || res.status === 419) {
-            handleSessionExpired();
-            throw new Error("Session expirée");
+        // petite fonction pour factoriser le fetch
+        async function doFetch() {
+            return fetch(url, options);
         }
 
+        let res = await doFetch();
+
+        // 1️⃣ Si access token expiré -> essayer de refresh
+        if (res.status === 401 || res.status === 419) {
+            try {
+                await refreshSession();           // tente de renouveler le token
+                res = await doFetch();            // rejoue la requête
+            } catch (e) {
+                // refresh a échoué => session vraiment expirée
+                handleSessionExpired();
+                throw new Error("Session expirée");
+            }
+
+            // Après refresh, si toujours 401/419 -> session expirée
+            if (res.status === 401 || res.status === 419) {
+                handleSessionExpired();
+                throw new Error("Session expirée");
+            }
+        }
+
+        // 2️⃣ Gestion des autres cas
         if (res.status === 404) {
-            showToast("Route API introuvable (404). Vérifie le backend.", "error", 5000);
+            showToast(
+                "Route API introuvable (404). Vérifie le backend.",
+                "error",
+                5000
+            );
             throw new Error("Route introuvable : " + url);
         }
 
@@ -145,12 +164,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function handleSessionExpired() {
         localStorage.removeItem("user");
-        showToast("Votre session a expiré, veuillez vous reconnecter.", "warning", 4000);
+        showToast(
+            "Votre session a expiré, veuillez vous reconnecter.",
+            "warning",
+            4000
+        );
         setTimeout(() => {
             window.location.href = "login.html";
         }, 1500);
     }
 
+    /* =========================
+       SÉLECTION DES ÉLÉMENTS
+       ========================= */
     const settingsPage = document.getElementById("settingsPage");
     const accountsPage = document.getElementById("accountsPage");
     const cardManageAccounts = document.getElementById("openAccountsPage");
@@ -177,8 +203,91 @@ document.addEventListener("DOMContentLoaded", () => {
     const inputUsername = document.getElementById("newUsername");
     const inputPassword = document.getElementById("newPassword");
     const selectRole = document.getElementById("newRole");
-    const modalTitle = accountModal?.querySelector(".account-modal-header h2");
-    const modalSubmitBtn = accountForm?.querySelector('button[type="submit"]');
+    const modalTitle =
+        accountModal?.querySelector(".account-modal-header h2");
+    const modalSubmitBtn =
+        accountForm?.querySelector('button[type="submit"]');
+
+    // Champs de membre
+    const lastName = document.getElementById("lastName");
+    const firstName = document.getElementById("firstName");
+    const lastNameAr = document.getElementById("lastNameAr");
+    const firstNameAr = document.getElementById("firstNameAr");
+    const gender = document.getElementById("gender");
+    const grade = document.getElementById("grade");
+
+    /* =========================
+       Champs dépendants du rôle
+       ========================= */
+    const roleSelect = document.getElementById("newRole");
+
+    const rowSalle = document.getElementById("rowSalle");
+    const rowFaculte = document.getElementById("rowFaculte");
+    const rowDepartement = document.getElementById("rowDepartement");
+    const rowConcours = document.getElementById("rowConcours");
+
+    // Select facultés + cache de chargement
+    const faculteSelect = document.getElementById("faculteSelect");
+    let facultesLoaded = false;
+
+    async function loadFacultesIfNeeded() {
+        if (!faculteSelect) return;
+        if (facultesLoaded) return;
+
+        try {
+            const facultes = await apiRequest(ENDPOINTS.facultes, "GET");
+            console.log(facultes);
+
+            faculteSelect.innerHTML = "";
+
+            const optDefault = document.createElement("option");
+            optDefault.value = "";
+            optDefault.textContent = "Sélectionner une faculté";
+            faculteSelect.appendChild(optDefault);
+
+            (facultes || []).forEach((f) => {
+                const opt = document.createElement("option");
+                opt.value = f.idFaculte;
+                opt.textContent = f.nomFaculte;
+                faculteSelect.appendChild(opt);
+            });
+
+            facultesLoaded = true;
+        } catch (err) {
+            console.error("Erreur lors du chargement des facultés:", err);
+            showToast("Erreur lors du chargement des facultés.", "error", 5000);
+        }
+    }
+
+    function updateRoleExtraFields() {
+        if (!roleSelect) return;
+
+        const role = roleSelect.value;
+
+        // Tout cacher d'abord
+        if (rowSalle) rowSalle.style.display = "none";
+        if (rowFaculte) rowFaculte.style.display = "none";
+        if (rowDepartement) rowDepartement.style.display = "none";
+        if (rowConcours) rowConcours.style.display = "none";
+
+        // Puis afficher ce qui correspond
+        if (role === "RESPONSABLE_SALLE") {
+            if (rowSalle) rowSalle.style.display = "flex";
+        } else if (role === "DOYEN" || role === "VICEDOYEN") {
+            if (rowFaculte) rowFaculte.style.display = "flex";
+            loadFacultesIfNeeded(); // charge les facultés
+        } else if (role === "CHEFDEPARTEMENT") {
+            if (rowDepartement) rowDepartement.style.display = "flex";
+        } else if (role === "CFD" || role === "CELLULE_ANONYMAT") {
+            if (rowConcours) rowConcours.style.display = "flex";
+        }
+    }
+
+    if (roleSelect) {
+        roleSelect.addEventListener("change", updateRoleExtraFields);
+        // état initial
+        updateRoleExtraFields();
+    }
 
     let currentEditUserId = null;
     let allUsers = [];
@@ -230,6 +339,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (modalSubmitBtn) modalSubmitBtn.textContent = "Créer";
 
         accountForm?.reset();
+        if (selectRole) selectRole.value = "ADMIN";
+        updateRoleExtraFields();
+
         accountModal.classList.add("is-visible");
     }
 
@@ -240,10 +352,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (modalTitle) modalTitle.textContent = "Modifier le compte";
         if (modalSubmitBtn) modalSubmitBtn.textContent = "Mettre à jour";
 
-        inputEmail.value = user.email || "";
-        inputUsername.value = user.username || "";
-        inputPassword.value = "";
-        selectRole.value = user.role || "";
+        if (inputEmail) inputEmail.value = user.email || "";
+        if (inputUsername) inputUsername.value = user.username || "";
+        if (inputPassword) inputPassword.value = "";
+        if (selectRole) selectRole.value = user.role || "";
+
+        updateRoleExtraFields();
 
         accountModal.classList.add("is-visible");
     }
@@ -252,6 +366,7 @@ document.addEventListener("DOMContentLoaded", () => {
         accountModal?.classList.remove("is-visible");
         accountForm?.reset();
         currentEditUserId = null;
+        updateRoleExtraFields();
     }
 
     btnNewAccount?.addEventListener("click", openCreateModal);
@@ -267,6 +382,9 @@ document.addEventListener("DOMContentLoaded", () => {
     accountForm?.addEventListener("submit", async (e) => {
         e.preventDefault();
 
+        // 0️⃣ Rôle courant
+        const role = selectRole.value;
+
         // 1️⃣ Construire payload membre
         const membrePayload = {
             nomMembre: lastName.value.trim(),
@@ -274,57 +392,138 @@ document.addEventListener("DOMContentLoaded", () => {
             nomAr: lastNameAr.value.trim(),
             prenomAr: firstNameAr.value.trim(),
             sexe: gender.value,
-            grade: grade.value
+            grade: grade.value,
         };
 
+        // 2️⃣ Construire payload user de base
         const userPayload = {
             email: inputEmail.value.trim(),
             username: inputUsername.value.trim(),
             password: inputPassword.value,
-            role: selectRole.value
+            role: role,
         };
 
+
+        if (role === "RESPONSABLE_SALLE") {
+            const salleSelect = document.getElementById("salleSelect");
+            userPayload.idSalle = salleSelect?.value || null;
+        } else if (role === "DOYEN" || role === "VICEDOYEN") {
+            userPayload.idFaculte = faculteSelect?.value || null;
+        } else if (role === "CHEFDEPARTEMENT") {
+            const departementSelect =
+                document.getElementById("departementSelect");
+            userPayload.idDepartement = departementSelect?.value || null;
+        } else if (role === "CFD" || role === "CELLULE_ANONYMAT") {
+            const concoursSelect =
+                document.getElementById("concoursSelect");
+            userPayload.idConcours = concoursSelect?.value || null;
+        }
+
+
         const loading = showLoadingToast(
-            currentEditUserId ? "Mise à jour du compte…" : "Création du compte…"
+            currentEditUserId
+                ? "Mise à jour du compte…"
+                : "Création du compte…"
         );
 
         try {
-            if (!userPayload.username || !userPayload.role || !userPayload.password) {
+            if (
+                !userPayload.username ||
+                !userPayload.role ||
+                (!currentEditUserId && !userPayload.password)
+            ) {
                 throw new Error("Veuillez remplir les champs obligatoires.");
             }
 
             let idMembreCree;
 
-            // 3️⃣ Créer membre SEULEMENT en mode création
-            if (!currentEditUserId) {
-                const membreResponse = await apiRequest(ENDPOINTS.membres, "POST", membrePayload);
 
+            if (!currentEditUserId) {
+                const membreResponse = await apiRequest(
+                    ENDPOINTS.membres,
+                    "POST",
+                    membrePayload
+                );
 
                 idMembreCree = membreResponse.idMembre;
-
-                if (!idMembreCree) throw new Error("Impossible de récupérer l’id du membre.");
+                if (!idMembreCree)
+                    throw new Error(
+                        "Impossible de récupérer l’id du membre."
+                    );
             }
 
-            // 4️⃣ Ajouter id_membre au payload user
+            // 5️⃣ Ajouter id_membre au payload user
             if (!currentEditUserId) {
                 userPayload.idMembre = idMembreCree;
             }
 
-            // 5️⃣ Créer ou mettre à jour le user
+
             if (currentEditUserId) {
-                await apiRequest(`${ENDPOINTS.users}/${currentEditUserId}`, "PUT", userPayload);
+                // MODE ÉDITION
+                await apiRequest(
+                    `${ENDPOINTS.users}/${currentEditUserId}`,
+                    "PUT",
+                    userPayload
+                );
                 showToast("Compte mis à jour avec succès.", "success");
+
+                // (optionnel) ici tu pourrais aussi gérer la MAJ du vice_doyen
             } else {
-                await apiRequest(ENDPOINTS.users, "POST", userPayload);
+                // MODE CRÉATION
+                const createdUser = await apiRequest(
+                    ENDPOINTS.users,
+                    "POST",
+                    {
+                        email: userPayload.email,
+                        username: userPayload.username,
+                        password: userPayload.password,
+                        role: userPayload.role,
+                        idMembre: userPayload.idMembre,
+                    }
+                );
                 showToast("Compte créé avec succès.", "success");
+
+
+
+                if (
+                    (role === "DOYEN" || role === "VICEDOYEN") &&
+                    faculteSelect?.value
+                ) {
+                    try {
+                        console.log(createdUser);
+
+                        await apiRequest(
+                            ENDPOINTS.vice_doyen,
+                            "POST",
+                            {
+                                idFaculte: faculteSelect.value,
+                                idUser: createdUser.user.idUser, 
+                            }
+                        );
+                        // Tu peux afficher un toast si tu veux :
+                        // showToast("Vice-doyen associé à la faculté.", "success");
+                    } catch (err) {
+                        console.error("Erreur lors de la création du vice-doyen:", err);
+                        showToast(
+                            "Compte créé, mais erreur lors de l'association à la faculté.",
+                            "warning",
+                            5000
+                        );
+                    }
+                }
             }
+
 
             closeAccountModalFn();
             await refreshUsersTable();
-
         } catch (err) {
             console.error(err);
-            showToast(err.message || "Erreur lors de l’enregistrement du compte.", "error", 5000);
+            showToast(
+                err.message ||
+                "Erreur lors de l’enregistrement du compte.",
+                "error",
+                5000
+            );
         } finally {
             removeToast(loading);
         }
@@ -335,13 +534,28 @@ document.addEventListener("DOMContentLoaded", () => {
        ========================= */
     const roleMeta = {
         ADMIN: { label: "Admin", badge: "badge-admin" },
-        RESPONSABLE_SALLE: { label: "Responsable Salle", badge: "badge-doyen" },
-        CHEFDEPARTEMENT: { label: "Chef de Département", badge: "badge-chefdep" },
+        RESPONSABLE_SALLE: {
+            label: "Responsable Salle",
+            badge: "badge-doyen",
+        },
+        CHEFDEPARTEMENT: {
+            label: "Chef de Département",
+            badge: "badge-chefdep",
+        },
         CFD: { label: "CFD", badge: "badge-cfd" },
-        CELLULE_ANONYMAT: { label: "Cellule Anonymat", badge: "badge-anonymat" },
-        CORRECTEUR: { label: "Correcteur", badge: "badge-correcteur" },
+        CELLULE_ANONYMAT: {
+            label: "Cellule Anonymat",
+            badge: "badge-anonymat",
+        },
+        CORRECTEUR: {
+            label: "Correcteur",
+            badge: "badge-correcteur",
+        },
         DOYEN: { label: "Doyen", badge: "badge-role" },
-        VICEDOYEN: { label: "Vice-Doyen", badge: "badge-role" },
+        VICEDOYEN: {
+            label: "Vice-Doyen",
+            badge: "badge-role",
+        },
         RECTEUR: { label: "Recteur", badge: "badge-role" },
     };
 
@@ -355,7 +569,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const matchesRole =
                 roleFilterValue === "all" || u.role === roleFilterValue;
 
-            const isActive = u.isActive ?? u.is_active ?? u.active ?? u.enabled ?? false;
+            const isActive =
+                u.isActive ??
+                u.is_active ??
+                u.active ??
+                u.enabled ??
+                false;
 
             const matchesStatus =
                 statusFilterValue === "all" ||
@@ -394,7 +613,8 @@ document.addEventListener("DOMContentLoaded", () => {
           <td>${user.username}</td>
           <td><span class="badge-role ${meta.badge}">${meta.label}</span></td>
           <td>
-            <span class="chip-status ${isActive ? "chip-active" : "chip-disabled"}">
+            <span class="chip-status ${isActive ? "chip-active" : "chip-disabled"
+                    }">
               ${isActive ? "Actif" : "Désactivé"}
             </span>
           </td>
@@ -436,18 +656,27 @@ document.addEventListener("DOMContentLoaded", () => {
         const loading = showLoadingToast("Chargement des comptes…");
         try {
             const users = await apiRequest(ENDPOINTS.users, "GET");
-            allUsers = Array.isArray(users) ? users : users?.data || [];
+            allUsers = Array.isArray(users)
+                ? users
+                : users?.data || [];
             renderUsersTable(allUsers);
         } catch (err) {
             console.error(err);
-            showToast("Erreur lors du chargement des comptes.", "error");
+            showToast(
+                "Erreur lors du chargement des comptes.",
+                "error"
+            );
         } finally {
             removeToast(loading);
         }
     }
 
-    roleFilter?.addEventListener("change", () => renderUsersTable(allUsers));
-    statusFilter?.addEventListener("change", () => renderUsersTable(allUsers));
+    roleFilter?.addEventListener("change", () =>
+        renderUsersTable(allUsers)
+    );
+    statusFilter?.addEventListener("change", () =>
+        renderUsersTable(allUsers)
+    );
 
     /* =========================
        ACTIONS EDIT / DELETE / TOGGLE
@@ -462,10 +691,15 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!id || !action) return;
 
         if (action === "edit") {
-            const user = allUsers.find((u) => String(u.idUser) === String(id));
+            const user = allUsers.find(
+                (u) => String(u.idUser) === String(id)
+            );
 
             if (!user) {
-                showToast("Utilisateur introuvable dans la liste.", "error");
+                showToast(
+                    "Utilisateur introuvable dans la liste.",
+                    "error"
+                );
                 return;
             }
 
@@ -474,7 +708,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (action === "toggle") {
-            const loading = showLoadingToast("Mise à jour du statut…");
+            const loading = showLoadingToast(
+                "Mise à jour du statut…"
+            );
             try {
                 // TODO: appeler une vraie route PATCH /users/:id/toggle
                 showToast("Statut mis à jour.", "success");
@@ -496,7 +732,9 @@ document.addEventListener("DOMContentLoaded", () => {
             );
             if (!confirmed) return;
 
-            const loading = showLoadingToast("Suppression du compte…");
+            const loading = showLoadingToast(
+                "Suppression du compte…"
+            );
             try {
                 await apiRequest(`${ENDPOINTS.users}/${id}`, "DELETE");
                 showToast("Compte supprimé.", "success");
@@ -513,5 +751,7 @@ document.addEventListener("DOMContentLoaded", () => {
     /* =========================
        INIT
        ========================= */
+    // Optionnel : tu pourrais aussi tenter un refresh dès le chargement
+    // refreshSession().catch(() => {});
     refreshUsersTable();
 });

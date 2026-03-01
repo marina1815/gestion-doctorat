@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Calendrier des concours | Vice Doyen | Gestion Doctorale</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Ton fichier global -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+
+  <!-- CSS spécifique du calendrier (tu peux le déplacer dans style.css) -->
+  <style>
+    .calendar-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .calendar-current-month {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .calendar-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--color-surface-subtle, #eef2ff);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+    }
+
+    /* couleurs pour les filières */
+    .legend-dot-informatique,
+    .badge-informatique {
+      background: #4f46e5;
+      color: #fff;
+    }
+
+    .legend-dot-electronique,
+    .badge-electronique {
+      background: #0ea5e9;
+      color: #fff;
+    }
+
+    .legend-dot-geniecivil,
+    .badge-geniecivil {
+      background: #22c55e;
+      color: #fff;
+    }
+
+    /* grille calendrier */
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 4px;
+      margin-top: 8px;
+    }
+
+    .calendar-day-header {
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      padding: 6px 0;
+      color: var(--color-text-muted, #6b7280);
+    }
+
+    .calendar-day {
+      min-height: 80px;
+      padding: 6px;
+      border-radius: 10px;
+      border: 1px solid var(--color-border-soft, #e5e7eb);
+      background: var(--color-surface, #ffffff);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 12px;
+    }
+
+    .calendar-day.empty {
+      background: transparent;
+      border: none;
+    }
+
+    .calendar-date {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-muted, #6b7280);
+      margin-bottom: 2px;
+    }
+
+    .calendar-events {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .calendar-badge {
+      font-size: 11px;
+      padding: 3px 6px;
+      border-radius: 999px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .calendar-day.has-concours {
+      border-color: rgba(79, 70, 229, 0.4);
+      box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+<div class="app-layout">
+  <!-- ===== SIDEBAR (simplifiée) ===== -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-icon">
+        <img id="mainLogo" src="img/iconlight.png" alt="Logo USTO" class="logo-img" />
+      </div>
+      <div class="logo-text">
+        <span class="logo-title">Gestion Doctorale</span>
+        <span class="logo-subtitle">USTO MB</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <p class="sidebar-section-title">Menu</p>
+
+      <a href="vice-doyen-accueil.html" class="nav-item">
+        <i class="uil uil-estate"></i>
+        <span>Accueil</span>
+      </a>
+
+      <a href="vice-doyen-import.html" class="nav-item">
+        <i class="uil uil-upload-alt nav-icon"></i>
+        <span>Import candidats</span>
+      </a>
+
+      <a href="vice-doyen-calendrier.html" class="nav-item active nav-item-active">
+        <i class="uil uil-calendar-alt"></i>
+        <span>Calendrier des concours</span>
+      </a>
+       <a href="vice-doyen-historique.html" class="nav-item">
+                    <i class="uil uil-history nav-icon"></i>
+                    <span>Historique des actions</span>
+                </a>
+    </nav>
+  </aside>
+
+
+  <main class="main">
+    <!-- ===== TOPBAR ===== -->
+    <header class="topbar">
+      <div class="search-wrapper">
+        <i class="uil uil-search"></i>
+        <input type="text" placeholder="Rechercher" />
+      </div>
+
+      <div class="topbar-actions">
+        <button class="icon-btn">
+          <i class="uil uil-envelope"></i>
+        </button>
+        <button class="icon-btn notification-btn">
+          <i class="uil uil-bell"></i>
+          <span class="badge">3</span>
+        </button>
+        <button id="themeToggle" class="icon-btn">
+          <i id="themeIcon" class="uil uil-moon"></i>
+        </button>
+
+        <div class="user-menu">
+          <button class="user-menu-trigger" id="userMenuBtn">
+            <img src="img/user.png" alt="Vice Doyen" class="user-avatar">
+            <span class="user-name">Vice Doyen</span>
+            <i class="uil uil-angle-down"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== CONTENU ===== -->
+    <section class="content">
+      <div class="content-header">
+        <h1>Calendrier des concours</h1>
+        <p class="content-subtitle">
+          Visualisez les dates des concours de doctorat déjà planifiés par filière.
+        </p>
+      </div>
+
+      <!-- ===== CALENDRIER ===== -->
+      <section class="one-column" id="concoursCalendarSection">
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h2>Mois de concours</h2>
+              <span class="card-subtitle">
+                Parcourez les mois pour voir les concours existants.
+              </span>
+            </div>
+
+            <div class="calendar-controls">
+              <button class="icon-btn" id="prevMonthBtn">
+                <i class="uil uil-angle-left"></i>
+              </button>
+              <span class="calendar-current-month" id="calendarCurrentMonth">
+                <!-- rempli en JS -->
+              </span>
+              <button class="icon-btn" id="nextMonthBtn">
+                <i class="uil uil-angle-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="calendar-legend">
+              <span class="legend-item">
+                <span class="legend-dot legend-dot-informatique"></span>
+                Informatique
+              </span>
+              <span class="legend-item">
+                <span class="legend-dot legend-dot-electronique"></span>
+                Électronique
+              </span>
+              <span class="legend-item">
+                <span class="legend-dot legend-dot-geniecivil"></span>
+                Génie Civil
+              </span>
+            </div>
+
+            <!-- grille du calendrier générée en JS -->
+            <div class="calendar-grid" id="calendarGrid">
+              <!-- JS remplira ici les en-têtes + jours -->
+            </div>
+          </div>
+        </article>
+      </section>
+    </section>
+  </main>
+</div>
+
+<!-- JS calendrier -->
+<script>
+  const monthNames = [
+    "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+    "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+  ];
+
+  // 🔹 Exemple de concours existants (à remplacer plus tard par les données de ton backend)
+  const concoursData = [
+    {
+      date: "2025-10-02",
+      label: "Doctorat 2024 – Informatique",
+      filiere: "informatique"
+    },
+    {
+      date: "2025-10-04",
+      label: "Doctorat 2024 – Électronique",
+      filiere: "electronique"
+    },
+    {
+      date: "2025-10-05",
+      label: "Doctorat 2024 – Génie Civil",
+      filiere: "geniecivil"
+    },
+    {
+      date: "2025-11-10",
+      label: "Doctorat 2024 – Informatique (session 2)",
+      filiere: "informatique"
+    }
+  ];
+
+  const calendarGrid = document.getElementById("calendarGrid");
+  const currentMonthLabel = document.getElementById("calendarCurrentMonth");
+  const prevMonthBtn = document.getElementById("prevMonthBtn");
+  const nextMonthBtn = document.getElementById("nextMonthBtn");
+
+  // mois affiché (année, mois)
+  let current = new Date();
+  current.setDate(1); // début du mois
+
+  function renderCalendar() {
+    // vider
+    calendarGrid.innerHTML = "";
+
+    const year = current.getFullYear();
+    const month = current.getMonth(); // 0-11
+
+    currentMonthLabel.textContent = `${monthNames[month]} ${year}`;
+
+    // en-têtes jours
+    const dayLabels = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+    dayLabels.forEach(label => {
+      const div = document.createElement("div");
+      div.className = "calendar-day-header";
+      div.textContent = label;
+      calendarGrid.appendChild(div);
+    });
+
+    // 1er jour du mois (position dans la grille, en commençant par lundi)
+    const firstDay = new Date(year, month, 1);
+    let startIndex = firstDay.getDay(); // 0=dimanche, 1=lundi...
+    if (startIndex === 0) startIndex = 7; // dim => 7
+
+    // nombre de jours dans le mois
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    // cases vides avant le 1er
+    for (let i = 1; i < startIndex; i++) {
+      const emptyCell = document.createElement("div");
+      emptyCell.className = "calendar-day empty";
+      calendarGrid.appendChild(emptyCell);
+    }
+
+    // indexer les concours par date AAAA-MM-JJ
+    const concoursByDate = {};
+    concoursData.forEach(c => {
+      if (!concoursByDate[c.date]) concoursByDate[c.date] = [];
+      concoursByDate[c.date].push(c);
+    });
+
+   
+    for (let day = 1; day <= daysInMonth; day++) {
+      const cellDate = new Date(year, month, day);
+      const isoDate = cellDate.toISOString().slice(0, 10); 
+
+      const div = document.createElement("div");
+      div.className = "calendar-day";
+      div.dataset.date = isoDate;
+
+      const spanDate = document.createElement("span");
+      spanDate.className = "calendar-date";
+      spanDate.textContent = day.toString();
+      div.appendChild(spanDate);
+
+      const events = concoursByDate[isoDate];
+      if (events && events.length > 0) {
+        div.classList.add("has-concours");
+        const eventsContainer = document.createElement("div");
+        eventsContainer.className = "calendar-events";
+
+        events.forEach(evt => {
+          const badge = document.createElement("span");
+          badge.classList.add("calendar-badge");
+          if (evt.filiere === "informatique") {
+            badge.classList.add("badge-informatique");
+          } else if (evt.filiere === "electronique") {
+            badge.classList.add("badge-electronique");
+          } else if (evt.filiere === "geniecivil") {
+            badge.classList.add("badge-geniecivil");
+          }
+          badge.textContent = evt.label;
+          eventsContainer.appendChild(badge);
+        });
+
+        div.appendChild(eventsContainer);
+      }
+
+      calendarGrid.appendChild(div);
+    }
+  }
+
+  prevMonthBtn.addEventListener("click", () => {
+    current.setMonth(current.getMonth() - 1);
+    renderCalendar();
+  });
+
+  nextMonthBtn.addEventListener("click", () => {
+    current.setMonth(current.getMonth() + 1);
+    renderCalendar();
+  });
+
+  // premier rendu
+  renderCalendar();
+</script>
+</body>
+</html>

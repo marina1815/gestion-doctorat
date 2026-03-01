@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="fr">
 
 <head>
@@ -8,9 +8,334 @@
 
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Styles spécifiques pour le pipeline / onglets -->
+  <style>
+/* ====== Mise en page header PV ====== */
+.toast-area {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toast {
+  min-width: 220px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.toast-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast-info    { background:#e0f2fe; color:#0369a1; }
+.toast-success { background:#dcfce7; color:#15803d; }
+.toast-warning { background:#fef9c3; color:#92400e; }
+.toast-danger  { background:#fee2e2; color:#b91c1c; }
+
+#view-pv .pv-header-card {
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+
+#view-pv .pv-header-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+#view-pv .pv-pipeline-wrapper {
+  flex: 1;
+  min-width: 320px;
+}
+
+#view-pv .pv-progress-wrapper {
+  flex: 0 0 260px;
+  min-width: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Résumé PV à droite */
+#view-pv .pv-summary {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.02);
+}
+
+/* Dark mode */
+:root[data-theme="dark"] #view-pv .pv-summary {
+  background: rgba(15, 23, 42, 0.7);
+}
+
+/* ====== Pipeline PV : petit effet hover pro ====== */
+/* =========================
+   HEADER DES VIEWS (pipeline + taux)
+   ========================= */
+
+.view-header-card {
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+
+.view-header-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.view-header-left {
+  flex: 1;
+  min-width: 350px;
+}
+
+.view-header-right {
+  flex: 0 0 260px;
+  min-width: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Summary à droite (bloc "Taux d’avancement") */
+
+.view-header-right .dashboard-summary {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.02);
+}
+
+:root[data-theme="dark"] .view-header-right .dashboard-summary {
+  background: rgba(15, 23, 42, 0.7);
+}
+
+/* Légère animation/hov sur les icônes pipeline */
+
+.pipeline-node {
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+  border-radius: 999px;
+}
+
+.pipeline-node .setting-icon {
+  transition: inherit;
+}
+
+.pipeline-node:hover .setting-icon {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12);
+}
+
+/* On peut aussi appliquer ça aux pipelines-step, si tu veux tout interactif */
+.pipeline-step:hover {
+  transform: translateY(-1px);
+}
+
+/* =========================
+   ANIMATIONS GLOBALES
+   ========================= */
+
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: fadeInUp 0.35s ease-out forwards;
+}
+
+.stagger-1 {
+  animation-delay: 0.08s;
+}
+
+.stagger-2 {
+  animation-delay: 0.16s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   CARDS PRINCIPALES DES VIEWS
+   ========================= */
+
+.view-main-card {
+  margin-bottom: 18px;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .view-header-layout {
+    flex-direction: column;
+  }
+
+  .view-header-right {
+    justify-content: flex-start;
+  }
+
+  .view-header-right .dashboard-summary {
+    width: 100%;
+  }
+}
+#view-pv .pv-pipeline {
+  padding: 6px 0;
+}
+
+#view-pv .pipeline-node {
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+  border-radius: 999px;
+}
+
+#view-pv .pipeline-node .setting-icon {
+  transition: inherit;
+}
+
+#view-pv .pipeline-node:hover .setting-icon {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12);
+}
+
+/* Active step déjà gérée par .pipeline-step-active, mais on doucit un peu */
+#view-pv .pipeline-step-active {
+  transform: translateY(-1px);
+}
+
+/* ====== Cards PV : espacements ====== */
+
+#view-pv .pv-config-card,
+#view-pv .pv-text-card {
+  margin-bottom: 18px;
+}
+
+/* Header texte PV */
+
+#view-pv .pv-text-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+#view-pv .pv-text-header .small-text {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* Actions PV */
+
+#view-pv .pv-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Bouton "ghost" (regen texte) */
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  color: inherit;
+}
+
+.btn-ghost:hover {
+  background: rgba(148, 163, 184, 0.08);
+}
+
+/* ====== Animations d’apparition ====== */
+
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: fadeInUp 0.35s ease-out forwards;
+}
+
+.stagger-1 {
+  animation-delay: 0.08s;
+}
+
+.stagger-2 {
+  animation-delay: 0.16s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive : pile les blocs sur petit écran */
+
+@media (max-width: 768px) {
+  #view-pv .pv-header-layout {
+    flex-direction: column;
+  }
+
+  #view-pv .pv-progress-wrapper {
+    justify-content: flex-start;
+  }
+
+  #view-pv .pv-summary {
+    width: 100%;
+  }
+
+  #view-pv .pv-text-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #view-pv .pv-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+
+
+/* Pour que le bouton garde sa taille normale */
+.btn-back {
+  width: fit-content;
+}
+.align-right {
+  margin-left: auto;
+}
+
+    @media (max-width: 900px) {
+      .pipeline {
+        overflow-x: auto;
+        padding-bottom: 8px;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <div id="toastArea" class="toast-area"></div>
   <div class="app-layout">
 
     <aside class="sidebar">
@@ -42,6 +367,10 @@
         <a href="#" class="nav-item" data-view="cfd">
           <i class="uil uil-briefcase"></i>
           <span>Comité CFD</span>
+        </a>
+        <a href="#" class="nav-item" data-view="sujet">
+          <i class="uil uil-edit"></i>
+          <span>Élaboration des sujets</span>
         </a>
 
         <a href="#" class="nav-item" data-view="correcteurs">
@@ -107,182 +436,111 @@
 
       <!-- ============ VIEW: ACCUEIL (simple) ============ -->
       <div class="view view-active" id="view-home" data-view="home">
-         <section class="card dashboard-card">
-          <!-- En-tête du dashboard -->
-          <div class="dashboard-header">
+  <section class="card dashboard-card">
+    <!-- En-tête -->
+    <div class="dashboard-header">
+      <div>
+        <h2>Bonjour, Doyen</h2>
+        <p class="dashboard-subtitle">
+          Vue globale de l’organisation du concours : comité CFD, correcteurs, anonymat,
+          surveillants & salles, puis PV et décision finale.
+        </p>
+      </div>
+
+     
+    </div>
+
+    <!-- PIPELINE -->
+    <div class="pipeline">
+      <div class="pipeline-step" data-step="cfd" data-go-view="cfd">
+        <div class="pipeline-icon"><i class="uil uil-briefcase"></i></div>
+        <div class="pipeline-content"><span class="pipeline-title">CFD</span></div>
+      </div>
+
+      <div class="pipeline-connector"></div>
+
+      <div class="pipeline-step" data-step="correcteurs" data-go-view="correcteurs">
+        <div class="pipeline-icon"><i class="uil uil-edit"></i></div>
+        <div class="pipeline-content"><span class="pipeline-title">Correcteurs</span></div>
+      </div>
+
+      <div class="pipeline-connector"></div>
+
+      <div class="pipeline-step" data-step="anonymat" data-go-view="anonymat">
+        <div class="pipeline-icon"><i class="uil uil-shield-check"></i></div>
+        <div class="pipeline-content"><span class="pipeline-title">Cellule d’anonymat</span></div>
+      </div>
+
+      <div class="pipeline-connector"></div>
+
+      <div class="pipeline-step" data-step="surveillants" data-go-view="surveillants">
+        <div class="pipeline-icon"><i class="uil uil-users-alt"></i></div>
+        <div class="pipeline-content"><span class="pipeline-title">Surveillants</span></div>
+      </div>
+
+      <div class="pipeline-connector"></div>
+
+      <div class="pipeline-step" data-step="pv" data-go-view="pv">
+        <div class="pipeline-icon"><i class="uil uil-file-alt"></i></div>
+        <div class="pipeline-content"><span class="pipeline-title">PV</span></div>
+      </div>
+    </div>
+
+    <!-- GRILLE ACCUEIL -->
+    <div class="home-grid">
+      <!-- COLONNE GAUCHE : stats + graphique -->
+      <div class="home-main">
+        
+
+        <!-- Graphique barres -->
+        <section class="card chart-card">
+          <div class="card-header">
             <div>
-              <h2>Bonjour , Doyen </h2>
-              <p class="dashboard-subtitle">
-                Vue globale de l’organisation du concours : comité CFD, correcteurs, anonymat,
-                surveillants & salles, puis PV et décision finale.
-              </p>
-            </div>
-
-            <!-- Résumé général -->
-            <div class="dashboard-summary">
-              <span class="summary-label">Taux d’avancement</span>
-              <div class="summary-progress">
-                <span class="summary-value" id="dashGlobalProgress">35%</span>
-                <span class="summary-chip success">En cours</span>
-              </div>
-              <span class="summary-hint">Basé sur 5 étapes principales</span>
+              <h3>Répartition des candidats par faculté</h3>
+              <p class="text-muted small-text">Nombre total de candidats par faculté</p>
             </div>
           </div>
-
-          <!-- PIPELINE DES ÉTAPES -->
-          <div class="pipeline">
-            <div class="pipeline-step pipeline-step-done">
-              <div class="pipeline-icon">
-                <i class="uil uil-briefcase"></i>
-              </div>
-              <div class="pipeline-content">
-                <span class="pipeline-title">CFD</span>
-              </div>
-            </div>
-
-            <div class="pipeline-connector"></div>
-
-            <div class="pipeline-step pipeline-step-active">
-              <div class="pipeline-icon">
-                <i class="uil uil-edit"></i>
-              </div>
-              <div class="pipeline-content">
-                <span class="pipeline-title">Correcteurs</span>
-              </div>
-            </div>
-
-            <div class="pipeline-connector"></div>
-
-            <div class="pipeline-step">
-              <div class="pipeline-icon">
-                <i class="uil uil-shield-check"></i>
-              </div>
-              <div class="pipeline-content">
-                <span class="pipeline-title">Cellule d’anonymat</span>
-              </div>
-            </div>
-
-            <div class="pipeline-connector"></div>
-
-            <div class="pipeline-step">
-              <div class="pipeline-icon">
-                <i class="uil uil-users-alt"></i>
-              </div>
-              <div class="pipeline-content">
-                <span class="pipeline-title">Surveillants </span>
-              </div>
-            </div>
-
-            <div class="pipeline-connector"></div>
-
-            <div class="pipeline-step">
-              <div class="pipeline-icon">
-                <i class="uil uil-file-alt"></i>
-              </div>
-              <div class="pipeline-content">
-                <span class="pipeline-title">PV </span>
-              </div>
-            </div>
-          </div>
-
-          <!-- GRILLE STATISTIQUES + GRAPHIQUE -->
-          <div class="dashboard-grid">
-            <!-- Statistiques rapides -->
-            <div class="stats-grid">
-              <div class="stat-card">
-                <div class="stat-header">
-                  <span class="stat-label">Concours</span>
-                  <span class="stat-tag">2024 / 2025</span>
-                </div>
-                <div class="stat-value-row">
-                  <span class="stat-value" id="statConcoursCount">3</span>
-                  <span class="stat-unit">concours</span>
-                </div>
-                <div class="stat-trend trend-up">+1 vs année précédente</div>
-              </div>
-
-              <div class="stat-card">
-                <div class="stat-header">
-                  <span class="stat-label">Comité CFD</span>
-                  <span class="stat-tag">Membres</span>
-                </div>
-                <div class="stat-value-row">
-                  <span class="stat-value" id="statCfdMembers">5</span>
-                  <span class="stat-unit">membres</span>
-                </div>
-                <div class="stat-trend">Responsable désigné</div>
-              </div>
-
-              <div class="stat-card">
-                <div class="stat-header">
-                  <span class="stat-label">Correcteurs</span>
-                  <span class="stat-tag">Rôle CORRECTEUR</span>
-                </div>
-                <div class="stat-value-row">
-                  <span class="stat-value" id="statCorrecteurs">8</span>
-                  <span class="stat-unit">inscrits</span>
-                </div>
-                <div class="stat-trend trend-warning">Objectif : 10</div>
-              </div>
-
-              <div class="stat-card">
-                <div class="stat-header">
-                  <span class="stat-label">Cellule d’anonymat</span>
-                  <span class="stat-tag">Par concours</span>
-                </div>
-                <div class="stat-value-row">
-                  <span class="stat-value" id="statAnonymat">2</span>
-                  <span class="stat-unit">cellules</span>
-                </div>
-                <div class="stat-trend">1 manquante</div>
-              </div>
-            </div>
-            <div class="card-header">
-                                <h2>Répartition des candidats par faculté</h2>
-                                <span class="card-subtitle">Nombre total de candidats par faculté</span>
-                            </div>
-
-                            <div class="card-body">
-                                <canvas id="chartFaculte" height="240"></canvas>
-                            </div>
-            <!-- Bloc “graphique” (placeholder) -->
-            <div class="card dashboard-subcard">
-              <div class="subcard-header">
-                <h3>Répartition des rôles</h3>
-                <span class="subcard-meta">CFD, correcteurs, anonymat, surveillants</span>
-              </div>
-
-              <div class="chart-placeholder">
-                <div class="chart-circle"></div>
-                <div class="chart-legend">
-                  <div class="legend-item">
-                    <span class="legend-dot legend-dot-primary"></span>
-                    <span>CFD</span>
-                  </div>
-                  <div class="legend-item">
-                    <span class="legend-dot legend-dot-secondary"></span>
-                    <span>Correcteurs</span>
-                  </div>
-                  <div class="legend-item">
-                    <span class="legend-dot legend-dot-soft"></span>
-                    <span>Cellule d’anonymat</span>
-                  </div>
-                  <div class="legend-item">
-                    <span class="legend-dot legend-dot-warning"></span>
-                    <span>Surveillants & salles</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="chart-footer">
-                <span class="chart-footer-text">
-                  Intégration possible avec un vrai graphique (Chart.js, etc.) côté front plus tard.
-                </span>
-              </div>
-            </div>
+          <div class="card-body">
+            <canvas id="chartFaculte" height="240"></canvas>
           </div>
         </section>
       </div>
+
+      <!-- COLONNE DROITE : calendrier + répartition rôles -->
+      <div class="home-side">
+        <!-- Calendrier -->
+        <section class="card clean-calendar">
+          <div class="cal-header">
+            <div class="cal-month-wrapper">
+              <span id="calMonthLabel" class="cal-month-label">Mai 2021</span>
+            </div>
+            <div class="cal-nav">
+              <button id="calPrev" class="cal-nav-btn">
+                <i class="uil uil-angle-left"></i>
+              </button>
+              <button id="calNext" class="cal-nav-btn">
+                <i class="uil uil-angle-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="cal-weekdays">
+            <span>Mo</span><span>Tu</span><span>We</span>
+            <span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+          </div>
+
+          <div id="calDays" class="cal-days"></div>
+
+          <div class="cal-footer">
+            <span id="calTodayLabel"></span>
+          </div>
+        </section>
+
+       
+      </div>
+    </div>
+  </section>
+</div>
 
       <!-- ============ VIEW: DASHBOARD ============ -->
       <div class="view" id="view-dashboard" data-view="dashboard">
@@ -301,16 +559,16 @@
             <div class="dashboard-summary">
               <span class="summary-label">Taux d’avancement</span>
               <div class="summary-progress">
-                <span class="summary-value" id="dashGlobalProgress">35%</span>
+                <span class="summary-value" id="dashGlobalProgress2">35%</span>
                 <span class="summary-chip success">En cours</span>
               </div>
               <span class="summary-hint">Basé sur 5 étapes principales</span>
             </div>
           </div>
 
-          <!-- PIPELINE DES ÉTAPES -->
+          <!-- PIPELINE DES ÉTAPES (même bloc, cliquable) -->
           <div class="pipeline">
-            <div class="pipeline-step pipeline-step-done">
+            <div class="pipeline-step" data-step="cfd" data-go-view="cfd">
               <div class="pipeline-icon">
                 <i class="uil uil-briefcase"></i>
               </div>
@@ -321,7 +579,7 @@
 
             <div class="pipeline-connector"></div>
 
-            <div class="pipeline-step pipeline-step-active">
+            <div class="pipeline-step" data-step="correcteurs" data-go-view="correcteurs">
               <div class="pipeline-icon">
                 <i class="uil uil-edit"></i>
               </div>
@@ -332,7 +590,7 @@
 
             <div class="pipeline-connector"></div>
 
-            <div class="pipeline-step">
+            <div class="pipeline-step" data-step="anonymat" data-go-view="anonymat">
               <div class="pipeline-icon">
                 <i class="uil uil-shield-check"></i>
               </div>
@@ -343,23 +601,23 @@
 
             <div class="pipeline-connector"></div>
 
-            <div class="pipeline-step">
+            <div class="pipeline-step" data-step="surveillants" data-go-view="surveillants">
               <div class="pipeline-icon">
                 <i class="uil uil-users-alt"></i>
               </div>
               <div class="pipeline-content">
-                <span class="pipeline-title">Surveillants </span>
+                <span class="pipeline-title">Surveillants</span>
               </div>
             </div>
 
             <div class="pipeline-connector"></div>
 
-            <div class="pipeline-step">
+            <div class="pipeline-step" data-step="pv" data-go-view="pv">
               <div class="pipeline-icon">
                 <i class="uil uil-file-alt"></i>
               </div>
               <div class="pipeline-content">
-                <span class="pipeline-title">PV </span>
+                <span class="pipeline-title">PV</span>
               </div>
             </div>
           </div>
@@ -374,7 +632,7 @@
                   <span class="stat-tag">2024 / 2025</span>
                 </div>
                 <div class="stat-value-row">
-                  <span class="stat-value" id="statConcoursCount">3</span>
+                  <span class="stat-value">3</span>
                   <span class="stat-unit">concours</span>
                 </div>
                 <div class="stat-trend trend-up">+1 vs année précédente</div>
@@ -386,7 +644,7 @@
                   <span class="stat-tag">Membres</span>
                 </div>
                 <div class="stat-value-row">
-                  <span class="stat-value" id="statCfdMembers">5</span>
+                  <span class="stat-value">5</span>
                   <span class="stat-unit">membres</span>
                 </div>
                 <div class="stat-trend">Responsable désigné</div>
@@ -398,7 +656,7 @@
                   <span class="stat-tag">Rôle CORRECTEUR</span>
                 </div>
                 <div class="stat-value-row">
-                  <span class="stat-value" id="statCorrecteurs">8</span>
+                  <span class="stat-value">8</span>
                   <span class="stat-unit">inscrits</span>
                 </div>
                 <div class="stat-trend trend-warning">Objectif : 10</div>
@@ -410,7 +668,7 @@
                   <span class="stat-tag">Par concours</span>
                 </div>
                 <div class="stat-value-row">
-                  <span class="stat-value" id="statAnonymat">2</span>
+                  <span class="stat-value">2</span>
                   <span class="stat-unit">cellules</span>
                 </div>
                 <div class="stat-trend">1 manquante</div>
@@ -455,278 +713,787 @@
           </div>
         </section>
       </div>
+<!-- ============ VIEW: COMITÉ CFD ============ -->
+<div class="view" id="view-cfd" data-view="cfd">
 
-      <!-- ============ VIEW: COMITÉ CFD ============ -->
-      <div class="view" id="view-cfd" data-view="cfd">
-        <!-- Membres CFD -->
-        <section class="card cfd-card">
-          <div class="card-header cfd-header">
-            <div class="cfd-header-main">
-              <h2>Comité de formation doctorale (CFD)</h2>
-              <span class="card-subtitle">
-                Crée les membres du Comité (table <code>membres</code>).
-              </span>
-              <div class="cfd-meta-row">
-                <span class="badge-role badge-cfd">CFD</span>
-                <span class="cfd-meta-text">Étape 1 / 5 – obligatoire avant les autres étapes</span>
-              </div>
+  <!-- HEADER : pipeline + taux d’avancement -->
+  <section class="card dashboard-card view-header-card fade-in-up">
+    <div class="view-header-layout">
+
+      <!-- GAUCHE : pipeline -->
+      <div class="view-header-left">
+        <div class="pipeline">
+
+          <div class="pipeline-step" data-step="cfd" data-go-view="cfd">
+            <div class="pipeline-icon">
+              <i class="uil uil-briefcase"></i>
             </div>
-
-            <button type="button" class="btn secondary-btn cfd-add-btn" id="btnOpenModalCfdMembre">
-              <i class="uil uil-plus"></i>
-              <span>Ajouter un membre CFD</span>
-            </button>
-          </div>
-
-          <div class="card-body">
-            <div class="cfd-toolbar">
-              <div class="accounts-search cfd-search">
-                <i class="uil uil-search"></i>
-                <input type="text" id="cfdSearchInput" placeholder="Rechercher dans les membres CFD…" />
-              </div>
-              <div class="cfd-chip">
-                <span id="cfdCount">0</span> membre(s)
-              </div>
-            </div>
-
-            <div class="table-wrapper slim">
-              <table class="table data-table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Nom & prénom (FR)</th>
-                    <th>الاسم و اللقب (AR)</th>
-                    <th>Grade</th>
-                    <th>Sexe</th>
-                    <th class="col-actions"></th>
-                  </tr>
-                </thead>
-                <tbody id="cfdMembersBody">
-                  <!-- rempli par JS -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <!-- Responsable CFD pour un concours -->
-        <section class="card cfd-card">
-          <div class="card-header">
-            <div>
-              <h2>Responsable CFD du concours</h2>
-              <span class="card-subtitle">
-                1) Sélectionner le concours<br>
-                2) Choisir le membre CFD responsable<br>
-                3) Créer son compte utilisateur (table <code>users</code>, rôle CFD).
-              </span>
+            <div class="pipeline-content">
+              <span class="pipeline-title">CFD</span>
             </div>
           </div>
 
-          <form id="formCfdResponsable" class="card-body form-grid cfd-resp-form">
-            <!-- Concours (viendra de la base, à remplir en JS ou serveur) -->
-            <div class="form-group">
-              <label for="cfdConcoursSelect">Concours</label>
-              <select id="cfdConcoursSelect">
-                <option value="">-- Sélectionner un concours --</option>
-                <!-- options injectées depuis la BDD -->
-              </select>
-            </div>
+          <div class="pipeline-connector"></div>
 
-            <!-- Membre CFD responsable (liste de membres créés) -->
-            <div class="form-group">
-              <label for="cfdResponsableSelect">Membre CFD responsable</label>
-              <select id="cfdResponsableSelect">
-                <option value="">-- Sélectionner un membre CFD --</option>
-                <!-- options injectées par JS depuis cfdMembers -->
-              </select>
+          <div class="pipeline-node" data-step="sujet" data-go-view="sujet">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-file-alt"></i>
             </div>
+          </div>
 
-            <!-- Infos du compte user -->
-            <div class="form-group">
-              <label for="cfdRespEmail">Email institutionnel</label>
-              <input
-                type="email"
-                id="cfdRespEmail"
-                placeholder="exemple@univ.dz"
-              />
-              <div class="field-hint">Utilise l’email universitaire officiel.</div>
-            </div>
+          <div class="pipeline-connector"></div>
 
-            <div class="form-group">
-              <label for="cfdRespUsername">Nom d’utilisateur</label>
-              <input
-                type="text"
-                id="cfdRespUsername"
-                placeholder="username_cfd"
-              />
+          <div class="pipeline-node" data-step="correcteurs" data-go-view="correcteurs">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-edit"></i>
             </div>
+          </div>
 
-            <div class="form-group">
-              <label for="cfdRespPassword">Mot de passe provisoire</label>
-              <input
-                type="password"
-                id="cfdRespPassword"
-                placeholder="••••••••"
-              />
-              <div class="field-hint">
-                Il pourra être changé par le responsable CFD à la première connexion.
-              </div>
-            </div>
+          <div class="pipeline-connector"></div>
 
-            <div class="form-actions">
-              <button type="submit" class="btn btn-primary">
-                <i class="uil uil-save"></i>
-                Enregistrer le responsable CFD
-              </button>
+          <div class="pipeline-node" data-step="anonymat" data-go-view="anonymat">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-shield-check"></i>
             </div>
-          </form>
-        </section>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <div class="pipeline-node" data-step="surveillants" data-go-view="surveillants">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-users-alt"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <div class="pipeline-node" data-step="pv" data-go-view="pv">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-file-alt"></i>
+            </div>
+          </div>
+
+        </div>
       </div>
 
-      <!-- ============ VIEW: CORRECTEURS ============ -->
-      <div class="view" id="view-correcteurs" data-view="correcteurs">
-        <section class="card">
-          <div class="card-header">
-            <div>
-              <h2>Correcteurs</h2>
-              <p class="text-muted">
-                Enregistre les correcteurs (membres + users rôle CORRECTEUR).
-              </p>
+      <!-- DROITE : taux d’avancement -->
+      <div class="view-header-right">
+        <div class="dashboard-header" style="align-items: center; padding: 10px 5px;">
+          <div class="dashboard-summary">
+            <span class="summary-label">Taux d’avancement</span>
+
+            <div class="summary-progress">
+              <span class="summary-value" id="dashGlobalProgress">0%</span>
+              <span class="summary-chip success">En cours</span>
             </div>
-            <button type="button" class="btn secondary-btn" id="btnOpenModalCorrecteur">
-              <i class="uil uil-plus"></i> Ajouter un correcteur
-            </button>
+
+            <span class="summary-hint">Basé sur 6 étapes principales</span>
           </div>
-          <div class="card-body">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Nom & prénom</th>
-                  <th>Grade</th>
-                  <th>Username</th>
-                  <th>Email</th>
-                  <th class="col-actions"></th>
-                </tr>
-              </thead>
-              <tbody id="correcteursBody">
-                <!-- à remplir en JS (même logique que CFD) -->
-              </tbody>
-            </table>
-          </div>
-        </section>
+        </div>
       </div>
 
-      <!-- ============ VIEW: CELLULE D’ANONYMAT ============ -->
-      <div class="view" id="view-anonymat" data-view="anonymat">
-        <section class="card">
-          <div class="card-header">
-            <div>
-              <h2>Cellule d’anonymat</h2>
-              <p class="text-muted">Membres avec rôle CELLULE_ANONYMAT.</p>
-            </div>
-            <button type="button" class="btn secondary-btn" id="btnOpenModalAnonymat">
-              <i class="uil uil-plus"></i> Ajouter un membre anonymat
-            </button>
-          </div>
-          <div class="card-body">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Concours</th>
-                  <th>Nom & prénom</th>
-                  <th>Username</th>
-                  <th>Email</th>
-                  <th class="col-actions"></th>
-                </tr>
-              </thead>
-              <tbody id="anonymatBody"></tbody>
-            </table>
-          </div>
-        </section>
+    </div>
+  </section>
+
+  <!-- Membres CFD -->
+  <section class="card cfd-card view-main-card fade-in-up stagger-1">
+    <div class="card-header cfd-header">
+      <div class="cfd-header-main">
+        <h2>Comité de formation doctorale (CFD)</h2>
+        <span class="card-subtitle">
+          Crée les membres du Comité .
+        </span>
+      </div>
+      <h2>لجنة الإشراف</h2>
+    </div>
+
+    <div class="card-body">
+      <div class="card-body form-grid cfd-resp-form">
+        <div class="form-group">
+          <select id="cfdConcoursSelect">
+            <option value="">-- Sélectionner un concours --</option>
+          </select>
+        </div>
+        <button type="button" class="btn-back align-right" id="btnOpenModalCfdMembre">
+          <i class="uil uil-plus"></i>
+          <span>Ajouter un membre CFD</span>
+        </button>
       </div>
 
-      <!-- ============ VIEW: SURVEILLANTS & SALLES ============ -->
-      <div class="view" id="view-surveillants" data-view="surveillants">
-        <section class="card">
-          <div class="card-header">
-            <div>
-              <h2>Salles</h2>
-              <p class="text-muted">Gestion des salles du concours.</p>
-            </div>
-            <button type="button" class="btn secondary-btn" id="btnOpenModalSalle">
-              <i class="uil uil-plus"></i> Ajouter une salle
-            </button>
-          </div>
-          <div class="card-body">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Nom salle</th>
-                  <th>Capacité</th>
-                  <th>Responsable</th>
-                  <th class="col-actions"></th>
-                </tr>
-              </thead>
-              <tbody id="sallesBody"></tbody>
-            </table>
-          </div>
-        </section>
+      <div class="table-wrapper slim">
+        <table class="table data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nom & prénom (FR)</th>
+              <th>الاسم و اللقب (AR)</th>
+              <th>Rôle</th>
+              <th class="col-actions"></th>
+            </tr>
+          </thead>
+          <tbody id="cfdMembersBody">
+            <!-- rempli par JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 
-        <section class="card">
-          <div class="card-header">
-            <h2>Surveillants par salle</h2>
-          </div>
-          <div class="card-body">
-            <p class="text-muted">Plus tard : assigner plusieurs surveillants (users rôle RESPONSABLE_SALLE / SURVEILLANT) par salle.</p>
-          </div>
-        </section>
+  <!-- Responsable CFD pour un concours -->
+  <section class="card cfd-card view-main-card fade-in-up stagger-2">
+    <div class="card-header">
+      <div>
+        <h2>Responsable CFD du concours</h2>
+        <span class="card-subtitle">
+          1) Choisir le membre CFD responsable<br>
+          2) Ajouter son Compte utilisateur  .
+        </span>
+      </div>
+    </div>
+
+    <form id="formCfdResponsable" class="card-body form-grid cfd-resp-form">
+      <div class="form-group">
+        <label for="cfdResponsableSelect">Membre CFD responsable</label>
+        <select id="cfdResponsableSelect">
+          <option value="">-- Sélectionner un membre CFD --</option>
+        </select>
       </div>
 
-      <!-- ============ VIEW: GENERATION DES PV / DECISION FINALE ============ -->
-      <div class="view" id="view-pv" data-view="pv">
-        <section class="card">
-          <div class="card-header">
-            <h2>Génération des PV & décision finale</h2>
-            <p class="text-muted">
-              Génération automatique (en arabe) à partir des données (CFD, correcteurs, anonymat, surveillants, classement, etc.),
-              tout en te laissant modifier les dates, numéros et détails avant impression.
-            </p>
+      <div class="form-group">
+        <label for="cfdRespEmail">Email institutionnel</label>
+        <input type="email" id="cfdRespEmail" placeholder="exemple@univ.dz" />
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="primary-btn">
+          Suivant
+          <i class="uil uil-angle-right"></i>
+        </button>
+      </div>
+    </form>
+  </section>
+
+</div>
+
+<!-- ============ VIEW: C. ÉLABORATION DES SUJETS ============ -->
+<div class="view" id="view-sujet" data-view="sujet">
+
+  <!-- HEADER : pipeline + taux d’avancement -->
+  <section class="card dashboard-card view-header-card fade-in-up">
+    <div class="view-header-layout">
+
+      <!-- GAUCHE : pipeline -->
+      <div class="view-header-left">
+        <div class="pipeline">
+
+          <!-- CFD -->
+          <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-briefcase"></i>
+            </div>
           </div>
 
-          <div class="card-body form-grid">
-            <div class="form-group">
-              <label>Concours</label>
-              <select id="pvConcoursSelect">
-                <option value="">-- Sélectionner un concours --</option>
-                <option value="concours-2024-info">Concours 2024 - Informatique</option>
-              </select>
-            </div>
+          <div class="pipeline-connector"></div>
 
-            <div class="form-group">
-              <label>Date de la décision / المقرر بتاريخ</label>
-              <input type="date" id="pvDateDecision" />
+          <!-- SUJET (active) -->
+          <div class="pipeline-step pipeline-step-active" data-step="sujet" data-go-view="sujet">
+            <div class="pipeline-icon">
+              <i class="uil uil-file-alt"></i>
             </div>
-
-            <div class="form-group">
-              <label>N° de la décision / المقرر رقم</label>
-              <input type="text" id="pvNumDecision" placeholder="…/…/1445 هـ / 2024 م" />
+            <div class="pipeline-content">
+              <span class="pipeline-title">Élaboration </span>
             </div>
           </div>
-        </section>
 
-        <!-- Un exemple de PV généré (décision finale en arabe) -->
-        <section class="card">
-          <div class="card-header">
-            <h2>نص المقرر النهائي (قابل للتعديل)</h2>
-            <button type="button" class="btn btn-secondary" id="btnRegenererPv">
-              إعادة توليد النص
-            </button>
+          <div class="pipeline-connector"></div>
+
+          <!-- Correcteurs -->
+          <div class="pipeline-node" data-step="correcteurs" data-go-view="correcteurs">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-edit"></i>
+            </div>
           </div>
-          <div class="card-body">
-            <textarea id="pvTexteAr" rows="12" class="pv-textarea" dir="rtl">
+
+          <div class="pipeline-connector"></div>
+
+          <!-- Anonymat -->
+          <div class="pipeline-node" data-step="anonymat" data-go-view="anonymat">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-shield-check"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <!-- Surveillants -->
+          <div class="pipeline-node" data-step="surveillants" data-go-view="surveillants">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-users-alt"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <!-- PV -->
+          <div class="pipeline-node" data-step="pv" data-go-view="pv">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-file-alt"></i>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- DROITE : Taux d’avancement -->
+      <div class="view-header-right">
+        <div class="dashboard-summary">
+          <span class="summary-label">Taux d’avancement</span>
+          <div class="summary-progress">
+            <span class="summary-value" id="dashGlobalProgress">60%</span>
+            <span class="summary-chip success">En cours</span>
+          </div>
+          <span class="summary-hint">Basé sur 5 étapes principales</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Commission d’élaboration des sujets -->
+  <section class="card view-main-card fade-in-up stagger-1">
+    <div class="card-header">
+      <div>
+        <h2>Commission d’élaboration des sujets</h2>
+      </div>
+      <h2>لجنة إعداد المواضيع</h2>
+    </div>
+
+    <div class="card-body">
+      <div class="card-body form-grid cfd-resp-form">
+        <button type="button" class="btn-back align-right" id="btnOpenModalSujet">
+          <i class="uil uil-plus"></i> Ajouter un membre commission
+        </button>
+      </div>
+
+      <div class="table-wrapper slim">
+        <table class="table data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nom & prénom</th>
+              <th>Grade</th>
+              <th>Rôle</th>
+              <th>Spécialité du sujet</th>
+              <th class="col-actions"></th>
+            </tr>
+          </thead>
+          <tbody id="sujetBody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============ VIEW: CORRECTEURS ============ -->
+<div class="view" id="view-correcteurs" data-view="correcteurs">
+
+  <!-- HEADER : pipeline + taux d’avancement -->
+  <section class="card dashboard-card view-header-card fade-in-up">
+    <div class="view-header-layout">
+
+      <!-- GAUCHE : pipeline -->
+      <div class="view-header-left">
+        <div class="pipeline">
+
+          <!-- CFD -->
+          <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-briefcase"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <!-- Commission d’élaboration des sujets -->
+          <div class="pipeline-node" data-step="sujet" data-go-view="sujet">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-file-alt"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <!-- Correcteurs (active) -->
+          <div class="pipeline-step pipeline-step-active" data-step="correcteurs" data-go-view="correcteurs">
+            <div class="pipeline-icon">
+              <i class="uil uil-edit"></i>
+            </div>
+            <div class="pipeline-content">
+              <span class="pipeline-title">Correcteurs</span>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <!-- Anonymat -->
+          <div class="pipeline-node" data-step="anonymat" data-go-view="anonymat">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-shield-check"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <!-- Surveillants -->
+          <div class="pipeline-node" data-step="surveillants" data-go-view="surveillants">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-users-alt"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <!-- PV -->
+          <div class="pipeline-node" data-step="pv" data-go-view="pv">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-file-alt"></i>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- DROITE : Taux d’avancement -->
+      <div class="view-header-right">
+        <div class="dashboard-header" style="align-items: center; padding: 10px 5px;">
+          <div class="dashboard-summary">
+            <span class="summary-label">Taux d’avancement</span>
+
+            <div class="summary-progress">
+              <span class="summary-value" id="dashGlobalProgress">0%</span>
+              <span class="summary-chip success">En cours</span>
+            </div>
+
+            <span class="summary-hint">Basé sur 6 étapes principales</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="card view-main-card fade-in-up stagger-1">
+    <div class="card-header">
+      <div>
+        <h2>Correcteurs</h2>
+      </div>
+      <h2>لجنة التصحيح</h2>
+    </div>
+
+    <div class="card-body">
+      <div class="card-body form-grid cfd-resp-form">
+        <button type="button" class="btn-back align-right" id="btnOpenModalCorrecteur">
+          <i class="uil uil-plus"></i> Ajouter un correcteur
+        </button>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nom & prénom</th>
+              <th>Grade</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th class="col-actions"></th>
+            </tr>
+          </thead>
+          <tbody id="correcteursBody">
+            <!-- à remplir en JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============ VIEW: CELLULE D’ANONYMAT ============ -->
+<div class="view" id="view-anonymat" data-view="anonymat">
+
+  <!-- HEADER : pipeline + taux d’avancement -->
+  <section class="card dashboard-card view-header-card fade-in-up">
+    <div class="view-header-layout">
+
+      <!-- GAUCHE : pipeline -->
+      <div class="view-header-left">
+        <div class="pipeline">
+
+          <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-briefcase"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <div class="pipeline-node" data-step="sujet" data-go-view="sujet">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-file-alt"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <div class="pipeline-node" data-step="correcteurs" data-go-view="correcteurs">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-edit"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <!-- Anonymat (active) -->
+          <div class="pipeline-step pipeline-step-active" data-step="anonymat" data-go-view="anonymat">
+            <div class="pipeline-icon">
+              <i class="uil uil-shield-check"></i>
+            </div>
+            <div class="pipeline-content">
+              <span class="pipeline-title">Anonymat</span>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <div class="pipeline-node" data-step="surveillants" data-go-view="surveillants">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-users-alt"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <div class="pipeline-node" data-step="pv" data-go-view="pv">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-file-alt"></i>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- DROITE : Taux d’avancement -->
+      <div class="view-header-right">
+        <div class="dashboard-header" style="align-items: center; padding: 10px 5px;">
+          <div class="dashboard-summary">
+            <span class="summary-label">Taux d’avancement</span>
+
+            <div class="summary-progress">
+              <span class="summary-value" id="dashGlobalProgress">0%</span>
+              <span class="summary-chip success">En cours</span>
+            </div>
+
+            <span class="summary-hint">Basé sur 6 étapes principales</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="card view-main-card fade-in-up stagger-1">
+    <div class="card-header">
+      <div>
+        <h2>Cellule d’anonymat</h2>
+        <p class="text-muted">Membres avec rôle CELLULE_ANONYMAT.</p>
+      </div>
+      <h2>خليّة التشفير</h2>
+    </div>
+
+    <div class="card-body">
+      <div class="card-body form-grid cfd-resp-form">
+        <button type="button" class="btn-back align-right" id="btnOpenModalAnonymat">
+          <i class="uil uil-plus"></i> Ajouter un membre anonymat
+        </button>
+      </div>
+
+      <div class="table-wrapper slim">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Concours</th>
+              <th>Nom & prénom</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th class="col-actions"></th>
+            </tr>
+          </thead>
+          <tbody id="anonymatBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============ VIEW: SURVEILLANTS & SALLES ============ -->
+<div class="view" id="view-surveillants" data-view="surveillants">
+
+  <!-- HEADER : pipeline + taux d’avancement -->
+  <section class="card dashboard-card view-header-card fade-in-up">
+    <div class="view-header-layout">
+
+      <!-- GAUCHE : pipeline -->
+      <div class="view-header-left">
+        <div class="pipeline">
+
+          <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-briefcase"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <div class="pipeline-node" data-step="sujet" data-go-view="sujet">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-file-alt"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <div class="pipeline-node" data-step="correcteurs" data-go-view="correcteurs">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-edit"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <div class="pipeline-node" data-step="anonymat" data-go-view="anonymat">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-shield-check"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <!-- Surveillants (active) -->
+          <div class="pipeline-step pipeline-step-active" data-step="surveillants" data-go-view="surveillants">
+            <div class="pipeline-icon">
+              <i class="uil uil-users-alt"></i>
+            </div>
+            <div class="pipeline-content">
+              <span class="pipeline-title">Surveillant</span>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <div class="pipeline-node" data-step="pv" data-go-view="pv">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-file-alt"></i>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- DROITE : Taux d’avancement -->
+      <div class="view-header-right">
+        <div class="dashboard-header" style="align-items: center; padding: 10px 5px;">
+          <div class="dashboard-summary">
+            <span class="summary-label">Taux d’avancement</span>
+
+            <div class="summary-progress">
+              <span class="summary-value" id="dashSurveillantsProgress">0%</span>
+              <span class="summary-chip success">En cours</span>
+            </div>
+
+            <span class="summary-hint">Basé sur 6 étapes principales</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="card view-main-card fade-in-up stagger-1">
+    <div class="card-header">
+      <div>
+        <h2>Surveillants</h2>
+        <p class="text-muted">Gestion des salles du concours.</p>
+      </div>
+      <h2>لجنة الحراسة</h2>
+    </div>
+
+    <div class="card-body">
+      <div class="card-body form-grid cfd-resp-form">
+        <button type="button" class="btn-back align-right" id="btnOpenModalSalle">
+          <i class="uil uil-plus"></i> Ajouter une salle
+        </button>
+      </div>
+
+      <div class="table-wrapper slim">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nom salle</th>
+              <th>Capacité</th>
+              <th>Responsable</th>
+              <th class="col-actions"></th>
+            </tr>
+          </thead>
+          <tbody id="sallesBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="card view-main-card fade-in-up stagger-2">
+    <div class="card-header">
+      <h2>Surveillants par salle</h2>
+    </div>
+    <div class="card-body">
+      <p class="text-muted">
+        Plus tard : assigner plusieurs surveillants (users rôle RESPONSABLE_SALLE /
+        SURVEILLANT) par salle.
+      </p>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============ VIEW: GENERATION DES PV / DECISION FINALE ============ -->
+<div class="view" id="view-pv" data-view="pv">
+
+  <!-- En-tête + pipeline + taux d’avancement -->
+  <section class="card dashboard-card pv-header-card fade-in-up">
+    <h2>Génération des PV & décision finale</h2>
+    <div class="pv-header-layout">
+      
+
+      <!-- PIPELINE (gauche) -->
+      <div class="pv-pipeline-wrapper">
+        <div class="pipeline pv-pipeline">
+
+          <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-briefcase"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <div class="pipeline-node" data-step="sujet" data-go-view="sujet">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-file-alt"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <div class="pipeline-node" data-step="correcteurs" data-go-view="correcteurs">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-edit"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <div class="pipeline-node" data-step="anonymat" data-go-view="anonymat">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-shield-check"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <div class="pipeline-node" data-step="surveillants" data-go-view="surveillants">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-users-alt"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
+
+          <!-- PV (active) -->
+          <div class="pipeline-step pipeline-step-active" data-step="pv" data-go-view="pv">
+            <div class="pipeline-icon">
+              <i class="uil uil-file-alt"></i>
+            </div>
+            <div class="pipeline-content">
+              <span class="pipeline-title">PV</span>
+              <span class="pipeline-meta">Étape finale</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TAUX D’AVANCEMENT (droite) -->
+      <div class="pv-progress-wrapper fade-in-up stagger-1">
+        <div class="dashboard-summary pv-summary">
+          <span class="summary-label">Taux d’avancement</span>
+
+          <div class="summary-progress">
+            <span class="summary-value" id="dashPvProgress">0%</span>
+            <span class="summary-chip success">En cours</span>
+          </div>
+
+          <span class="summary-hint">Basé sur 6 étapes principales</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <section class="card pv-config-card fade-in-up stagger-1">
+    <div class="card-header">
+      
+      <p class="text-muted">
+        Génération automatique (en arabe) à partir des données (CFD, correcteurs, anonymat, surveillants,
+        classement, etc.),
+        tout en te laissant modifier les dates, numéros et détails avant impression.
+      </p>
+    </div>
+
+    <div class="card-body form-grid">
+     
+
+      <div class="form-group">
+        <label>Date de la décision / المقرر بتاريخ</label>
+        <input type="date" id="pvDateDecision" />
+      </div>
+
+      <div class="form-group">
+        <label>N° de la décision / المقرر رقم</label>
+        <input type="text" id="pvNumDecision" placeholder="…/…/1445 هـ / 2024 م" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Texte PV -->
+  <section class="card pv-text-card fade-in-up stagger-2">
+    <div class="card-header pv-text-header">
+      <div>
+        <h2>نص المقرر النهائي (قابل للتعديل)</h2>
+        <p class="text-muted small-text">سيتم توليد النص اعتمادا على المعطيات النهائية للمسابقة.</p>
+      </div>
+      <button type="button" class="btn btn-secondary btn-ghost" id="btnRegenererPv">
+        إعادة توليد النص
+      </button>
+    </div>
+
+    <div class="card-body">
+      <textarea id="pvTexteAr" rows="12" class="pv-textarea" dir="rtl">
 سيتم توليد نص المقرر هنا اعتمادا على:
 - الجامعة والكلية والقسم
 - لجنة التكوين في الدكتوراه (CFD)
@@ -735,19 +1502,20 @@
 - محاضر التصحيح والترتيب النهائي للمترشحين
 
 يمكنك تعديل هذا النص يدويا قبل الطباعة.
-            </textarea>
+      </textarea>
 
-            <div class="form-actions">
-              <button type="button" class="btn btn-primary" id="btnValiderPv">
-                <i class="uil uil-check-circle"></i> Valider le PV
-              </button>
-              <button type="button" class="btn btn-secondary" id="btnImprimerPv">
-                <i class="uil uil-print"></i> Imprimer
-              </button>
-            </div>
-          </div>
-        </section>
+      <div class="form-actions pv-actions">
+        <button type="button" class="primary-btn" id="btnValiderPv">
+          <i class="uil uil-check-circle"></i> Valider le PV
+        </button>
+        <button type="button" class="btn btn-secondary" id="btnImprimerPv">
+          <i class="uil uil-print"></i> Imprimer
+        </button>
       </div>
+    </div>
+  </section>
+
+</div>
 
     </main>
   </div>
@@ -821,20 +1589,14 @@
           <div class="form-group form-group-sex">
             <label>Sexe</label>
             <div class="sex-toggle" id="sexeToggle">
-              <button
-                type="button"
-                class="sex-option sex-option-active"
-                data-sex-value="FEMME">
+              <button type="button" class="sex-option sex-option-active" data-sex-value="FEMME">
                 <span class="sex-icon-circle">
                   <i class="uil uil-female"></i>
                 </span>
                 <span>Femme</span>
               </button>
 
-              <button
-                type="button"
-                class="sex-option"
-                data-sex-value="HOMME">
+              <button type="button" class="sex-option" data-sex-value="HOMME">
                 <span class="sex-icon-circle">
                   <i class="uil uil-male"></i>
                 </span>
@@ -924,20 +1686,14 @@
           <div class="form-group form-group-sex">
             <label>Sexe</label>
             <div class="sex-toggle" id="sexeToggleCorrecteur">
-              <button
-                type="button"
-                class="sex-option sex-option-active"
-                data-sex-value="FEMME">
+              <button type="button" class="sex-option sex-option-active" data-sex-value="FEMME">
                 <span class="sex-icon-circle">
                   <i class="uil uil-female"></i>
                 </span>
                 <span>Femme</span>
               </button>
 
-              <button
-                type="button"
-                class="sex-option"
-                data-sex-value="HOMME">
+              <button type="button" class="sex-option" data-sex-value="HOMME">
                 <span class="sex-icon-circle">
                   <i class="uil uil-male"></i>
                 </span>
@@ -948,7 +1704,7 @@
           </div>
         </div>
 
-        <!-- User : email + username + password -->
+    
         <div class="form-row">
           <div class="form-group">
             <label for="corrEmail">Email institutionnel</label>
@@ -959,27 +1715,9 @@
             <div class="field-hint">Utilise l’email universitaire officiel.</div>
           </div>
 
-          <div class="form-group">
-            <label for="corrUsername">Nom d’utilisateur</label>
-            <div class="input-wrapper">
-              <span class="field-icon"><i class="uil uil-user-circle"></i></span>
-              <input type="text" id="corrUsername" placeholder="username_correcteur" required />
-            </div>
-          </div>
-        </div>
+         
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="corrPassword">Mot de passe provisoire</label>
-            <div class="input-wrapper">
-              <span class="field-icon"><i class="uil uil-lock"></i></span>
-              <input type="password" id="corrPassword" placeholder="••••••••" required />
-            </div>
-            <div class="field-hint">
-              Il pourra être changé par le correcteur à la première connexion.
-            </div>
-          </div>
-        </div>
+        
 
         <div class="account-modal-footer modal-footer-full">
           <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
@@ -1059,20 +1797,14 @@
           <div class="form-group form-group-sex">
             <label>Sexe</label>
             <div class="sex-toggle" id="sexeToggleAnonymat">
-              <button
-                type="button"
-                class="sex-option sex-option-active"
-                data-sex-value="FEMME">
+              <button type="button" class="sex-option sex-option-active" data-sex-value="FEMME">
                 <span class="sex-icon-circle">
                   <i class="uil uil-female"></i>
                 </span>
                 <span>Femme</span>
               </button>
 
-              <button
-                type="button"
-                class="sex-option"
-                data-sex-value="HOMME">
+              <button type="button" class="sex-option" data-sex-value="HOMME">
                 <span class="sex-icon-circle">
                   <i class="uil uil-male"></i>
                 </span>
@@ -1093,24 +1825,9 @@
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="anonyUsername">Nom d’utilisateur</label>
-            <div class="input-wrapper">
-              <span class="field-icon"><i class="uil uil-user-circle"></i></span>
-              <input type="text" id="anonyUsername" placeholder="username_anonymat" required />
-            </div>
-          </div>
-        </div>
+        
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="anonyPassword">Mot de passe provisoire</label>
-            <div class="input-wrapper">
-              <span class="field-icon"><i class="uil uil-lock"></i></span>
-              <input type="password" id="anonyPassword" placeholder="••••••••" required />
-            </div>
-          </div>
-        </div>
+       
 
         <div class="account-modal-footer modal-footer-full">
           <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
@@ -1125,326 +1842,498 @@
   <script src="theme.js"></script>
 
   <!-- ================== JS : Navigation + logique ================== -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
 
-      // ===== SEXE : toggle Femme / Homme pour CFD =====
-      const sexeHidden = document.getElementById("sexeMembre");
-      const sexeToggle = document.getElementById("sexeToggle");
 
-      if (sexeHidden && sexeToggle) {
-        const sexButtons = sexeToggle.querySelectorAll(".sex-option");
+     const calDays = document.getElementById("calDays");
+  const calMonthLabel = document.getElementById("calMonthLabel");
+  const calTodayLabel = document.getElementById("calTodayLabel");
+  const btnPrev = document.getElementById("calPrev");
+  const btnNext = document.getElementById("calNext");
 
-        sexButtons.forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const value = btn.dataset.sexValue || "FEMME";
+  let current = new Date();   // mois affiché
 
-            // 1) mettre à jour le hidden
-            sexeHidden.value = value;
+  // formatte "Aujourd'hui : mercredi 5 mars 2025"
+  function updateTodayLabel() {
+    const now = new Date();
+    const label = now.toLocaleDateString("fr-FR", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    calTodayLabel.textContent = "Aujourd'hui : " + label;
+  }
 
-            // 2) switch visuel active
-            sexButtons.forEach((b) =>
-              b.classList.toggle(
-                "sex-option-active",
-                b === btn
-              )
-            );
-          });
-        });
+  function renderCalendar() {
+    const year = current.getFullYear();
+    const month = current.getMonth(); // 0-11
+
+    // Titre mois + année
+    calMonthLabel.textContent = current.toLocaleString("en-US", {
+      month: "long",
+      year: "numeric",
+    });
+
+    calDays.innerHTML = "";
+
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const totalDays = lastDay.getDate();
+
+    // JS: 0 = dimanche, 1 = lundi, ... | on veut LUNDI en premier
+    let startIndex = firstDay.getDay(); // 0-6
+    // adapter pour que lundi = 0, mardi = 1, ..., dimanche = 6
+    startIndex = (startIndex + 6) % 7;
+
+    // Cases vides avant le 1er
+    for (let i = 0; i < startIndex; i++) {
+      const empty = document.createElement("div");
+      empty.className = "cal-day cal-day-empty";
+      calDays.appendChild(empty);
+    }
+
+    const today = new Date();
+
+    for (let d = 1; d <= totalDays; d++) {
+      const cell = document.createElement("div");
+      cell.className = "cal-day";
+      cell.textContent = d;
+
+      // est-ce aujourd'hui ?
+      if (
+        d === today.getDate() &&
+        month === today.getMonth() &&
+        year === today.getFullYear()
+      ) {
+        cell.classList.add("cal-day-today");
       }
 
-      /* ===== NAVIGATION SIDEBAR ===== */
-      const navItems = document.querySelectorAll(".sidebar-nav .nav-item");
-      const views = document.querySelectorAll(".view");
+      calDays.appendChild(cell);
+    }
+  }
 
-      function showView(viewName) {
-        views.forEach(v => v.classList.toggle("view-active", v.dataset.view === viewName));
-        navItems.forEach(i => i.classList.toggle("nav-item-active", i.dataset.view === viewName));
+  btnPrev.addEventListener("click", () => {
+    current.setMonth(current.getMonth() - 1);
+    renderCalendar();
+  });
+
+  btnNext.addEventListener("click", () => {
+    current.setMonth(current.getMonth() + 1);
+    renderCalendar();
+  });
+
+  // initialisation
+  renderCalendar();
+  updateTodayLabel();
+
+    /* =========================
+       TOASTS
+       ========================= */
+    const toastArea = document.getElementById("toastArea");
+
+    function showToast(message, type = "info", duration = 3000) {
+      if (!toastArea) {
+        // fallback si la zone n'existe pas
+        alert(message);
+        return;
       }
 
-      navItems.forEach(item => {
-        item.addEventListener("click", (e) => {
-          e.preventDefault();
-          const target = item.dataset.view;
-          showView(target);
-        });
+      const toast = document.createElement("div");
+      toast.className = `toast toast-${type}`;
+      toast.textContent = message;
+      toastArea.appendChild(toast);
+
+      // apparition
+      requestAnimationFrame(() => {
+        toast.classList.add("toast-visible");
       });
 
-      document.querySelectorAll("[data-go-view]").forEach(btn => {
+      // disparition auto
+      setTimeout(() => {
+        toast.classList.remove("toast-visible");
+        setTimeout(() => toast.remove(), 300);
+      }, duration);
+    }
+
+    // ===== SEXE : toggle Femme / Homme pour CFD =====
+    const sexeHidden = document.getElementById("sexeMembre");
+    const sexeToggle = document.getElementById("sexeToggle");
+
+    if (sexeHidden && sexeToggle) {
+      const sexButtons = sexeToggle.querySelectorAll(".sex-option");
+
+      sexButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
-          const target = btn.getAttribute("data-go-view");
-          showView(target);
+          const value = btn.dataset.sexValue || "FEMME";
+
+          // 1) mettre à jour le hidden
+          sexeHidden.value = value;
+
+          // 2) switch visuel active
+          sexButtons.forEach((b) =>
+            b.classList.toggle(
+              "sex-option-active",
+              b === btn
+            )
+          );
         });
       });
+    }
 
-      /* ===== MODALS ===== */
-      const modalCfd = document.getElementById("modalCfdMembre");
-      const btnOpenModalCfdMembre = document.getElementById("btnOpenModalCfdMembre");
+    /* ===== NAVIGATION SIDEBAR + PIPELINE ===== */
+    const navItems = document.querySelectorAll(".sidebar-nav .nav-item");
+    const views = document.querySelectorAll(".view");
 
-      function openModal(modal) {
-        if (!modal) return;
-        modal.classList.add("modal-open");
-      }
+    // Ordre logique des étapes du concours
+    const stepOrder = ["cfd","sujet", "correcteurs", "anonymat", "surveillants", "pv"];
+    const pipelineSteps = document.querySelectorAll(".pipeline-step[data-step]");
 
-      function closeModal(modal) {
-        if (!modal) return;
-        modal.classList.remove("modal-open");
-      }
+    function updatePipeline(viewName) {
+      if (!pipelineSteps.length) return;
 
-      // Bouton + pour ouvrir la modale CFD
-      if (btnOpenModalCfdMembre) {
-        btnOpenModalCfdMembre.addEventListener("click", () => {
-          formCfdMembre.reset();
-
-          // reset sexe par défaut : FEMME
-          if (sexeHidden && sexeToggle) {
-            sexeHidden.value = "FEMME";
-            sexeToggle.querySelectorAll(".sex-option").forEach((btn) => {
-              btn.classList.toggle(
-                "sex-option-active",
-                btn.dataset.sexValue === "FEMME"
-              );
-            });
-          }
-
-          openModal(modalCfd);
+      // Si la vue n'est pas une étape, on enlève les états
+      if (!stepOrder.includes(viewName)) {
+        pipelineSteps.forEach(step => {
+          step.classList.remove("pipeline-step-active", "pipeline-step-done");
         });
+        return;
       }
 
-      // Tout élément avec data-close-modal ferme la modale parente
-      document.querySelectorAll("[data-close-modal]").forEach(el => {
-        el.addEventListener("click", () => {
-          const m = el.closest(".modal");
-          closeModal(m);
-        });
+      const activeIndex = stepOrder.indexOf(viewName);
+
+      pipelineSteps.forEach(step => {
+        const stepName = step.dataset.step;
+        const index = stepOrder.indexOf(stepName);
+
+        step.classList.remove("pipeline-step-active", "pipeline-step-done");
+        if (index === -1) return;
+
+        if (index < activeIndex) {
+          step.classList.add("pipeline-step-done");
+        } else if (index === activeIndex) {
+          step.classList.add("pipeline-step-active");
+        }
       });
+    }
 
-      /* ===== ÉTAT FRONT CFD ===== */
-      // Représente les lignes de la table "membres" côté front
-      let cfdMembers = [];
+    function showView(viewName) {
+      // afficher/masquer les vues
+      views.forEach(v =>
+        v.classList.toggle("view-active", v.dataset.view === viewName)
+      );
 
-      const cfdMembersBody = document.getElementById("cfdMembersBody");
-      const cfdResponsableSelect = document.getElementById("cfdResponsableSelect");
-      const cfdCount = document.getElementById("cfdCount");
-      const cfdSearchInput = document.getElementById("cfdSearchInput");
-      const formCfdMembre = document.getElementById("formCfdMembre");
+      // activer l'item de la sidebar
+      navItems.forEach(i =>
+        i.classList.toggle("nav-item-active", i.dataset.view === viewName)
+      );
 
-      // Ouverture modale membre CFD (déjà géré plus haut mais on garde la sécurité)
-      if (btnOpenModalCfdMembre && formCfdMembre) {
-        btnOpenModalCfdMembre.addEventListener("click", () => {
-          formCfdMembre.reset();
+      // mettre à jour le pipeline
+      updatePipeline(viewName);
+    }
 
-          // reset sexe : FEMME
-          if (sexeHidden && sexeToggle) {
-            sexeHidden.value = "FEMME";
-            sexeToggle.querySelectorAll(".sex-option").forEach((btn) => {
-              btn.classList.toggle(
-                "sex-option-active",
-                btn.dataset.sexValue === "FEMME"
-              );
-            });
-          }
+    navItems.forEach(item => {
+      item.addEventListener("click", (e) => {
+        e.preventDefault();
+        const target = item.dataset.view;
+        showView(target);
+      });
+    });
 
-          openModal(modalCfd);
-        });
-      }
+    // Tous les boutons / steps avec data-go-view (pipeline)
+    document.querySelectorAll("[data-go-view]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const target = btn.getAttribute("data-go-view");
+        showView(target);
+      });
+    });
 
-      // Soumission création membre CFD (table membres)
-      if (formCfdMembre) {
-        formCfdMembre.addEventListener("submit", (e) => {
-          e.preventDefault();
+    /* ===== MODALS ===== */
+    const modalCfd = document.getElementById("modalCfdMembre");
+    const btnOpenModalCfdMembre = document.getElementById("btnOpenModalCfdMembre");
 
-          const nomFr = document.getElementById("nomMembreFr").value.trim();
-          const prenomFr = document.getElementById("prenomMembreFr").value.trim();
-          const nomAr = document.getElementById("nomMembreAr").value.trim();
-          const prenomAr = document.getElementById("prenomMembreAr").value.trim();
-          const grade = document.getElementById("gradeMembre").value.trim();
-          const sexe = document.getElementById("sexeMembre").value;
+    function openModal(modal) {
+      if (!modal) return;
+      modal.classList.add("modal-open");
+    }
 
-          if (!nomFr || !prenomFr) {
-            alert("Nom et prénom (FR) sont obligatoires.");
-            return;
-          }
+    function closeModal(modal) {
+      if (!modal) return;
+      modal.classList.remove("modal-open");
+    }
 
-          // côté backend ce sera gen_random_uuid(), ici on simule
-          const idMembre = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-m";
+    // Bouton + pour ouvrir la modale CFD
+    if (btnOpenModalCfdMembre) {
+      btnOpenModalCfdMembre.addEventListener("click", () => {
+        formCfdMembre.reset();
 
-          cfdMembers.push({
-            idMembre,
-            nomFr,
-            prenomFr,
-            nomAr,
-            prenomAr,
-            grade,
-            sexe
-          });
-
-          renderCfdMembers();
-          closeModal(modalCfd);
-        });
-      }
-
-      // Rendu de la table + combo responsable
-      function renderCfdMembers() {
-        if (!cfdMembersBody || !cfdResponsableSelect) return;
-
-        // filtre recherche
-        const search = (cfdSearchInput?.value || "").toLowerCase();
-
-        cfdMembersBody.innerHTML = "";
-        cfdResponsableSelect.innerHTML = '<option value="">-- Sélectionner un membre CFD --</option>';
-
-        let displayIndex = 0;
-
-        cfdMembers.forEach((m) => {
-          const fullNameFr = `${m.nomFr} ${m.prenomFr}`.toLowerCase();
-          const fullNameAr = `${m.prenomAr || ""} ${m.nomAr || ""}`.toLowerCase();
-
-          if (search && !fullNameFr.includes(search) && !fullNameAr.includes(search)) {
-            return;
-          }
-
-          displayIndex += 1;
-
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${displayIndex}</td>
-            <td>${m.nomFr} ${m.prenomFr}</td>
-            <td dir="rtl">${(m.prenomAr || "")} ${(m.nomAr || "")}</td>
-            <td>${m.grade || ""}</td>
-            <td>${m.sexe}</td>
-            <td class="table-actions">
-              <button class="btn-icon btn-icon-danger" data-remove="${m.idMembre}">
-                <i class="uil uil-trash"></i>
-              </button>
-            </td>
-          `;
-          cfdMembersBody.appendChild(tr);
-
-          // option dans la liste des responsables possibles
-          const opt = document.createElement("option");
-          opt.value = m.idMembre;
-          opt.textContent = `${m.nomFr} ${m.prenomFr}`;
-          cfdResponsableSelect.appendChild(opt);
-        });
-
-        if (cfdCount) cfdCount.textContent = String(cfdMembers.length);
-
-        // suppression
-        cfdMembersBody.querySelectorAll("[data-remove]").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const idMembre = btn.getAttribute("data-remove");
-            cfdMembers = cfdMembers.filter((m) => m.idMembre !== idMembre);
-            renderCfdMembers();
-          });
-        });
-      }
-
-      if (cfdSearchInput) {
-        cfdSearchInput.addEventListener("input", renderCfdMembers);
-      }
-
-      renderCfdMembers(); // initial (liste vide)
-
-      /* ===== CORRECTEURS : membres + users (role CORRECTEUR) ===== */
-      let correcteurs = [];
-
-      const correcteursBody = document.getElementById("correcteursBody");
-      const modalCorrecteur = document.getElementById("modalCorrecteur");
-      const btnOpenModalCorrecteur = document.getElementById("btnOpenModalCorrecteur");
-      const formCorrecteur = document.getElementById("formCorrecteur");
-      const sexeCorrHidden = document.getElementById("sexeCorrecteur");
-      const sexeToggleCorr = document.getElementById("sexeToggleCorrecteur");
-
-      // Toggle sexe correcteur
-      if (sexeCorrHidden && sexeToggleCorr) {
-        const sexButtons = sexeToggleCorr.querySelectorAll(".sex-option");
-        sexButtons.forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const value = btn.dataset.sexValue || "FEMME";
-            sexeCorrHidden.value = value;
-            sexButtons.forEach((b) =>
-              b.classList.toggle("sex-option-active", b === btn)
+        // reset sexe par défaut : FEMME
+        if (sexeHidden && sexeToggle) {
+          sexeHidden.value = "FEMME";
+          sexeToggle.querySelectorAll(".sex-option").forEach((btn) => {
+            btn.classList.toggle(
+              "sex-option-active",
+              btn.dataset.sexValue === "FEMME"
             );
           });
-        });
-      }
+        }
 
-      // Ouvrir la modale correcteur
-      if (btnOpenModalCorrecteur && formCorrecteur) {
-        btnOpenModalCorrecteur.addEventListener("click", () => {
-          formCorrecteur.reset();
+        openModal(modalCfd);
+      });
+    }
 
-          // reset sexe = FEMME
-          if (sexeCorrHidden && sexeToggleCorr) {
-            sexeCorrHidden.value = "FEMME";
-            sexeToggleCorr.querySelectorAll(".sex-option").forEach((btn) => {
-              btn.classList.toggle(
-                "sex-option-active",
-                btn.dataset.sexValue === "FEMME"
-              );
-            });
-          }
+    // Tout élément avec data-close-modal ferme la modale parente
+    document.querySelectorAll("[data-close-modal]").forEach(el => {
+      el.addEventListener("click", () => {
+        const m = el.closest(".modal");
+        closeModal(m);
+      });
+    });
 
-          openModal(modalCorrecteur);
-        });
-      }
+    /* ===== ÉTAT FRONT CFD ===== */
+    // Représente les lignes de la table "membres" côté front
+    let cfdMembers = [];
 
-      // Soumission création correcteur : membre + user (role = CORRECTEUR)
-      if (formCorrecteur) {
-        formCorrecteur.addEventListener("submit", (e) => {
-          e.preventDefault();
+    const cfdMembersBody = document.getElementById("cfdMembersBody");
+    const cfdResponsableSelect = document.getElementById("cfdResponsableSelect");
+    const cfdCount = document.getElementById("cfdCount");
+    const cfdSearchInput = document.getElementById("cfdSearchInput");
+    const formCfdMembre = document.getElementById("formCfdMembre");
 
-          const nomFr = document.getElementById("corrNomFr").value.trim();
-          const prenomFr = document.getElementById("corrPrenomFr").value.trim();
-          const nomAr = document.getElementById("corrNomAr").value.trim();
-          const prenomAr = document.getElementById("corrPrenomAr").value.trim();
-          const grade = document.getElementById("corrGrade").value.trim();
-          const sexe = document.getElementById("sexeCorrecteur").value;
-          const email = document.getElementById("corrEmail").value.trim();
-          const username = document.getElementById("corrUsername").value.trim();
-          const password = document.getElementById("corrPassword").value;
+    // Ouverture modale membre CFD (sécurité)
+    if (btnOpenModalCfdMembre && formCfdMembre) {
+      btnOpenModalCfdMembre.addEventListener("click", () => {
+        formCfdMembre.reset();
 
-          if (!nomFr || !prenomFr || !username || !password) {
-            alert("Nom, prénom, username et mot de passe sont obligatoires.");
-            return;
-          }
-
-          const idMembre = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-m";
-          const idUser = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-u";
-
-          correcteurs.push({
-            idMembre,
-            idUser,
-            nomFr,
-            prenomFr,
-            nomAr,
-            prenomAr,
-            grade,
-            sexe,
-            email,
-            username,
-            role: "CORRECTEUR"
+        // reset sexe : FEMME
+        if (sexeHidden && sexeToggle) {
+          sexeHidden.value = "FEMME";
+          sexeToggle.querySelectorAll(".sex-option").forEach((btn) => {
+            btn.classList.toggle(
+              "sex-option-active",
+              btn.dataset.sexValue === "FEMME"
+            );
           });
+        }
 
-          // TODO backend : POST /correcteurs -> crée membre + user (role CORRECTEUR)
+        openModal(modalCfd);
+      });
+    }
 
-          renderCorrecteurs();
-          closeModal(modalCorrecteur);
+    // Soumission création membre CFD (table membres)
+    if (formCfdMembre) {
+      formCfdMembre.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const nomFr = document.getElementById("nomMembreFr").value.trim();
+        const prenomFr = document.getElementById("prenomMembreFr").value.trim();
+        const nomAr = document.getElementById("nomMembreAr").value.trim();
+        const prenomAr = document.getElementById("prenomMembreAr").value.trim();
+        const grade = document.getElementById("gradeMembre").value.trim();
+        const sexe = document.getElementById("sexeMembre").value;
+
+        if (!nomFr || !prenomFr) {
+          showToast("Nom et prénom (FR) sont obligatoires.", "warning");
+          return;
+        }
+
+        // côté backend ce sera gen_random_uuid(), ici on simule
+        const idMembre = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-m";
+
+        cfdMembers.push({
+          idMembre,
+          nomFr,
+          prenomFr,
+          nomAr,
+          prenomAr,
+          role: "" 
         });
-      }
 
-      function renderCorrecteurs() {
-        if (!correcteursBody) return;
-        correcteursBody.innerHTML = "";
+        renderCfdMembers();
+        closeModal(modalCfd);
+        showToast("Membre CFD ajouté.", "success");
+      });
+    }
 
-        correcteurs.forEach((c, index) => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
+    // Rendu de la table + combo responsable
+    function renderCfdMembers() {
+      if (!cfdMembersBody || !cfdResponsableSelect) return;
+
+      // filtre recherche
+      const search = (cfdSearchInput?.value || "").toLowerCase();
+
+      cfdMembersBody.innerHTML = "";
+      cfdResponsableSelect.innerHTML = '<option value="">-- Sélectionner un membre CFD --</option>';
+
+      let displayIndex = 0;
+
+      cfdMembers.forEach((m) => {
+        const fullNameFr = `${m.nomFr} ${m.prenomFr}`.toLowerCase();
+        const fullNameAr = `${m.prenomAr || ""} ${m.nomAr || ""}`.toLowerCase();
+
+        if (search && !fullNameFr.includes(search) && !fullNameAr.includes(search)) {
+          return;
+        }
+
+        displayIndex += 1;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+      <td>${displayIndex}</td>
+      <td>${m.nomFr} ${m.prenomFr}</td>
+      <td dir="rtl">${(m.prenomAr || "")} ${(m.nomAr || "")}</td>
+      <td>
+        <select class="cfd-role-select" data-id="${m.idMembre}">
+          <option value="">-- Rôle --</option>
+          <option value="PRESIDENT" ${m.role === "PRESIDENT" ? "selected" : ""}>رئيس / Président</option>
+          <option value="MEMBRE" ${m.role === "MEMBRE" ? "selected" : ""}>عضو / Membre</option>
+          <option value="RAPPORTEUR" ${m.role === "RAPPORTEUR" ? "selected" : ""}>مقرر / Rapporteur</option>
+        </select>
+      </td>
+      <td class="table-actions">
+        <button class="btn-icon btn-icon-danger" data-remove="${m.idMembre}">
+          <i class="uil uil-trash"></i>
+        </button>
+      </td>
+    `;
+        cfdMembersBody.appendChild(tr);
+
+        // option dans la liste des responsables possibles
+        const opt = document.createElement("option");
+        opt.value = m.idMembre;
+        opt.textContent = `${m.nomFr} ${m.prenomFr}`;
+        cfdResponsableSelect.appendChild(opt);
+      });
+
+      if (cfdCount) cfdCount.textContent = String(cfdMembers.length);
+
+      // suppression
+      cfdMembersBody.querySelectorAll("[data-remove]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const idMembre = btn.getAttribute("data-remove");
+          cfdMembers = cfdMembers.filter((m) => m.idMembre !== idMembre);
+          renderCfdMembers();
+          showToast("Membre CFD supprimé.", "danger");
+        });
+      });
+
+      // 🆕 gestion du changement de rôle
+      cfdMembersBody.querySelectorAll(".cfd-role-select").forEach((select) => {
+        select.addEventListener("change", () => {
+          const id = select.dataset.id;
+          const roleValue = select.value;
+          const member = cfdMembers.find((m) => m.idMembre === id);
+          if (member) {
+            member.role = roleValue;
+            // plus tard : envoyer au backend
+          }
+        });
+      });
+    }
+    if (cfdSearchInput) {
+      cfdSearchInput.addEventListener("input", renderCfdMembers);
+    }
+
+    renderCfdMembers(); // initial (liste vide)
+
+    /* ===== CORRECTEURS : membres + users (role CORRECTEUR) ===== */
+    let correcteurs = [];
+
+    const correcteursBody = document.getElementById("correcteursBody");
+    const modalCorrecteur = document.getElementById("modalCorrecteur");
+    const btnOpenModalCorrecteur = document.getElementById("btnOpenModalCorrecteur");
+    const formCorrecteur = document.getElementById("formCorrecteur");
+    const sexeCorrHidden = document.getElementById("sexeCorrecteur");
+    const sexeToggleCorr = document.getElementById("sexeToggleCorrecteur");
+
+    // Toggle sexe correcteur
+    if (sexeCorrHidden && sexeToggleCorr) {
+      const sexButtons = sexeToggleCorr.querySelectorAll(".sex-option");
+      sexButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const value = btn.dataset.sexValue || "FEMME";
+          sexeCorrHidden.value = value;
+          sexButtons.forEach((b) =>
+            b.classList.toggle("sex-option-active", b === btn)
+          );
+        });
+      });
+    }
+
+    // Ouvrir la modale correcteur
+    if (btnOpenModalCorrecteur && formCorrecteur) {
+      btnOpenModalCorrecteur.addEventListener("click", () => {
+        formCorrecteur.reset();
+
+        // reset sexe = FEMME
+        if (sexeCorrHidden && sexeToggleCorr) {
+          sexeCorrHidden.value = "FEMME";
+          sexeToggleCorr.querySelectorAll(".sex-option").forEach((btn) => {
+            btn.classList.toggle(
+              "sex-option-active",
+              btn.dataset.sexValue === "FEMME"
+            );
+          });
+        }
+
+        openModal(modalCorrecteur);
+      });
+    }
+
+    // Soumission création correcteur : membre + user (role = CORRECTEUR)
+    if (formCorrecteur) {
+      formCorrecteur.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const nomFr = document.getElementById("corrNomFr").value.trim();
+        const prenomFr = document.getElementById("corrPrenomFr").value.trim();
+        const nomAr = document.getElementById("corrNomAr").value.trim();
+        const prenomAr = document.getElementById("corrPrenomAr").value.trim();
+        const grade = document.getElementById("corrGrade").value.trim();
+        const sexe = document.getElementById("sexeCorrecteur").value;
+        const email = document.getElementById("corrEmail").value.trim();
+      
+
+        if (!nomFr || !prenomFr  ) {
+          showToast("Nom, prénom  et mot de passe sont obligatoires.", "warning");
+          return;
+        }
+
+        const idMembre = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-m";
+        const idUser = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-u";
+
+        correcteurs.push({
+          idMembre,
+          idUser,
+          nomFr,
+          prenomFr,
+          nomAr,
+          prenomAr,
+          grade,
+          sexe,
+          email,
+          role: "CORRECTEUR"
+        });
+
+        // TODO backend : POST /correcteurs
+
+        renderCorrecteurs();
+        closeModal(modalCorrecteur);
+        showToast("Correcteur ajouté.", "success");
+      });
+    }
+
+    function renderCorrecteurs() {
+      if (!correcteursBody) return;
+      correcteursBody.innerHTML = "";
+
+      correcteurs.forEach((c, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
             <td>${index + 1}</td>
             <td>${c.nomFr} ${c.prenomFr}</td>
             <td>${c.grade || ""}</td>
-            <td>${c.username}</td>
             <td>${c.email || ""}</td>
             <td class="table-actions">
               <button class="btn-icon btn-icon-danger" data-remove-corr="${c.idUser}">
@@ -1452,144 +2341,139 @@
               </button>
             </td>
           `;
-          correcteursBody.appendChild(tr);
+        correcteursBody.appendChild(tr);
+      });
+
+      correcteursBody.querySelectorAll("[data-remove-corr]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const idUser = btn.getAttribute("data-remove-corr");
+          correcteurs = correcteurs.filter((c) => c.idUser !== idUser);
+          renderCorrecteurs();
+          showToast("Correcteur supprimé.", "danger");
         });
+      });
+    }
 
-        correcteursBody.querySelectorAll("[data-remove-corr]").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const idUser = btn.getAttribute("data-remove-corr");
-            correcteurs = correcteurs.filter((c) => c.idUser !== idUser);
-            renderCorrecteurs();
-          });
+    renderCorrecteurs();
+
+    /* ===== CELLULE D'ANONYMAT : user + lien cellule_anonymat ===== */
+    let anonymatMembers = [];
+
+    const anonymatBody = document.getElementById("anonymatBody");
+    const modalAnonymat = document.getElementById("modalAnonymat");
+    const btnOpenModalAnonymat = document.getElementById("btnOpenModalAnonymat");
+    const formAnonymat = document.getElementById("formAnonymat");
+    const sexeAnonyHidden = document.getElementById("sexeAnonymat");
+    const sexeToggleAnony = document.getElementById("sexeToggleAnonymat");
+    const anonyConcoursSelect = document.getElementById("anonyConcoursSelect");
+
+    // 🔁 Copier les concours depuis le select PV
+    const pvConcoursSelect = document.getElementById("pvConcoursSelect");
+    if (pvConcoursSelect && anonyConcoursSelect && anonyConcoursSelect.options.length === 1) {
+      Array.from(pvConcoursSelect.options).forEach((opt, idx) => {
+        if (idx === 0) return;
+        const clone = opt.cloneNode(true);
+        anonyConcoursSelect.appendChild(clone);
+      });
+    }
+
+    // Toggle sexe anonymat
+    if (sexeAnonyHidden && sexeToggleAnony) {
+      const sexButtons = sexeToggleAnony.querySelectorAll(".sex-option");
+      sexButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const value = btn.dataset.sexValue || "FEMME";
+          sexeAnonyHidden.value = value;
+          sexButtons.forEach((b) =>
+            b.classList.toggle("sex-option-active", b === btn)
+          );
         });
-      }
+      });
+    }
 
-      renderCorrecteurs();
-
-      /* ===== CELLULE D'ANONYMAT : user + lien cellule_anonymat ===== */
-      let anonymatMembers = [];
-
-      const anonymatBody = document.getElementById("anonymatBody");
-      const modalAnonymat = document.getElementById("modalAnonymat");
-      const btnOpenModalAnonymat = document.getElementById("btnOpenModalAnonymat");
-      const formAnonymat = document.getElementById("formAnonymat");
-      const sexeAnonyHidden = document.getElementById("sexeAnonymat");
-      const sexeToggleAnony = document.getElementById("sexeToggleAnonymat");
-      const anonyConcoursSelect = document.getElementById("anonyConcoursSelect");
-
-      // 🔁 Copier les concours depuis le select PV
-      const pvConcoursSelect = document.getElementById("pvConcoursSelect");
-      if (pvConcoursSelect && anonyConcoursSelect && anonyConcoursSelect.options.length === 1) {
-        Array.from(pvConcoursSelect.options).forEach((opt, idx) => {
-          if (idx === 0) return;
-          const clone = opt.cloneNode(true);
-          anonyConcoursSelect.appendChild(clone);
-        });
-      }
-
-      // Toggle sexe anonymat
-      if (sexeAnonyHidden && sexeToggleAnony) {
-        const sexButtons = sexeToggleAnony.querySelectorAll(".sex-option");
-        sexButtons.forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const value = btn.dataset.sexValue || "FEMME";
-            sexeAnonyHidden.value = value;
-            sexButtons.forEach((b) =>
-              b.classList.toggle("sex-option-active", b === btn)
+    // Ouvrir modale anonymat
+    if (btnOpenModalAnonymat && formAnonymat) {
+      btnOpenModalAnonymat.addEventListener("click", () => {
+        formAnonymat.reset();
+        if (sexeAnonyHidden && sexeToggleAnony) {
+          sexeAnonyHidden.value = "FEMME";
+          sexeToggleAnony.querySelectorAll(".sex-option").forEach((btn) => {
+            btn.classList.toggle(
+              "sex-option-active",
+              btn.dataset.sexValue === "FEMME"
             );
           });
+        }
+        openModal(modalAnonymat);
+      });
+    }
+
+    // Soumission création membre anonymat
+    if (formAnonymat) {
+      formAnonymat.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const concoursId = anonyConcoursSelect.value;
+        const concoursLabel =
+          anonyConcoursSelect.options[anonyConcoursSelect.selectedIndex]?.text || "";
+
+        const nomFr = document.getElementById("anonyNomFr").value.trim();
+        const prenomFr = document.getElementById("anonyPrenomFr").value.trim();
+        const grade = document.getElementById("anonyGrade").value.trim();
+        const sexe = document.getElementById("sexeAnonymat").value;
+        const email = document.getElementById("anonyEmail").value.trim();
+
+        if (!concoursId) {
+          showToast("Veuillez sélectionner un concours.", "warning");
+          return;
+        }
+        if (!nomFr || !prenomFr ) {
+          showToast("Nom, prénom sont obligatoires.", "warning");
+          return;
+        }
+
+        // Respect de la contrainte UNIQUE(id_concours)
+        if (anonymatMembers.some((m) => m.concoursId === concoursId)) {
+          showToast("Une cellule d’anonymat est déjà définie pour ce concours.", "danger");
+          return;
+        }
+
+        const idMembre = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-m";
+        const idUser = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-u";
+        const idCellule = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-ca";
+
+        anonymatMembers.push({
+          idCellule,
+          concoursId,
+          concoursLabel,
+          idMembre,
+          idUser,
+          nomFr,
+          prenomFr,
+          grade,
+          sexe,
+          email,
+         
+          role: "CELLULE_ANONYMAT"
         });
-      }
 
-      // Ouvrir modale anonymat
-      if (btnOpenModalAnonymat && formAnonymat) {
-        btnOpenModalAnonymat.addEventListener("click", () => {
-          formAnonymat.reset();
-          if (sexeAnonyHidden && sexeToggleAnony) {
-            sexeAnonyHidden.value = "FEMME";
-            sexeToggleAnony.querySelectorAll(".sex-option").forEach((btn) => {
-              btn.classList.toggle(
-                "sex-option-active",
-                btn.dataset.sexValue === "FEMME"
-              );
-            });
-          }
-          openModal(modalAnonymat);
-        });
-      }
+        renderAnonymat();
+        closeModal(modalAnonymat);
+        showToast("Membre anonymat ajouté.", "success");
+      });
+    }
 
-      // Soumission création membre anonymat
-      if (formAnonymat) {
-        formAnonymat.addEventListener("submit", (e) => {
-          e.preventDefault();
+    function renderAnonymat() {
+      if (!anonymatBody) return;
+      anonymatBody.innerHTML = "";
 
-          const concoursId = anonyConcoursSelect.value;
-          const concoursLabel =
-            anonyConcoursSelect.options[anonyConcoursSelect.selectedIndex]?.text || "";
-
-          const nomFr = document.getElementById("anonyNomFr").value.trim();
-          const prenomFr = document.getElementById("anonyPrenomFr").value.trim();
-          const grade = document.getElementById("anonyGrade").value.trim();
-          const sexe = document.getElementById("sexeAnonymat").value;
-          const email = document.getElementById("anonyEmail").value.trim();
-          const username = document.getElementById("anonyUsername").value.trim();
-          const password = document.getElementById("anonyPassword").value;
-
-          if (!concoursId) {
-            alert("Veuillez sélectionner un concours.");
-            return;
-          }
-          if (!nomFr || !prenomFr || !username || !password) {
-            alert("Nom, prénom, username et mot de passe sont obligatoires.");
-            return;
-          }
-
-          // Respect de la contrainte UNIQUE(id_concours)
-          if (anonymatMembers.some((m) => m.concoursId === concoursId)) {
-            alert("Une cellule d’anonymat est déjà définie pour ce concours.");
-            return;
-          }
-
-          const idMembre = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-m";
-          const idUser = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-u";
-          const idCellule = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-ca";
-
-          anonymatMembers.push({
-            idCellule,
-            concoursId,
-            concoursLabel,
-            idMembre,
-            idUser,
-            nomFr,
-            prenomFr,
-            grade,
-            sexe,
-            email,
-            username,
-            role: "CELLULE_ANONYMAT"
-          });
-
-          // TODO backend :
-          // 1) INSERT INTO membres (...)
-          // 2) INSERT INTO users (..., role = 'CELLULE_ANONYMAT', id_membre = idMembre)
-          // 3) INSERT INTO cellule_anonymat (id_cellule_anonymat, id_concours, id_user)
-
-          renderAnonymat();
-          closeModal(modalAnonymat);
-        });
-      }
-
-      function renderAnonymat() {
-        if (!anonymatBody) return;
-        anonymatBody.innerHTML = "";
-
-        anonymatMembers.forEach((m, index) => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
+      anonymatMembers.forEach((m, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
             <td>${index + 1}</td>
             <td>${m.concoursLabel}</td>
             <td>${m.nomFr} ${m.prenomFr}</td>
-            <td>${m.username}</td>
+           
             <td>${m.email || ""}</td>
             <td class="table-actions">
               <button class="btn-icon btn-icon-danger" data-remove-anony="${m.idCellule}">
@@ -1597,73 +2481,67 @@
               </button>
             </td>
           `;
-          anonymatBody.appendChild(tr);
+        anonymatBody.appendChild(tr);
+      });
+
+      anonymatBody.querySelectorAll("[data-remove-anony]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const idCellule = btn.getAttribute("data-remove-anony");
+          anonymatMembers = anonymatMembers.filter((m) => m.idCellule !== idCellule);
+          renderAnonymat();
+          showToast("Membre anonymat supprimé.", "danger");
+        });
+      });
+    }
+
+    renderAnonymat();
+
+    /* ===== RESPONSABLE CFD : création user (table users) ===== */
+    const formCfdResponsable = document.getElementById("formCfdResponsable");
+
+    if (formCfdResponsable) {
+      formCfdResponsable.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const concoursId = document.getElementById("cfdConcoursSelect").value;
+        const membreId = document.getElementById("cfdResponsableSelect").value;
+        const email = document.getElementById("cfdRespEmail").value.trim();
+        
+        if (!concoursId) {
+          showToast("Veuillez sélectionner un concours.", "warning");
+          return;
+        }
+        if (!membreId) {
+          showToast("Veuillez sélectionner le membre CFD responsable.", "warning");
+          return;
+        }
+       
+
+        console.log("Créer responsable CFD :", {
+          concoursId,
+          membreId,
+          email,
+          role: "CFD"
         });
 
-        anonymatBody.querySelectorAll("[data-remove-anony]").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const idCellule = btn.getAttribute("data-remove-anony");
-            anonymatMembers = anonymatMembers.filter((m) => m.idCellule !== idCellule);
-            renderAnonymat();
-          });
-        });
-      }
+        showToast("Responsable CFD enregistré (simulation front).", "success");
+        formCfdResponsable.reset();
+      });
+    }
 
-      renderAnonymat();
+    /* ===== PV : génération simple + impression ===== */
+    const pvTexteAr = document.getElementById("pvTexteAr");
+    const btnRegenererPv = document.getElementById("btnRegenererPv");
+    const btnImprimerPv = document.getElementById("btnImprimerPv");
+    const btnValiderPv = document.getElementById("btnValiderPv");
 
-      /* ===== RESPONSABLE CFD : création user (table users) ===== */
-      const formCfdResponsable = document.getElementById("formCfdResponsable");
+    if (btnRegenererPv && pvTexteAr) {
+      btnRegenererPv.addEventListener("click", () => {
+        const concoursLabel =  "مسابقة الدكتوراه";
+        const dateDecision = document.getElementById("pvDateDecision").value || "....";
+        const numDecision = document.getElementById("pvNumDecision").value || "…/…/…";
 
-      if (formCfdResponsable) {
-        formCfdResponsable.addEventListener("submit", (e) => {
-          e.preventDefault();
-
-          const concoursId = document.getElementById("cfdConcoursSelect").value;
-          const membreId = document.getElementById("cfdResponsableSelect").value;
-          const email = document.getElementById("cfdRespEmail").value.trim();
-          const username = document.getElementById("cfdRespUsername").value.trim();
-          const password = document.getElementById("cfdRespPassword").value;
-
-          if (!concoursId) {
-            alert("Veuillez sélectionner un concours.");
-            return;
-          }
-          if (!membreId) {
-            alert("Veuillez sélectionner le membre CFD responsable.");
-            return;
-          }
-          if (!username || !password) {
-            alert("Username et mot de passe sont obligatoires pour le compte utilisateur.");
-            return;
-          }
-
-          console.log("Créer responsable CFD :", {
-            concoursId,
-            membreId,
-            username,
-            email,
-            password,
-            role: "CFD"
-          });
-
-          alert("Responsable CFD enregistré (simulation front, à connecter au backend).");
-          formCfdResponsable.reset();
-        });
-      }
-
-      /* ===== PV : génération simple + impression ===== */
-      const pvTexteAr = document.getElementById("pvTexteAr");
-      const btnRegenererPv = document.getElementById("btnRegenererPv");
-      const btnImprimerPv = document.getElementById("btnImprimerPv");
-      const btnValiderPv = document.getElementById("btnValiderPv");
-
-      if (btnRegenererPv && pvTexteAr) {
-        btnRegenererPv.addEventListener("click", () => {
-          const concoursLabel = document.getElementById("pvConcoursSelect").value || "مسابقة الدكتوراه";
-          const dateDecision = document.getElementById("pvDateDecision").value || "....";
-          const numDecision = document.getElementById("pvNumDecision").value || "…/…/…";
-
-          pvTexteAr.value =
+        pvTexteAr.value =
 `بمقتضى القوانين والتنظيمات السارية، 
 وبناء على محاضر لجان التكوين في الدكتوراه (CFD) ولجان التصحيح والترتيب،
 يقرر ما يلي:
@@ -1674,23 +2552,135 @@
 تحت رقم ${numDecision}.
 
 يمكنك تعديل هذا النص قبل الطباعة.`;
-        });
-      }
+        showToast("نص المقرر أُعيد توليده.", "info");
+      });
+    }
 
-      if (btnImprimerPv) {
-        btnImprimerPv.addEventListener("click", () => window.print());
-      }
+    if (btnImprimerPv) {
+      btnImprimerPv.addEventListener("click", () => {
+        window.print();
+        showToast("Ouverture de la boîte de dialogue d’impression.", "info");
+      });
+    }
 
-      if (btnValiderPv) {
-        btnValiderPv.addEventListener("click", () => {
-          alert("PV validé (plus tard : sauvegarde en base + génération PDF).");
-        });
-      }
+    if (btnValiderPv) {
+      btnValiderPv.addEventListener("click", () => {
+        showToast("PV validé (plus tard : sauvegarde + génération PDF).", "success");
+      });
+    }
 
-      // Vue par défaut = Accueil
-      showView("home");
-    });
-  </script>
+
+    showView("home");
+
+    // ====== GRAPHIQUE : Répartition des candidats par faculté ======
+function initFaculteChart() {
+  const canvas = document.getElementById("chartFaculte");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+
+  const labels = [
+    "Sciences Exactes",
+    "Sciences & Technologie",
+    "Génie Civil",
+    "Chimie",
+    "Lettres & Langues"
+  ];
+
+  const dataValues = [450, 340, 235, 155, 120];
+
+  const colors = [
+    "#4f46e5", // bleu
+    "#a855f7", // violet
+    "#f97316", // orange
+    "#ec4899", // rose
+    "#22c55e"  // vert
+  ];
+
+  // Optionnel : un léger gradient vertical pour chaque barre
+  const backgroundColors = colors.map((c) => {
+    const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    grad.addColorStop(0, c);
+    grad.addColorStop(1, c + "33"); // couleur + transparence
+    return grad;
+  });
+
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "Nombre de candidats",
+          data: dataValues,
+          backgroundColor: backgroundColors,
+          borderRadius: 10,
+          borderSkipped: false,
+          maxBarThickness: 40
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: {
+        padding: { top: 10, right: 10, left: 0, bottom: 0 }
+      },
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          backgroundColor: "#111827",
+          titleFont: { size: 12, weight: "600" },
+          bodyFont: { size: 11 },
+          padding: 10,
+          cornerRadius: 10
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            autoSkip: false,
+            maxRotation: 40,
+            minRotation: 40,
+            font: { size: 11 }
+          },
+          grid: { display: false }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 50,
+            font: { size: 11 }
+          },
+          grid: {
+            color: "#e5e7eb"
+          }
+        }
+      },
+      animation: {
+        duration: 900,
+        easing: "easeOutQuart",
+        delay: (ctx) => {
+          // petite animation échelonnée barre par barre
+          let delay = 0;
+          if (ctx.type === "data" && ctx.mode === "default") {
+            delay = ctx.dataIndex * 120;
+          }
+          return delay;
+        }
+      }
+    }
+  });
+}
+
+// Appel après tout le reste
+initFaculteChart();
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </body>
+
 </html>

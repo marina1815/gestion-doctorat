@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Paramètres du compte</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Icônes Unicons (comme dans tes autres pages) -->
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="app-layout" data-theme="light">
+  <div class="app-layout">
+
+    <!-- SIDEBAR (facultatif si tu as déjà ton aside global) -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-icon">
+          <img id="mainLogo" src="img/iconlight.png" alt="Logo USTO" class="logo-img" />
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">Gestion Doctorale</span>
+          <span class="logo-subtitle">USTO MB</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-link">
+          <i class="uil uil-estate"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="concours.html" class="nav-link">
+          <i class="uil uil-file-alt"></i>
+          <span>Concours</span>
+        </a>
+        <a href="parametres.html" class="nav-link nav-link-active">
+          <i class="uil uil-setting"></i>
+          <span>Paramètres</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main class="main-content">
+
+      <!-- HEADER COMPTE / TITRE PAGE -->
+      <header class="page-header">
+        <div>
+          <h1 class="page-title">Paramètres du compte</h1>
+          <p class="page-subtitle">Gérez vos informations générales et le mode d’affichage de l’application.</p>
+        </div>
+
+        <div class="account-summary">
+          <div class="account-avatar">
+            <span class="avatar-initials">HA</span>
+          </div>
+          <div class="account-info">
+            <span class="account-name">Hanaa Amira</span>
+            <span class="account-role">Doyen - USTO MB</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- CONTENU PARAMÈTRES -->
+      <section class="settings-grid">
+
+        <!-- INFORMATIONS GÉNÉRALES -->
+        <section class="card settings-section">
+          <header class="card-header">
+            <div class="card-header-main">
+              <i class="uil uil-user-circle card-icon"></i>
+              <div>
+                <h2>Informations générales</h2>
+                <p class="card-subtitle">Modifiez vos informations de profil.</p>
+              </div>
+            </div>
+          </header>
+
+          <form id="generalSettingsForm" class="card-body form-grid">
+            <div class="form-field">
+              <label for="fullName">Nom complet</label>
+              <input type="text" id="fullName" name="fullName" placeholder="Ex : Hanaa Amira" />
+            </div>
+
+            <div class="form-field">
+              <label for="email">E-mail institutionnel</label>
+              <input type="email" id="email" name="email" placeholder="prenom.nom@univ-usto.dz" />
+            </div>
+
+            <div class="form-field">
+              <label for="phone">Téléphone</label>
+              <input type="tel" id="phone" name="phone" placeholder="Ex : 0550 00 00 00" />
+            </div>
+
+            <div class="form-field">
+              <label for="language">Langue de l’interface</label>
+              <select id="language" name="language">
+                <option value="fr" selected>Français</option>
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+              </select>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-ghost" id="resetGeneralBtn">
+                Annuler
+              </button>
+              <button type="submit" class="btn btn-primary">
+                Enregistrer
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- SÉCURITÉ / MOT DE PASSE -->
+        <section class="card settings-section">
+          <header class="card-header">
+            <div class="card-header-main">
+              <i class="uil uil-lock card-icon"></i>
+              <div>
+                <h2>Sécurité & mot de passe</h2>
+                <p class="card-subtitle">Changez votre mot de passe régulièrement.</p>
+              </div>
+            </div>
+          </header>
+
+          <form id="securitySettingsForm" class="card-body form-grid">
+            <div class="form-field">
+              <label for="currentPassword">Mot de passe actuel</label>
+              <input type="password" id="currentPassword" name="currentPassword" />
+            </div>
+
+            <div class="form-field">
+              <label for="newPassword">Nouveau mot de passe</label>
+              <input type="password" id="newPassword" name="newPassword" />
+            </div>
+
+            <div class="form-field">
+              <label for="confirmPassword">Confirmer le nouveau mot de passe</label>
+              <input type="password" id="confirmPassword" name="confirmPassword" />
+            </div>
+
+            <div class="password-hint">
+              <i class="uil uil-info-circle"></i>
+              <span>Utilisez au moins 8 caractères avec des lettres, chiffres et symboles.</span>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-ghost" id="resetPasswordBtn">
+                Réinitialiser
+              </button>
+              <button type="submit" class="btn btn-primary">
+                Mettre à jour le mot de passe
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- APPARENCE & THÈME -->
+        <section class="card settings-section settings-theme">
+          <header class="card-header">
+            <div class="card-header-main">
+              <i class="uil uil-moon card-icon"></i>
+              <div>
+                <h2>Apparence & thème</h2>
+                <p class="card-subtitle">Choisissez le mode clair, sombre ou automatique.</p>
+              </div>
+            </div>
+          </header>
+
+          <div class="card-body theme-options">
+            <div class="theme-choice-group">
+              <label class="theme-option">
+                <input type="radio" name="theme" value="light" checked />
+                <div class="theme-option-content">
+                  <div class="theme-icon">
+                    <i class="uil uil-sun"></i>
+                  </div>
+                  <div class="theme-text">
+                    <span class="theme-title">Mode clair</span>
+                    <span class="theme-description">Fond clair, idéal pour la journée.</span>
+                  </div>
+                </div>
+              </label>
+
+              <label class="theme-option">
+                <input type="radio" name="theme" value="dark" />
+                <div class="theme-option-content">
+                  <div class="theme-icon">
+                    <i class="uil uil-moon"></i>
+                  </div>
+                  <div class="theme-text">
+                    <span class="theme-title">Mode sombre</span>
+                    <span class="theme-description">Fond sombre, confortable la nuit.</span>
+                  </div>
+                </div>
+              </label>
+
+              <label class="theme-option">
+                <input type="radio" name="theme" value="system" />
+                <div class="theme-option-content">
+                  <div class="theme-icon">
+                    <i class="uil uil-monitor"></i>
+                  </div>
+                  <div class="theme-text">
+                    <span class="theme-title">Automatique (système)</span>
+                    <span class="theme-description">S’adapte au thème de votre appareil.</span>
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            <!-- Petit aperçu visuel du thème -->
+            <div class="theme-preview">
+              <div class="theme-preview-header">
+                <span class="theme-preview-title">Aperçu</span>
+              </div>
+              <div class="theme-preview-body">
+                <div class="theme-preview-sidebar"></div>
+                <div class="theme-preview-main">
+                  <div class="theme-preview-bar"></div>
+                  <div class="theme-preview-cards">
+                    <div class="theme-preview-card"></div>
+                    <div class="theme-preview-card"></div>
+                    <div class="theme-preview-card"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-ghost" id="resetThemeBtn">
+                Valeur par défaut
+              </button>
+              <button type="button" class="btn btn-primary" id="saveThemeBtn">
+                Enregistrer le thème
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- SCRIPT : gestion simple du thème -->
+  <script>
+    const THEME_KEY = "app-theme";
+
+    function applyTheme(theme) {
+      const root = document.documentElement;
+      if (theme === "system") {
+        const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        root.setAttribute("data-theme", isDark ? "dark" : "light");
+      } else {
+        root.setAttribute("data-theme", theme);
+      }
+    }
+
+    // Charger le thème au chargement
+    (function initTheme() {
+      const saved = localStorage.getItem(THEME_KEY) || "light";
+      const radio = document.querySelector(`input[name="theme"][value="${saved}"]`);
+      if (radio) radio.checked = true;
+      applyTheme(saved);
+    })();
+
+    // Quand on change le radio
+    document.querySelectorAll('input[name="theme"]').forEach((input) => {
+      input.addEventListener("change", () => {
+        const value = input.value;
+        applyTheme(value);
+      });
+    });
+
+    // Bouton "Enregistrer le thème"
+    document.getElementById("saveThemeBtn").addEventListener("click", () => {
+      const selected = document.querySelector('input[name="theme"]:checked')?.value || "light";
+      localStorage.setItem(THEME_KEY, selected);
+      applyTheme(selected);
+      // Ici tu peux ajouter un toast : "Thème mis à jour"
+    });
+
+    // Bouton "Valeur par défaut"
+    document.getElementById("resetThemeBtn").addEventListener("click", () => {
+      const defaultTheme = "light";
+      const radio = document.querySelector(`input[name="theme"][value="${defaultTheme}"]`);
+      if (radio) radio.checked = true;
+      localStorage.setItem(THEME_KEY, defaultTheme);
+      applyTheme(defaultTheme);
+    });
+  </script>
+</body>
+
+</html>

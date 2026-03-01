@@ -9,6 +9,7 @@ import concoursRoutes from "./routes/concours.routes";
 import candidatRoutes from "./routes/candidat.routes";
 import specialiteRoutes from "./routes/specialite.routes";
 import membreRoutes from "./routes/membre.routes";
+import  viceDoyenRoutes  from "./routes/viceDoyen.route";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 import { sanitize } from "./middleware/sanitize";
 import cookieParser from "cookie-parser";
@@ -17,6 +18,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
+
 app.use(sanitize);
 app.use(
   cors({
@@ -38,6 +40,7 @@ app.use("/concours", concoursRoutes);
 app.use("/specialites", specialiteRoutes);
 app.use("/candidats", candidatRoutes);
 app.use("/membres",membreRoutes);
+app.use("/vice-doyens", viceDoyenRoutes);
 app.use(notFoundHandler);
 app.use(errorHandler);
 

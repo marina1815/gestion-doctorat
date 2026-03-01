@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Accueil Vice Doyen | Gestion Doctorale</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+</head>
+
+<body>
+    <div id="toastArea" class="toast-area"></div>
+
+    <div class="app-layout">
+
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">
+                    <img id="mainLogo" src="img/iconlight.png" alt="Logo USTO" class="logo-img" />
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">Gestion Doctorale</span>
+                    <span class="logo-subtitle">USTO MB</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <p class="sidebar-section-title">Menu</p>
+
+                <!-- Accueil vice-doyen -->
+                <a href="vice-doyen-accueil.html" class="nav-item active">
+                    <i class="uil uil-estate"></i>
+                    <span>Accueil</span>
+                </a>
+
+                <!-- Import candidats -->
+                <a href="vice-doyen-import.html" class="nav-item">
+                    <i class="uil uil-upload-alt nav-icon"></i>
+                    <span>Import candidats</span>
+                </a>
+                <a href="vice-doyen-calendrier.html" class="nav-item ">
+        <i class="uil uil-calendar-alt"></i>
+        <span>Calendrier des concours</span>
+
+                <!-- Historique -->
+                <a href="vice-doyen-historique.html" class="nav-item">
+                    <i class="uil uil-history nav-icon"></i>
+                    <span>Historique des actions</span>
+                </a>
+
+            </nav>
+        </aside>
+
+        <!-- ===== MAIN ===== -->
+        <main class="main">
+
+            <!-- ===== TOPBAR ===== -->
+            <header class="topbar">
+                <div class="search-wrapper">
+                    <i class="uil uil-search"></i>
+                    <input type="text" placeholder="Rechercher" />
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-btn">
+                        <i class="uil uil-envelope"></i>
+                    </button>
+                    <button class="icon-btn notification-btn">
+                        <i class="uil uil-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                    <button id="themeToggle" class="icon-btn">
+                        <i id="themeIcon" class="uil uil-moon"></i>
+                    </button>
+
+                    <div class="user-menu">
+                        <button class="user-menu-trigger" id="userMenuBtn">
+                            <img src="img/user.png" alt="Vice Doyen" class="user-avatar">
+                            <span class="user-name">Vice Doyen</span>
+                            <i class="uil uil-angle-down"></i>
+                        </button>
+
+                        <div class="user-menu-dropdown" id="userMenuDropdown">
+                            <button class="user-menu-item" id="logoutBtn">
+                                <i class="uil uil-signout"></i>
+                                Déconnexion
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ===== CONTENT ===== -->
+            <section class="content">
+
+                <!-- En-tête -->
+                <div class="content-header">
+                    <h1>Bienvenue, Vice Doyen</h1>
+                    <p class="content-subtitle">
+                        Vue globale du workflow des concours de doctorat : import des candidats, suivi par faculté
+                        et validation des résultats.
+                    </p>
+                </div>
+
+                <!-- Statistiques rapides -->
+                <section class="stats-grid">
+                    <article class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Concours actifs</span>
+                            <span class="stat-icon icon-blue">
+                                <i class="uil uil-clipboard-alt"></i>
+                            </span>
+                        </div>
+                        <div class="stat-value">4</div>
+                        <div class="stat-footer">
+                            <span class="stat-note">Année universitaire 2024/2025</span>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Candidats inscrits</span>
+                            <span class="stat-icon icon-purple">
+                                <i class="uil uil-users-alt"></i>
+                            </span>
+                        </div>
+                        <div class="stat-value">1 238</div>
+                        <div class="stat-footer">
+                            <span class="stat-note">toutes facultés confondues</span>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Concours en préparation</span>
+                            <span class="stat-icon icon-orange">
+                                <i class="uil uil-edit-alt"></i>
+                            </span>
+                        </div>
+                        <div class="stat-value">2</div>
+                        <div class="stat-footer">
+                            <span class="stat-note">en attente de validation</span>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">PV validés</span>
+                            <span class="stat-icon icon-green">
+                                <i class="uil uil-check-circle"></i>
+                            </span>
+                        </div>
+                        <div class="stat-value">6</div>
+                        <div class="stat-footer">
+                            <span class="stat-note">sur les 3 dernières années</span>
+                        </div>
+                    </article>
+                </section>
+
+                <!-- Concours par faculté + Activités récentes -->
+                <section class="two-column">
+
+                    <!-- Liste des concours (table-wrapper existant) -->
+                    <article class="card">
+                        <div class="card-header">
+                            <div>
+                                <h2>Concours par faculté</h2>
+                                <span class="card-subtitle">
+                                    Liste des concours en cours d’organisation ou actifs, classés par faculté.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-wrapper">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Concours</th>
+                                            <th>Faculté</th>
+                                            <th>Département</th>
+                                            <th>Statut</th>
+                                      
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                     
+                                        <tr>
+                                            <td>Doctorat 2024 – Informatique</td>
+                                            <td>Sciences Exactes</td>
+                                            <td>Informatique</td>
+                                            <td>
+                                                <span class="status-pill status-open">Actif</span>
+                                            </td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td>Doctorat 2024 – Électronique</td>
+                                            <td>Sciences et Technologie</td>
+                                            <td>Électronique</td>
+                                            <td>
+                                                <span class="status-pill status-prep">En préparation</span>
+                                            </td>
+                                           
+                                        </tr>
+                                        <tr>
+                                            <td>Doctorat 2024 – Génie Civil</td>
+                                            <td>Génie Civil</td>
+                                            <td>Structures</td>
+                                            <td>
+                                                <span class="status-pill status-wait">En attente</span>
+                                            </td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td>Doctorat 2024 – Chimie</td>
+                                            <td>Sciences Exactes</td>
+                                            <td>Chimie</td>
+                                            <td>
+                                                <span class="status-pill status-closed">Terminé</span>
+                                            </td>
+                                           
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                           
+                        </div>
+                    </article>
+
+                   
+                     <article class="card process-card">
+                        <div class="card-header">
+                            <div>
+                                <h2>Processus du Vice Doyen</h2>
+                                <span class="card-subtitle">
+                                    Organisez votre travail en étapes claires pour chaque concours de doctorat.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="workflow-steps">
+
+                                <div class="workflow-step neutre">
+                                    <div class="step-circle">
+                                        <i class="uil uil-calendar-alt"></i>
+                                    </div>
+                                    <div class="step-body">
+                                        <h3>1. Sélectionner le concours</h3>
+                                        <p>
+                                            Choisir le concours concernés pour le traitement des
+                                            candidatures.
+                                        </p>
+                                        <button type="button" class="link-btn small"
+                                            onclick="window.location.href='vice-doyen-import.html'">
+                                            Accéder à sélectionner
+                                            <i class="uil uil-angle-right"></i>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-step completed">
+                                    <div class="step-circle">
+                                        <i class="uil uil-file-plus-alt"></i>
+                                    </div>
+                                    <div class="step-body">
+                                        <h3>2. Importer les candidatures</h3>
+                                        <p>
+                                            Importer le fichier Excel des candidats, puis
+                                            envoyer aux chefs de département.
+                                        </p>
+                                        <button type="button" class="link-btn small"
+                                            onclick="window.location.href='vice-doyen-import.html'">
+                                            Accéder à l’import
+                                            <i class="uil uil-angle-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                               
+
+                               
+
+                            </div>
+                        </div>
+                    </article>
+
+                </section>
+
+               
+                <section class="two-column">
+                   
+                </section>
+
+            </section>
+        </main>
+    </div>
+
+    <script src="theme.js"></script>
+</body>
+
+</html>

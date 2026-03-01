@@ -1170,6 +1170,45 @@ body {
     color: #ea580c;
 }
 
+/* 🌙 Inputs en dark mode */
+:root[data-theme="dark"] input[type="text"],
+:root[data-theme="dark"] input[type="password"],
+:root[data-theme="dark"] input[type="email"],
+:root[data-theme="dark"] input[type="number"],
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] textarea {
+    background-color: #020617;      /* gris très foncé (presque noir mais pas totalement) */
+    color: #e5e7eb;                 /* texte gris clair */
+    border-color: #1f2937;          /* bordure gris foncé */
+}
+
+/* Focus en dark */
+:root[data-theme="dark"] input:focus,
+:root[data-theme="dark"] select:focus,
+:root[data-theme="dark"] textarea:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.65);
+}
+:root[data-theme="dark"] .icon-blue {
+    background-color: #1e3a5f;
+    color: #93c5fd;
+}
+
+:root[data-theme="dark"] .icon-purple {
+    background-color: #3b264b;
+    color: #d8b4fe;
+}
+
+:root[data-theme="dark"] .icon-green {
+    background-color: #0f3320;
+    color: #86efac;
+}
+
+:root[data-theme="dark"] .icon-orange {
+    background-color: #4a2d13;
+    color: #fdba74;
+}
+
 .stat-value {
     font-size: 26px;
     font-weight: 700;
@@ -1407,7 +1446,10 @@ body {
     border-radius: 14px;
     border: 1px solid var(--color-border-soft);
     overflow: hidden;
+    
+
 }
+
 
 .data-table {
     width: 100%;
@@ -2231,7 +2273,7 @@ body {
 .toast-error {
     background: rgba(248, 113, 113, 0.18);
     color: #7f1d1d;
-    border-color: rgba(248, 113, 113, 0.65);
+    border-color: rgba(49, 4, 4, 0.65);
 }
 
 .toast-error::before {
@@ -2523,7 +2565,7 @@ body {
 .progress-bar {
     position: relative;
     width: 100%;
-    max-width: 260px;
+   
     height: 8px;
     border-radius: 999px;
     background: #e2e8f0;
@@ -3217,4 +3259,2294 @@ html[data-theme="dark"] .btn-back:hover {
 
 html[data-theme="dark"] .meta-label {
   color: #6b7280;
+}
+/* ========================================================================== */
+/*  PAGE DOYEN – ORGANISATION CONCOURS DE DOCTORAT                            */
+/* ========================================================================== */
+
+/* ------------------------ BARRE D’ÉTAPES EN HAUT -------------------------- */
+
+.steps-bar {
+    margin-bottom: 18px;
+    padding: 16px 18px 12px;
+}
+
+.steps-bar .step-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--color-text-muted);
+    background-color: #eef2ff;
+    margin-right: 6px;
+    margin-bottom: 6px;
+}
+
+.steps-bar .step-index {
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    background-color: #e5e7eb;
+    color: #111827;
+}
+
+.steps-bar .step-item.step-item-active {
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: #ffffff;
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35);
+}
+
+.steps-bar .step-item.step-item-active .step-index {
+    background-color: rgba(15, 23, 42, 0.25);
+    color: #ffffff;
+}
+
+/* Dark mode pour les steps */
+:root[data-theme="dark"] .steps-bar .step-item {
+    background-color: #111827;
+    color: #e5e7eb;
+}
+
+:root[data-theme="dark"] .steps-bar .step-index {
+    background-color: #1f2937;
+    color: #e5e7eb;
+}
+
+/* On réutilise la progress-bar globale pour l’avancement */
+.steps-bar .progress-bar {
+    margin-top: 8px;
+}
+
+/* --------------------- GRILLE DU FORMULAIRE D’ORGANISATION ---------------- */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px 18px;
+}
+
+.form-grid .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+}
+
+.form-grid .form-group label {
+    color: var(--form-group-label);
+    font-size: 13px;
+}
+
+.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 6px;
+}
+
+/* --------------------- TABLES du doyen (Textes / Comités / Membres) ------- */
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.table thead {
+    background-color: #f9fafb;
+    color: #433f3f;
+}
+
+.table th,
+.table td {
+    padding: 10px 12px;
+    text-align: left;
+}
+
+.table th {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-muted-2);
+    border-bottom: 1px solid var(--color-border-soft);
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #fbfcff;
+}
+
+.table tbody tr:hover {
+    background-color: #eef2ff;
+}
+
+.col-ellipsis {
+    max-width: 260px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.col-actions {
+    width: 90px;
+}
+
+.table-actions {
+    display: flex;
+    gap: 4px;
+}
+
+/* Version dark des tableaux .table */
+:root[data-theme="dark"] .table thead {
+    background-color: #020617;
+}
+
+:root[data-theme="dark"] .table th {
+    color: #9ca3af;
+    border-bottom-color: #111827;
+}
+
+:root[data-theme="dark"] .table tbody tr:nth-child(odd) {
+    background-color: #050816;
+}
+
+:root[data-theme="dark"] .table tbody tr:nth-child(even) {
+    background-color: #030712;
+}
+
+:root[data-theme="dark"] .table tbody tr:hover {
+    background-color: #111827;
+}
+
+/* --------------------- Petits boutons icône dans les tableaux ------------- */
+
+.btn-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    border: none;
+    background-color: #eef2ff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-muted-2);
+    transition: background 0.18s ease-out, transform 0.12s ease-out,
+                color 0.18s ease-out;
+}
+
+.btn-icon i {
+    font-size: 16px;
+}
+
+.btn-icon:hover {
+    background-color: #e0e7ff;
+    transform: translateY(-1px);
+    color: var(--color-accent);
+}
+
+.btn-icon-danger {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+:root[data-theme="dark"] .btn-icon-danger {
+  background-color: #3f0d0d;  
+  color: #fca5a5;              /* rouge clair lisible */
+  border: 1px solid #7f1d1d;   /* fine bordure rouge */
+}
+
+.btn-icon-danger:hover {
+    background-color: #fecaca;
+}
+
+/* Dark mode pour les icônes */
+:root[data-theme="dark"] .btn-icon {
+    background-color: #0b1120;
+    color: #e5e7eb;
+}
+
+:root[data-theme="dark"] .btn-icon:hover {
+    background-color: #111827;
+}
+
+/* ---------------------------- MODALES DOYEN -------------------------------- */
+
+
+
+.modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+
+.modal.show {
+    display: flex;
+}
+
+.modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.35);
+    backdrop-filter: blur(3px);
+}
+
+
+.modal.modal-open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.modal-dialog {
+    position: relative;
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--color-border-soft);
+    padding: 18px 20px 16px;
+    width: 460px;
+    max-width: 95vw;
+    z-index: 1001;
+    overflow: auto;
+}
+
+
+
+.modal-dialog-large {
+    width: 620px;
+    max-width: 96vw;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.modal-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.modal-body {
+    margin-top: 4px;
+}
+
+.modal-body .form-group {
+    margin-bottom: 10px;
+}
+
+.modal-footer {
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.modal-footer-full {
+    grid-column: 1 / -1;
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+/* Responsive modales */
+@media (max-width: 640px) {
+    .modal-dialog,
+    .modal-dialog-large {
+        margin-inline: 16px;
+        padding-inline: 16px;
+    }
+}
+
+
+
+.view {
+  display: none;
+}
+
+.view.view-active {
+  display: block;
+}
+
+#view-cfd {
+  /* pour être sûre qu'il n'ajoute pas de padding horizontal bizarre */
+  padding: 0;
+}
+
+#view-cfd .card {
+  max-width: none;
+  width: 100%;
+  margin: 0 0 18px 0;   /* plus de margin auto → plus de gros vide à droite */
+}
+
+
+
+
+
+/* ========================================================================== */
+/*  CFD – STYLE SPÉCIFIQUE (vue Doyen)                                        */
+/* ========================================================================== */
+
+/* Carte CFD légèrement différente visuellement */
+.cfd-card {
+  margin-bottom: 18px;
+  padding: 18px 20px 16px 20px;
+}
+
+/* Header CFD : titre + badge + bouton à droite */
+.cfd-header {
+  align-items: flex-start;
+}
+
+.cfd-header-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cfd-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.cfd-meta-text {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* Bouton "Ajouter un membre CFD" un peu plus compact */
+.cfd-add-btn {
+  width: auto;
+  display: inline-flex;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+/* Barre au-dessus du tableau : recherche + compteur */
+.cfd-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* Réutilise ta barre de recherche comptes mais en plus petit */
+.cfd-search {
+  flex: 1;
+  padding-block: 6px;
+  border-radius: 999px;
+}
+
+/* Pastille nombre de membres */
+.cfd-chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  background-color: #eef2ff;
+  color: var(--color-text-muted);
+}
+
+/* Dark mode */
+:root[data-theme="dark"] .cfd-chip {
+  background-color: #111827;
+  color: #e5e7eb;
+}
+
+/* Formulaire Responsable CFD : un peu plus aéré en haut */
+.cfd-resp-form .form-group label {
+  font-size: 13px;
+}
+
+/* Modal CFD : largeur et grille */
+#modalCfdMembre .modal-dialog {
+  max-width: 720px;
+}
+
+#modalCfdMembre .account-form {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Pour que les labels AR soient bien alignés */
+#modalCfdMembre [dir="rtl"] {
+  text-align: right;
+}
+
+/* Ajuste le footer de la modale CFD */
+#modalCfdMembre .modal-footer-full {
+  margin-top: 4px;
+}
+
+/* Mise à jour du compteur dans la liste CFD (option JS) */
+
+
+/* ================= CFD - Formulaire Responsable ================= */
+
+.cfd-resp-form .form-group select,
+.cfd-resp-form .form-group input {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--color-input-border);
+  background-color: #f9fafb;
+  font-size: 14px;
+  color: var(--color-text-main);
+  outline: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease,
+              box-shadow 0.15s ease;
+}
+
+.cfd-resp-form .form-group select:focus,
+.cfd-resp-form .form-group input:focus {
+  border-color: var(--color-accent);
+  background-color: #ffffff;
+  box-shadow: 0 0 0 1px rgba(12, 17, 84, 0.08);
+}
+
+/* Petite flèche custom sur le select */
+.cfd-resp-form .form-group {
+  position: relative;
+}
+
+.cfd-resp-form .form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.cfd-resp-form .form-group::after {
+  content: "▾";
+  position: absolute;
+  right: 14px;
+  top: 32px; /* ajuster si besoin */
+  font-size: 12px;
+  color: var(--color-muted-2);
+  pointer-events: none;
+}
+
+/* DARK MODE pour ces champs */
+:root[data-theme="dark"] .cfd-resp-form .form-group select,
+:root[data-theme="dark"] .cfd-resp-form .form-group input {
+  background-color: #020617;
+  color: #e5e7eb;
+  border-color: #1f2937;
+}
+
+:root[data-theme="dark"] .cfd-resp-form .form-group select:focus,
+:root[data-theme="dark"] .cfd-resp-form .form-group input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.35);
+}
+
+
+/* Le main du doyen doit utiliser toute la largeur disponible, pas de colonne centrée */
+.main-content {
+  flex: 1;
+  padding: 24px 32px 32px;   /* garde un peu de marge intérieure si tu veux */
+  max-width: none;           /* 🔥 enlève la limite de largeur */
+  margin: 0;                 /* plus de centrage auto */
+}
+
+/* =========================
+   Champ Sexe (Femme / Homme)
+   ========================= */
+
+.sex-toggle {
+  display: flex;
+  gap: 10px;
+}
+
+.sex-option {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--color-input-border);
+  background-color: #f9fafb;
+
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.10s ease,
+    color 0.18s ease;
+}
+
+/* petit rond autour de l'icône */
+.sex-icon-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  background-color: #ffffff;
+}
+
+.sex-option-active {
+  background: #eef2ff;
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  box-shadow: 0 6px 16px rgba(12, 17, 84, 0.25);
+  transform: translateY(-1px);
+}
+
+.sex-option-active .sex-icon-circle {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #ffffff;
+}
+
+.sex-option:hover:not(.sex-option-active) {
+  background-color: #e5ecff;
+}
+
+/* DARK MODE */
+:root[data-theme="dark"] .sex-option {
+  background-color: #020617;
+  border-color: #1f2937;
+  color: #e5e7eb;
+}
+
+:root[data-theme="dark"] .sex-icon-circle {
+  background-color: #020617;
+  border-color: #1f2937;
+  color: #e5e7eb;
+}
+
+:root[data-theme="dark"] .sex-option-active {
+  background-color: #111827;
+  border-color: var(--color-primary);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+}
+
+:root[data-theme="dark"] .sex-option-active .sex-icon-circle {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+}
+
+:root[data-theme="dark"] .sex-option:hover:not(.sex-option-active) {
+  background-color: #0b1120;
+}
+.tag {
+    background: #eef2ff;
+    color: #3f51b5;
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 13px;
+    margin-right: 6px;
+    display: inline-block;
+    font-weight: 600;
+}
+
+/* ================================
+   FILE UPLOAD ZONE
+================================ */
+.file-drop-zone {
+    border: 2px dashed #c7d2fe;
+    background: #f8f9ff;
+    padding: 28px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.file-drop-zone:hover {
+    background: #f0f3ff;
+    border-color: #6366f1;
+}
+
+.file-drop-zone.drag-over {
+    background: #e0e7ff;
+    border-color: #4338ca;
+    transform: scale(0.98);
+}
+
+.file-icon {
+    font-size: 45px;
+    color: #6366f1;
+}
+
+.file-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+.file-subtitle {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.file-info {
+    margin-top: 8px;
+    color: #374151;
+    font-size: 13px;
+}
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.file-drop-zone input[type="file"] {
+    display: none;   /* cache le bouton "Choisir un fichier" */
+}
+
+/* ================================
+   DARK MODE - TAGS
+================================ */
+:root[data-theme="dark"] .tag {
+    background: #1e293b;
+    color: #93c5fd;
+}
+
+
+/* ================================
+   DARK MODE - FILE UPLOAD ZONE
+================================ */
+:root[data-theme="dark"] .file-drop-zone {
+    border-color: #334155;
+    background: #0f172a;
+}
+
+:root[data-theme="dark"] .file-drop-zone:hover {
+    background: #1e293b;
+    border-color: #3b82f6;
+}
+
+:root[data-theme="dark"] .file-drop-zone.drag-over {
+    background: #1e3a8a;     /* bleu foncé moderne */
+    border-color: #60a5fa;
+    transform: scale(0.98);
+}
+
+:root[data-theme="dark"] .file-icon {
+    color: #60a5fa;  /* bleu clair */
+}
+
+:root[data-theme="dark"] .file-title {
+    color: #f1f5f9;
+}
+
+:root[data-theme="dark"] .file-subtitle {
+    color: #94a3b8;
+}
+
+:root[data-theme="dark"] .file-info {
+    color: #cbd5e1;
+}
+
+.dashboard-top {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
+    gap: 20px;
+    margin-bottom: 24px;
+    align-items: stretch;
+}
+
+/* Colonne gauche : stats + graphe empilés */
+.dashboard-left {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Deux stats côte à côte */
+.dashboard-left .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+.steps-bar {
+    margin-bottom: 18px;
+    padding: 16px 18px 12px;
+}
+
+.steps-bar .step-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--color-text-muted);
+    background-color: #eef2ff;
+    margin-right: 6px;
+    margin-bottom: 6px;
+}
+
+.steps-bar .step-index {
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    background-color: #e5e7eb;
+    color: #111827;
+}
+
+.steps-bar .step-item.step-item-active {
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: #ffffff;
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35);
+}
+
+.steps-bar .step-item.step-item-active .step-index {
+    background-color: rgba(15, 23, 42, 0.25);
+    color: #ffffff;
+}
+
+/* Dark mode pour les steps */
+:root[data-theme="dark"] .steps-bar .step-item {
+    background-color: #111827;
+    color: #e5e7eb;
+}
+
+:root[data-theme="dark"] .steps-bar .step-index {
+    background-color: #1f2937;
+    color: #e5e7eb;
+}
+
+/* On réutilise la progress-bar globale pour l’avancement */
+.steps-bar .progress-bar {
+    margin-top: 8px;
+}
+
+/* --------------------- GRILLE DU FORMULAIRE D’ORGANISATION ---------------- */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px 18px;
+}
+
+.form-grid .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+}
+
+.form-grid .form-group label {
+    color: var(--form-group-label);
+    font-size: 13px;
+}
+
+.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 6px;
+}
+
+/* --------------------- TABLES du doyen (Textes / Comités / Membres) ------- */
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.table thead {
+    background-color: #f9fafb;
+    color: #433f3f;
+}
+
+.table th,
+.table td {
+    padding: 10px 12px;
+    text-align: left;
+}
+
+.table th {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-muted-2);
+    border-bottom: 1px solid var(--color-border-soft);
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #fbfcff;
+}
+
+.table tbody tr:hover {
+    background-color: #eef2ff;
+}
+
+.col-ellipsis {
+    max-width: 260px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.col-actions {
+    width: 90px;
+}
+
+.table-actions {
+    display: flex;
+    gap: 4px;
+}
+
+/* Version dark des tableaux .table */
+:root[data-theme="dark"] .table thead {
+    background-color: #020617;
+}
+
+:root[data-theme="dark"] .table th {
+    color: #9ca3af;
+    border-bottom-color: #111827;
+}
+
+:root[data-theme="dark"] .table tbody tr:nth-child(odd) {
+    background-color: #050816;
+}
+
+:root[data-theme="dark"] .table tbody tr:nth-child(even) {
+    background-color: #030712;
+}
+
+:root[data-theme="dark"] .table tbody tr:hover {
+    background-color: #111827;
+}
+
+/* --------------------- Petits boutons icône dans les tableaux ------------- */
+
+.btn-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    border: none;
+    background-color: #eef2ff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-muted-2);
+    transition: background 0.18s ease-out, transform 0.12s ease-out,
+                color 0.18s ease-out;
+}
+
+.btn-icon i {
+    font-size: 16px;
+}
+
+.btn-icon:hover {
+    background-color: #e0e7ff;
+    transform: translateY(-1px);
+    color: var(--color-accent);
+}
+
+.btn-icon-danger {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.btn-icon-danger:hover {
+    background-color: #fecaca;
+}
+
+/* Dark mode pour les icônes */
+:root[data-theme="dark"] .btn-icon {
+    background-color: #0b1120;
+    color: #e5e7eb;
+}
+
+:root[data-theme="dark"] .btn-icon:hover {
+    background-color: #111827;
+}
+
+/* ---------------------------- MODALES DOYEN -------------------------------- */
+
+
+
+.modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+
+.modal.show {
+    display: flex;
+}
+
+.modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.35);
+    backdrop-filter: blur(3px);
+}
+
+
+.modal.modal-open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.modal-dialog {
+    position: relative;
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--color-border-soft);
+    padding: 18px 20px 16px;
+    width: 460px;
+    max-width: 95vw;
+    z-index: 1001;
+    overflow: auto;
+}
+
+
+
+.modal-dialog-large {
+    width: 620px;
+    max-width: 96vw;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.modal-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.modal-body {
+    margin-top: 4px;
+}
+
+.modal-body .form-group {
+    margin-bottom: 10px;
+}
+
+.modal-footer {
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.modal-footer-full {
+    grid-column: 1 / -1;
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+/* Responsive modales */
+@media (max-width: 640px) {
+    .modal-dialog,
+    .modal-dialog-large {
+        margin-inline: 16px;
+        padding-inline: 16px;
+    }
+}
+
+
+
+.view {
+  display: none;
+}
+
+.view.view-active {
+  display: block;
+}
+
+#view-cfd {
+  /* pour être sûre qu'il n'ajoute pas de padding horizontal bizarre */
+  padding: 0;
+}
+
+#view-cfd .card {
+  max-width: none;
+  width: 100%;
+  margin: 0 0 18px 0;   /* plus de margin auto → plus de gros vide à droite */
+}
+
+
+
+
+
+/* ========================================================================== */
+/*  CFD – STYLE SPÉCIFIQUE (vue Doyen)                                        */
+/* ========================================================================== */
+
+/* Carte CFD légèrement différente visuellement */
+.cfd-card {
+  margin-bottom: 18px;
+  padding: 18px 20px 16px 20px;
+}
+
+/* Header CFD : titre + badge + bouton à droite */
+.cfd-header {
+  align-items: flex-start;
+}
+
+.cfd-header-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cfd-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.cfd-meta-text {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* Bouton "Ajouter un membre CFD" un peu plus compact */
+.cfd-add-btn {
+  width: auto;
+  display: inline-flex;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+/* Barre au-dessus du tableau : recherche + compteur */
+.cfd-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* Réutilise ta barre de recherche comptes mais en plus petit */
+.cfd-search {
+  flex: 1;
+  padding-block: 6px;
+  border-radius: 999px;
+}
+
+/* Pastille nombre de membres */
+.cfd-chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  background-color: #eef2ff;
+  color: var(--color-text-muted);
+}
+
+/* Dark mode */
+:root[data-theme="dark"] .cfd-chip {
+  background-color: #111827;
+  color: #e5e7eb;
+}
+
+/* Formulaire Responsable CFD : un peu plus aéré en haut */
+.cfd-resp-form .form-group label {
+  font-size: 13px;
+}
+
+/* Modal CFD : largeur et grille */
+#modalCfdMembre .modal-dialog {
+  max-width: 720px;
+}
+
+#modalCfdMembre .account-form {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Pour que les labels AR soient bien alignés */
+#modalCfdMembre [dir="rtl"] {
+  text-align: right;
+}
+
+/* Ajuste le footer de la modale CFD */
+#modalCfdMembre .modal-footer-full {
+  margin-top: 4px;
+}
+
+/* Mise à jour du compteur dans la liste CFD (option JS) */
+
+
+/* ================= CFD - Formulaire Responsable ================= */
+
+.cfd-resp-form .form-group select,
+.cfd-resp-form .form-group input {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--color-input-border);
+  background-color: #f9fafb;
+  font-size: 14px;
+  color: var(--color-text-main);
+  outline: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease,
+              box-shadow 0.15s ease;
+}
+
+.cfd-resp-form .form-group select:focus,
+.cfd-resp-form .form-group input:focus {
+  border-color: var(--color-accent);
+  background-color: #ffffff;
+  box-shadow: 0 0 0 1px rgba(12, 17, 84, 0.08);
+}
+
+/* Petite flèche custom sur le select */
+.cfd-resp-form .form-group {
+  position: relative;
+}
+
+.cfd-resp-form .form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.cfd-resp-form .form-group::after {
+  content: "▾";
+  position: absolute;
+  right: 14px;
+  top: 32px; /* ajuster si besoin */
+  font-size: 12px;
+  color: var(--color-muted-2);
+  pointer-events: none;
+}
+
+/* DARK MODE pour ces champs */
+:root[data-theme="dark"] .cfd-resp-form .form-group select,
+:root[data-theme="dark"] .cfd-resp-form .form-group input {
+  background-color: #020617;
+  color: #e5e7eb;
+  border-color: #1f2937;
+}
+
+:root[data-theme="dark"] .cfd-resp-form .form-group select:focus,
+:root[data-theme="dark"] .cfd-resp-form .form-group input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.35);
+}
+
+
+/* Le main du doyen doit utiliser toute la largeur disponible, pas de colonne centrée */
+.main-content {
+  flex: 1;
+  padding: 24px 32px 32px;   /* garde un peu de marge intérieure si tu veux */
+  max-width: none;           /* 🔥 enlève la limite de largeur */
+  margin: 0;                 /* plus de centrage auto */
+}
+
+/* =========================
+   Champ Sexe (Femme / Homme)
+   ========================= */
+
+.sex-toggle {
+  display: flex;
+  gap: 10px;
+}
+
+.sex-option {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--color-input-border);
+  background-color: #f9fafb;
+
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.10s ease,
+    color 0.18s ease;
+}
+
+/* petit rond autour de l'icône */
+.sex-icon-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  background-color: #ffffff;
+}
+
+.sex-option-active {
+  background: #eef2ff;
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  box-shadow: 0 6px 16px rgba(12, 17, 84, 0.25);
+  transform: translateY(-1px);
+}
+
+.sex-option-active .sex-icon-circle {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #ffffff;
+}
+
+.sex-option:hover:not(.sex-option-active) {
+  background-color: #e5ecff;
+}
+
+/* DARK MODE */
+:root[data-theme="dark"] .sex-option {
+  background-color: #020617;
+  border-color: #1f2937;
+  color: #e5e7eb;
+}
+
+:root[data-theme="dark"] .sex-icon-circle {
+  background-color: #020617;
+  border-color: #1f2937;
+  color: #e5e7eb;
+}
+
+:root[data-theme="dark"] .sex-option-active {
+  background-color: #111827;
+  border-color: var(--color-primary);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+}
+
+:root[data-theme="dark"] .sex-option-active .sex-icon-circle {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+}
+
+:root[data-theme="dark"] .sex-option:hover:not(.sex-option-active) {
+  background-color: #0b1120;
+}
+
+
+
+
+
+/* =================== DASHBOARD DOYEN =================== */
+
+.dashboard-card {
+  padding: 18px 20px 20px;
+}
+
+/* Header du dashboard */
+.dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+
+.dashboard-title {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.dashboard-subtitle {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  max-width: 520px;
+}
+
+/* Résumé à droite */
+.dashboard-summary {
+  min-width: 220px;
+  text-align: right;
+}
+
+.summary-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.summary-progress {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.summary-value {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.summary-chip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  background: #d1fae5;
+  color: #047857;
+}
+
+.summary-chip.success {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.summary-hint {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+
+/* Pipeline */
+.pipeline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  overflow-x: visible;
+}
+
+.pipeline-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #eef2ff;
+  flex-shrink: 0;
+  margin-bottom: 4px;
+}
+
+/* connecteurs */
+.pipeline-connector {
+  width: 32px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(to right, #e5e7eb, #cbd5f5);
+  flex-shrink: 0;
+}
+
+/* DONE = Vert pâle */
+.pipeline-step-done {
+  background: #dcfce7;
+}
+
+/* ACTIVE = VERT */
+.pipeline-step-active {
+  background: #15993f;
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(21, 153, 63, 0.35);
+}
+
+.pipeline-step-active .pipeline-meta,
+.pipeline-step-active .pipeline-badge {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Icones */
+.pipeline-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.04);
+}
+
+.pipeline-step-active .pipeline-icon {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.pipeline-icon i {
+  font-size: 18px;
+}
+
+/* Contenu */
+.pipeline-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pipeline-title {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pipeline-meta {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.pipeline-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.03);
+}
+
+/* ---------- DARK MODE VERSION (VERT aussi) ---------- */
+
+:root[data-theme="dark"] .pipeline {
+  background: #020617;
+}
+
+:root[data-theme="dark"] .pipeline-step {
+  background: #0b1120;
+  color: #e5e7eb;
+  box-shadow: 0 10px 18px rgba(15, 23, 42, 0.7);
+}
+
+/* Connecteurs verts en dark mode */
+:root[data-theme="dark"] .pipeline-connector {
+  background: linear-gradient(to right, #e5e7eb, #cbd5f5);
+}
+
+/* ACTIVE = vert néon dégradé */
+:root[data-theme="dark"] .pipeline-step-active {
+  background: linear-gradient(135deg, #16a34a, #059669);
+  color: #f9fafb;
+}
+
+/* Icône active en dark */
+:root[data-theme="dark"] .pipeline-step-active .pipeline-icon {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+
+/* Grille principale sous le pipeline */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr;
+  gap: 18px;
+}
+
+/* Statistiques rapides */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+
+:root[data-theme="dark"] .stat-card {
+  background: #020617;
+}
+
+
+.stat-label {
+  font-weight: 500;
+}
+
+/* ========= STAT-TAG (petits labels dans les stats) ========= */
+
+.stat-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+
+  background: var(--color-border-soft);   /* déjà défini */
+  color: var(--color-text-main);          /* déjà défini */
+}
+
+/* Variante plus douce (ex: "Objectif", "En cours") */
+.stat-tag.soft {
+  background: var(--user-trigger-bg);     /* #eef1fb déjà défini */
+  color: var(--color-text-muted);         /* déjà défini */
+}
+
+/* ---- DARK MODE ---- */
+
+:root[data-theme="dark"] .stat-tag {
+  background: #111827;                    /* couleur déjà utilisée plus haut */
+  color: var(--color-text-main);          /* texte clair */
+}
+
+:root[data-theme="dark"] .stat-tag.soft {
+  background: #020617;                    /* déjà utilisée dans ton thème */
+  color: var(--color-text-muted);
+}
+
+.stat-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.stat-unit {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.stat-trend {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.stat-trend.trend-up {
+  color: #047857;
+}
+
+.stat-trend.trend-warning {
+  color: #b45309;
+}
+
+/* Sous-cartes (tâches + graphique) */
+.dashboard-subcard {
+  padding: 14px 16px;
+}
+
+.subcard-header {
+  margin-bottom: 10px;
+}
+
+.subcard-header h3 {
+  font-size: 15px;
+  margin-bottom: 2px;
+}
+
+.subcard-meta {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* Tâches */
+.tasks-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: #f9fafb;
+}
+
+:root[data-theme="dark"] .task-item {
+  background: #020617;
+}
+
+.task-bullet {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.task-bullet-primary {
+  background: #2563eb;
+}
+
+.task-bullet-warning {
+  background: #f97316;
+}
+
+.task-bullet-soft {
+  background: #9ca3af;
+}
+
+.task-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.task-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  letter-spacing: 0.2px;
+  color: var(--color-text-main); 
+}
+
+:root[data-theme="dark"] .task-title {
+  color: var(--color-text-main);   
+}
+
+
+.task-meta {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.task-link {
+  border: none;
+  background: transparent;
+  color: var(--color-accent);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Graphique placeholder */
+.chart-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.chart-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 999px;
+  border: 10px solid #e5e7eb;
+  border-top-color: #2563eb;
+  border-right-color: #4f46e5;
+  border-bottom-color: #a5b4fc;
+}
+
+:root[data-theme="dark"] .chart-circle {
+  border-color: #1f2937;
+  border-top-color: #3b82f6;
+  border-right-color: #6366f1;
+  border-bottom-color: #a5b4fc;
+}
+
+.chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.legend-dot-primary {
+  background: #2563eb;
+}
+.legend-dot-secondary {
+  background: #4f46e5;
+}
+.legend-dot-soft {
+  background: #9ca3af;
+}
+.legend-dot-warning {
+  background: #f97316;
+}
+
+.chart-footer {
+  margin-top: 4px;
+}
+
+.chart-footer-text {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dashboard-summary {
+    text-align: left;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Conteneur des deux blocs */
+.two-sections {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* On enlève le grand margin-bottom sur ces cards quand elles sont côte à côte */
+.two-sections > section.dashboard-card {
+  margin-bottom: 0;
+}
+
+/* 1) Pipeline = à gauche, prend tout l’espace dispo */
+.two-sections > section.dashboard-card:last-child {
+  /* le second <section> = pipeline */
+  order: 1;             /* s'affiche en premier (à gauche) */
+  flex: 1 1 0;          /* prend tout l’espace restant */
+}
+
+/* 2) Taux d’avancement = à droite, petite carte fixe */
+.two-sections > section.dashboard-card:first-child {
+  /* le premier <section> = Taux d’avancement */
+  order: 2;             /* s'affiche en deuxième (à droite) */
+  flex: 0 0 260px;      /* largeur fixe ~260px */
+  max-width: 320px;
+}
+
+/* Option : pour les petits écrans, on repasse en colonne proprement */
+@media (max-width: 900px) {
+  .two-sections {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .two-sections > section.dashboard-card:first-child,
+  .two-sections > section.dashboard-card:last-child {
+    order: initial;
+    flex: 1 1 auto;
+    max-width: 100%;
+  }
+}
+  .pv-textarea {
+  width: 100%;            /* prend toute la largeur dispo */
+  min-height: 320px;      /* hauteur confortable */
+  padding: 14px 16px;     /* espace interne */
+  font-size: 16px;
+  line-height: 1.7;
+  border-radius: 10px;
+  box-sizing: border-box;
+  resize: vertical;       /* tu peux agrandir/réduire en hauteur avec la souris */
+}
+
+/* =======================
+   MODALE : FORM CFD
+   ======================= */
+
+.account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Ligne avec 2 colonnes */
+.account-form .form-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.account-form .form-group {
+  flex: 1;
+  min-width: 220px;
+}
+
+/* Label */
+.account-form .form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Wrapper input + icône */
+.account-form .input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px 0 38px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+/* Icône à gauche */
+.account-form .field-icon {
+  position: absolute;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #9ca3af;
+}
+
+/* Inputs + select à l'intérieur */
+.account-form .input-wrapper input,
+.account-form .input-wrapper select {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 14px;
+  color: #111827;
+}
+
+/* Placeholder doux */
+.account-form .input-wrapper input::placeholder {
+  color: #9ca3af;
+}
+
+/* Focus */
+.account-form .input-wrapper:focus-within {
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.08), 0 10px 20px rgba(15, 23, 42, 0.06);
+}
+
+/* =======================
+   TOGGLE SEXE
+   ======================= */
+
+.form-group-sex {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.sex-toggle {
+  display: inline-flex;
+  background: #f3f4f6;
+  border-radius: 999px;
+  padding: 3px;
+  gap: 4px;
+}
+
+.sex-option {
+  flex: 1;
+  border: none;
+  background: transparent;
+  border-radius: 999px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #4b5563;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
+}
+
+.sex-icon-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e5e7eb;
+  font-size: 14px;
+}
+
+/* État actif */
+.sex-option.sex-option-active {
+  background: #16a34a;
+  color: #f9fafb;
+  box-shadow: 0 8px 16px rgba(22, 163, 74, 0.25);
+  transform: translateY(-1px);
+}
+
+.sex-option.sex-option-active .sex-icon-circle {
+  background: rgba(15, 23, 42, 0.18);
+  color: #ffffff;
+}
+
+/* Hover léger */
+.sex-option:not(.sex-option-active):hover {
+  background: #e5e7eb;
+}
+
+/* =======================
+   PIED DE FORMULAIRE
+   ======================= */
+
+.account-modal-footer {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Tu peux adapter aux classes de tes boutons existants */
+.account-modal-footer .btn {
+  min-width: 130px;
+}
+
+/* =======================
+   DARK MODE (optionnel)
+   ======================= */
+
+:root[data-theme="dark"] .account-form .form-group label {
+  color: #e5e7eb;
+}
+
+:root[data-theme="dark"] .account-form .input-wrapper {
+  border-color: #1f2937;
+  background: #020617;
+}
+
+:root[data-theme="dark"] .account-form .input-wrapper:focus-within {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.35);
+}
+
+:root[data-theme="dark"] .sex-toggle {
+  background: #020617;
+}
+
+:root[data-theme="dark"] .sex-option:not(.sex-option-active) {
+  color: #e5e7eb;
+}
+
+:root[data-theme="dark"] .sex-icon-circle {
+  background: #111827;
+}
+
+/* Carte globale */
+.clean-calendar {
+  max-width: 700px;  
+  width: 100%;       
+  margin: 20px auto;
+  padding: 18px 18px 14px;
+  border-radius: 18px;
+  box-shadow: 0 18px 35px rgba(15, 23, 42, 0.10);
+}
+
+/* Header */
+.cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.cal-month-label {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Boutons de navigation */
+.cal-nav {
+  display: flex;
+  gap: 6px;
+}
+
+.cal-nav-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #f97373;          /* rouge clair (modifiable) */
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease;
+}
+
+.cal-nav-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+  opacity: 0.95;
+}
+
+/* Jours de la semaine */
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #9ca3af;
+  margin-bottom: 6px;
+}
+
+.cal-weekdays span {
+  padding: 4px 0;
+}
+
+/* Grille des jours */
+.cal-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.cal-day {
+  height: 32px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #111827;
+}
+
+/* Cases vides du début de mois */
+.cal-day-empty {
+  height: 32px;
+}
+
+/* Aujourd'hui */
+.cal-day-today {
+  background: #ef4444;    /* rouge du jour actuel */
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+}
+
+/* Hover simple */
+.cal-day:not(.cal-day-empty):hover {
+  background: #fee2e2;
+  cursor: pointer;
+}
+
+/* Footer (texte "Aujourd'hui : ...") */
+.cal-footer {
+  margin-top: 10px;
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-align: center;
+}
+
+/* Dark mode (optionnel si tu as déjà :root[data-theme="dark"]) */
+:root[data-theme="dark"] .clean-calendar {
+  background: #020617;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.7);
+}
+
+:root[data-theme="dark"] .cal-day {
+  color: #e5e7eb;
+}
+
+:root[data-theme="dark"] .cal-day:hover {
+  background: #1f2937;
+}
+/* Grille d'accueil */
+.home-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.3fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.home-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.home-side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.stat-card {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #f9fafb;
+}
+
+:root[data-theme="dark"] .stat-card {
+  background: #020617;
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 0.8rem;
+}
+
+.stat-label {
+  font-weight: 600;
+}
+
+.stat-tag {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+.stat-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.stat-unit {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.stat-trend {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.stat-trend.trend-up {
+  color: #16a34a;
+}
+
+.stat-trend.trend-warning {
+  color: #f97316;
+}
+
+/* Carte graphique */
+.chart-card {
+  padding-top: 10px;
+}
+
+/* Légende rôles */
+.dashboard-subcard .chart-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.chart-circle {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: conic-gradient(
+    #4f46e5 0 25%,
+    #a855f7 25% 50%,
+    #f97316 50% 75%,
+    #22c55e 75% 100%
+  );
+}
+
+.chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.8rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.legend-dot-primary { background: #4f46e5; }
+.legend-dot-secondary { background: #a855f7; }
+.legend-dot-soft { background: #0ea5e9; }
+.legend-dot-warning { background: #f97316; }
+
+.chart-footer {
+  margin-top: 10px;
+}
+
+.chart-footer-text {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
 }
