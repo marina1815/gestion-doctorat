@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="fr">
 
 <head>
@@ -13,7 +13,6 @@
 <body>
   <div class="app-layout">
 
-    <!-- =============== SIDEBAR =============== -->
     <aside class="sidebar">
       <div class="sidebar-header">
         <div class="logo-icon">
@@ -28,9 +27,16 @@
       <nav class="sidebar-nav">
         <p class="sidebar-section-title">Doyen</p>
 
-        <a href="#" class="nav-item nav-item-active" data-view="dashboard">
+        <!-- ACCUEIL (vue simple) -->
+        <a href="#" class="nav-item nav-item-active" data-view="home">
           <i class="uil uil-estate"></i>
           <span>Accueil</span>
+        </a>
+
+        <!-- DASHBOARD (vue détaillée) -->
+        <a href="#" class="nav-item" data-view="dashboard">
+          <i class="uil uil-apps"></i>
+          <span>Dashboard</span>
         </a>
 
         <a href="#" class="nav-item" data-view="cfd">
@@ -58,8 +64,6 @@
           <span>Génération des PV</span>
         </a>
       </nav>
-
-    
     </aside>
 
     <!-- =============== MAIN CONTENT =============== -->
@@ -101,168 +105,485 @@
         </div>
       </header>
 
-      <!-- BARRE D’AVANCEMENT (vue globale) -->
-      <section class="steps-bar card">
-        <div class="step-item step-item-active" data-step="cfd">
-          <span class="step-index">1</span>
-          <span>CFD</span>
-        </div>
-        <div class="step-item" data-step="correcteurs">
-          <span class="step-index">2</span>
-          <span>Correcteurs</span>
-        </div>
-        <div class="step-item" data-step="anonymat">
-          <span class="step-index">3</span>
-          <span>Anonymat</span>
-        </div>
-        <div class="step-item" data-step="surveillants">
-          <span class="step-index">4</span>
-          <span>Surveillants</span>
-        </div>
-        <div class="step-item" data-step="pv">
-          <span class="step-index">5</span>
-          <span>PV & décision finale</span>
-        </div>
+      <!-- ============ VIEW: ACCUEIL (simple) ============ -->
+      <div class="view view-active" id="view-home" data-view="home">
+         <section class="card dashboard-card">
+          <!-- En-tête du dashboard -->
+          <div class="dashboard-header">
+            <div>
+              <h2>Bonjour , Doyen </h2>
+              <p class="dashboard-subtitle">
+                Vue globale de l’organisation du concours : comité CFD, correcteurs, anonymat,
+                surveillants & salles, puis PV et décision finale.
+              </p>
+            </div>
 
-        <div class="progress-bar">
-          <div class="progress-bar-inner" id="globalProgress" style="width: 10%;"></div>
-        </div>
-      </section>
-
-      <!-- ============ VIEW: DASHBOARD / ACCUEIL ============ -->
-      <div class="view view-active" id="view-dashboard" data-view="dashboard">
-        <section class="card">
-          <div class="card-header">
-            <h2>Bienvenue, Doyen</h2>
-            <p class="text-muted">
-              Suivez les étapes : commencer par le comité CFD, puis les correcteurs, anonymat, surveillants & salles,
-              et enfin générer les PV et la décision finale.
-            </p>
+            <!-- Résumé général -->
+            <div class="dashboard-summary">
+              <span class="summary-label">Taux d’avancement</span>
+              <div class="summary-progress">
+                <span class="summary-value" id="dashGlobalProgress">35%</span>
+                <span class="summary-chip success">En cours</span>
+              </div>
+              <span class="summary-hint">Basé sur 5 étapes principales</span>
+            </div>
           </div>
-          <div class="card-body dashboard-grid">
-            <div class="mini-card">
-              <h3>1. Comité CFD</h3>
-              <p>Créer les membres CFD et leurs comptes.</p>
-              <button class="btn btn-primary" data-go-view="cfd">Configurer le CFD</button>
+
+          <!-- PIPELINE DES ÉTAPES -->
+          <div class="pipeline">
+            <div class="pipeline-step pipeline-step-done">
+              <div class="pipeline-icon">
+                <i class="uil uil-briefcase"></i>
+              </div>
+              <div class="pipeline-content">
+                <span class="pipeline-title">CFD</span>
+              </div>
             </div>
-            <div class="mini-card">
-              <h3>2. Correcteurs</h3>
-              <p>Enregistrer les correcteurs et leurs comptes.</p>
-              <button class="btn btn-secondary" data-go-view="correcteurs">Configurer les correcteurs</button>
+
+            <div class="pipeline-connector"></div>
+
+            <div class="pipeline-step pipeline-step-active">
+              <div class="pipeline-icon">
+                <i class="uil uil-edit"></i>
+              </div>
+              <div class="pipeline-content">
+                <span class="pipeline-title">Correcteurs</span>
+              </div>
             </div>
-            <div class="mini-card">
-              <h3>3. Anonymat</h3>
-              <p>Créer la cellule d’anonymat et ses comptes.</p>
-              <button class="btn btn-secondary" data-go-view="anonymat">Configurer anonymat</button>
+
+            <div class="pipeline-connector"></div>
+
+            <div class="pipeline-step">
+              <div class="pipeline-icon">
+                <i class="uil uil-shield-check"></i>
+              </div>
+              <div class="pipeline-content">
+                <span class="pipeline-title">Cellule d’anonymat</span>
+              </div>
             </div>
-            <div class="mini-card">
-              <h3>4. Surveillants & salles</h3>
-              <p>Gérer les salles, surveillants et responsables.</p>
-              <button class="btn btn-secondary" data-go-view="surveillants">Configurer surveillants</button>
+
+            <div class="pipeline-connector"></div>
+
+            <div class="pipeline-step">
+              <div class="pipeline-icon">
+                <i class="uil uil-users-alt"></i>
+              </div>
+              <div class="pipeline-content">
+                <span class="pipeline-title">Surveillants </span>
+              </div>
             </div>
-            <div class="mini-card">
-              <h3>5. PV & décision finale</h3>
-              <p>Générer les PV en arabe, modifier les dates et imprimer.</p>
-              <button class="btn btn-secondary" data-go-view="pv">Générer les PV</button>
+
+            <div class="pipeline-connector"></div>
+
+            <div class="pipeline-step">
+              <div class="pipeline-icon">
+                <i class="uil uil-file-alt"></i>
+              </div>
+              <div class="pipeline-content">
+                <span class="pipeline-title">PV </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- GRILLE STATISTIQUES + GRAPHIQUE -->
+          <div class="dashboard-grid">
+            <!-- Statistiques rapides -->
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-header">
+                  <span class="stat-label">Concours</span>
+                  <span class="stat-tag">2024 / 2025</span>
+                </div>
+                <div class="stat-value-row">
+                  <span class="stat-value" id="statConcoursCount">3</span>
+                  <span class="stat-unit">concours</span>
+                </div>
+                <div class="stat-trend trend-up">+1 vs année précédente</div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-header">
+                  <span class="stat-label">Comité CFD</span>
+                  <span class="stat-tag">Membres</span>
+                </div>
+                <div class="stat-value-row">
+                  <span class="stat-value" id="statCfdMembers">5</span>
+                  <span class="stat-unit">membres</span>
+                </div>
+                <div class="stat-trend">Responsable désigné</div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-header">
+                  <span class="stat-label">Correcteurs</span>
+                  <span class="stat-tag">Rôle CORRECTEUR</span>
+                </div>
+                <div class="stat-value-row">
+                  <span class="stat-value" id="statCorrecteurs">8</span>
+                  <span class="stat-unit">inscrits</span>
+                </div>
+                <div class="stat-trend trend-warning">Objectif : 10</div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-header">
+                  <span class="stat-label">Cellule d’anonymat</span>
+                  <span class="stat-tag">Par concours</span>
+                </div>
+                <div class="stat-value-row">
+                  <span class="stat-value" id="statAnonymat">2</span>
+                  <span class="stat-unit">cellules</span>
+                </div>
+                <div class="stat-trend">1 manquante</div>
+              </div>
+            </div>
+            <div class="card-header">
+                                <h2>Répartition des candidats par faculté</h2>
+                                <span class="card-subtitle">Nombre total de candidats par faculté</span>
+                            </div>
+
+                            <div class="card-body">
+                                <canvas id="chartFaculte" height="240"></canvas>
+                            </div>
+            <!-- Bloc “graphique” (placeholder) -->
+            <div class="card dashboard-subcard">
+              <div class="subcard-header">
+                <h3>Répartition des rôles</h3>
+                <span class="subcard-meta">CFD, correcteurs, anonymat, surveillants</span>
+              </div>
+
+              <div class="chart-placeholder">
+                <div class="chart-circle"></div>
+                <div class="chart-legend">
+                  <div class="legend-item">
+                    <span class="legend-dot legend-dot-primary"></span>
+                    <span>CFD</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-dot legend-dot-secondary"></span>
+                    <span>Correcteurs</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-dot legend-dot-soft"></span>
+                    <span>Cellule d’anonymat</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-dot legend-dot-warning"></span>
+                    <span>Surveillants & salles</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chart-footer">
+                <span class="chart-footer-text">
+                  Intégration possible avec un vrai graphique (Chart.js, etc.) côté front plus tard.
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============ VIEW: DASHBOARD ============ -->
+      <div class="view" id="view-dashboard" data-view="dashboard">
+        <section class="card dashboard-card">
+          <!-- En-tête du dashboard -->
+          <div class="dashboard-header">
+            <div>
+              <h2>Bonjour , Doyen </h2>
+              <p class="dashboard-subtitle">
+                Vue globale de l’organisation du concours : comité CFD, correcteurs, anonymat,
+                surveillants & salles, puis PV et décision finale.
+              </p>
+            </div>
+
+            <!-- Résumé général -->
+            <div class="dashboard-summary">
+              <span class="summary-label">Taux d’avancement</span>
+              <div class="summary-progress">
+                <span class="summary-value" id="dashGlobalProgress">35%</span>
+                <span class="summary-chip success">En cours</span>
+              </div>
+              <span class="summary-hint">Basé sur 5 étapes principales</span>
+            </div>
+          </div>
+
+          <!-- PIPELINE DES ÉTAPES -->
+          <div class="pipeline">
+            <div class="pipeline-step pipeline-step-done">
+              <div class="pipeline-icon">
+                <i class="uil uil-briefcase"></i>
+              </div>
+              <div class="pipeline-content">
+                <span class="pipeline-title">CFD</span>
+              </div>
+            </div>
+
+            <div class="pipeline-connector"></div>
+
+            <div class="pipeline-step pipeline-step-active">
+              <div class="pipeline-icon">
+                <i class="uil uil-edit"></i>
+              </div>
+              <div class="pipeline-content">
+                <span class="pipeline-title">Correcteurs</span>
+              </div>
+            </div>
+
+            <div class="pipeline-connector"></div>
+
+            <div class="pipeline-step">
+              <div class="pipeline-icon">
+                <i class="uil uil-shield-check"></i>
+              </div>
+              <div class="pipeline-content">
+                <span class="pipeline-title">Cellule d’anonymat</span>
+              </div>
+            </div>
+
+            <div class="pipeline-connector"></div>
+
+            <div class="pipeline-step">
+              <div class="pipeline-icon">
+                <i class="uil uil-users-alt"></i>
+              </div>
+              <div class="pipeline-content">
+                <span class="pipeline-title">Surveillants </span>
+              </div>
+            </div>
+
+            <div class="pipeline-connector"></div>
+
+            <div class="pipeline-step">
+              <div class="pipeline-icon">
+                <i class="uil uil-file-alt"></i>
+              </div>
+              <div class="pipeline-content">
+                <span class="pipeline-title">PV </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- GRILLE STATISTIQUES + GRAPHIQUE -->
+          <div class="dashboard-grid">
+            <!-- Statistiques rapides -->
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-header">
+                  <span class="stat-label">Concours</span>
+                  <span class="stat-tag">2024 / 2025</span>
+                </div>
+                <div class="stat-value-row">
+                  <span class="stat-value" id="statConcoursCount">3</span>
+                  <span class="stat-unit">concours</span>
+                </div>
+                <div class="stat-trend trend-up">+1 vs année précédente</div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-header">
+                  <span class="stat-label">Comité CFD</span>
+                  <span class="stat-tag">Membres</span>
+                </div>
+                <div class="stat-value-row">
+                  <span class="stat-value" id="statCfdMembers">5</span>
+                  <span class="stat-unit">membres</span>
+                </div>
+                <div class="stat-trend">Responsable désigné</div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-header">
+                  <span class="stat-label">Correcteurs</span>
+                  <span class="stat-tag">Rôle CORRECTEUR</span>
+                </div>
+                <div class="stat-value-row">
+                  <span class="stat-value" id="statCorrecteurs">8</span>
+                  <span class="stat-unit">inscrits</span>
+                </div>
+                <div class="stat-trend trend-warning">Objectif : 10</div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-header">
+                  <span class="stat-label">Cellule d’anonymat</span>
+                  <span class="stat-tag">Par concours</span>
+                </div>
+                <div class="stat-value-row">
+                  <span class="stat-value" id="statAnonymat">2</span>
+                  <span class="stat-unit">cellules</span>
+                </div>
+                <div class="stat-trend">1 manquante</div>
+              </div>
+            </div>
+
+            <!-- Bloc “graphique” (placeholder) -->
+            <div class="card dashboard-subcard">
+              <div class="subcard-header">
+                <h3>Répartition des rôles</h3>
+                <span class="subcard-meta">CFD, correcteurs, anonymat, surveillants</span>
+              </div>
+
+              <div class="chart-placeholder">
+                <div class="chart-circle"></div>
+                <div class="chart-legend">
+                  <div class="legend-item">
+                    <span class="legend-dot legend-dot-primary"></span>
+                    <span>CFD</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-dot legend-dot-secondary"></span>
+                    <span>Correcteurs</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-dot legend-dot-soft"></span>
+                    <span>Cellule d’anonymat</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-dot legend-dot-warning"></span>
+                    <span>Surveillants & salles</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chart-footer">
+                <span class="chart-footer-text">
+                  Intégration possible avec un vrai graphique (Chart.js, etc.) côté front plus tard.
+                </span>
+              </div>
             </div>
           </div>
         </section>
       </div>
 
       <!-- ============ VIEW: COMITÉ CFD ============ -->
-      <!-- ============ VIEW: COMITÉ CFD ============ -->
-<!-- ============ VIEW: COMITÉ CFD ============ -->
-<div class="view" id="view-cfd" data-view="cfd">
-  <!-- Membres CFD -->
-  <section class="card cfd-card">
-    <div class="card-header cfd-header">
-      <div class="cfd-header-main">
-        <h2>Comité de formation doctorale (CFD)</h2>
-        <span class="card-subtitle">
-          Crée les membres et leurs comptes.
-        </span>
-        <div class="cfd-meta-row">
-          <span class="badge-role badge-cfd">CFD</span>
-          <span class="cfd-meta-text">Étape 1 / 5 – obligatoire avant les autres étapes</span>
-        </div>
+      <div class="view" id="view-cfd" data-view="cfd">
+        <!-- Membres CFD -->
+        <section class="card cfd-card">
+          <div class="card-header cfd-header">
+            <div class="cfd-header-main">
+              <h2>Comité de formation doctorale (CFD)</h2>
+              <span class="card-subtitle">
+                Crée les membres du Comité (table <code>membres</code>).
+              </span>
+              <div class="cfd-meta-row">
+                <span class="badge-role badge-cfd">CFD</span>
+                <span class="cfd-meta-text">Étape 1 / 5 – obligatoire avant les autres étapes</span>
+              </div>
+            </div>
+
+            <button type="button" class="btn secondary-btn cfd-add-btn" id="btnOpenModalCfdMembre">
+              <i class="uil uil-plus"></i>
+              <span>Ajouter un membre CFD</span>
+            </button>
+          </div>
+
+          <div class="card-body">
+            <div class="cfd-toolbar">
+              <div class="accounts-search cfd-search">
+                <i class="uil uil-search"></i>
+                <input type="text" id="cfdSearchInput" placeholder="Rechercher dans les membres CFD…" />
+              </div>
+              <div class="cfd-chip">
+                <span id="cfdCount">0</span> membre(s)
+              </div>
+            </div>
+
+            <div class="table-wrapper slim">
+              <table class="table data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nom & prénom (FR)</th>
+                    <th>الاسم و اللقب (AR)</th>
+                    <th>Grade</th>
+                    <th>Sexe</th>
+                    <th class="col-actions"></th>
+                  </tr>
+                </thead>
+                <tbody id="cfdMembersBody">
+                  <!-- rempli par JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Responsable CFD pour un concours -->
+        <section class="card cfd-card">
+          <div class="card-header">
+            <div>
+              <h2>Responsable CFD du concours</h2>
+              <span class="card-subtitle">
+                1) Sélectionner le concours<br>
+                2) Choisir le membre CFD responsable<br>
+                3) Créer son compte utilisateur (table <code>users</code>, rôle CFD).
+              </span>
+            </div>
+          </div>
+
+          <form id="formCfdResponsable" class="card-body form-grid cfd-resp-form">
+            <!-- Concours (viendra de la base, à remplir en JS ou serveur) -->
+            <div class="form-group">
+              <label for="cfdConcoursSelect">Concours</label>
+              <select id="cfdConcoursSelect">
+                <option value="">-- Sélectionner un concours --</option>
+                <!-- options injectées depuis la BDD -->
+              </select>
+            </div>
+
+            <!-- Membre CFD responsable (liste de membres créés) -->
+            <div class="form-group">
+              <label for="cfdResponsableSelect">Membre CFD responsable</label>
+              <select id="cfdResponsableSelect">
+                <option value="">-- Sélectionner un membre CFD --</option>
+                <!-- options injectées par JS depuis cfdMembers -->
+              </select>
+            </div>
+
+            <!-- Infos du compte user -->
+            <div class="form-group">
+              <label for="cfdRespEmail">Email institutionnel</label>
+              <input
+                type="email"
+                id="cfdRespEmail"
+                placeholder="exemple@univ.dz"
+              />
+              <div class="field-hint">Utilise l’email universitaire officiel.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="cfdRespUsername">Nom d’utilisateur</label>
+              <input
+                type="text"
+                id="cfdRespUsername"
+                placeholder="username_cfd"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="cfdRespPassword">Mot de passe provisoire</label>
+              <input
+                type="password"
+                id="cfdRespPassword"
+                placeholder="••••••••"
+              />
+              <div class="field-hint">
+                Il pourra être changé par le responsable CFD à la première connexion.
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">
+                <i class="uil uil-save"></i>
+                Enregistrer le responsable CFD
+              </button>
+            </div>
+          </form>
+        </section>
       </div>
 
-      <button type="button" class="btn btn-primary cfd-add-btn" id="btnOpenModalCfdMembre">
-        <i class="uil uil-plus"></i>
-        <span>Ajouter un membre CFD</span>
-      </button>
-    </div>
-
-    <div class="card-body">
-      <div class="cfd-toolbar">
-        <div class="accounts-search cfd-search">
-          <i class="uil uil-search"></i>
-          <input type="text" id="cfdSearchInput" placeholder="Rechercher dans les membres CFD…" />
-        </div>
-        <div class="cfd-chip">
-          <span id="cfdCount">0</span> membre(s)
-        </div>
-      </div>
-
-      <div class="table-wrapper slim">
-        <table class="table data-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Nom & prénom (FR)</th>
-              <th>الاسم و اللقب (AR)</th>
-              <th>Grade</th>
-              <th>Sexe</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th class="col-actions"></th>
-            </tr>
-          </thead>
-          <tbody id="cfdMembersBody">
-            <!-- rempli par JS -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- Responsable CFD pour un concours -->
-  <section class="card cfd-card">
-    <div class="card-header">
-      <div>
-        <h2>Responsable CFD du concours</h2>
-        <span class="card-subtitle">
-          Lien avec la table <code>cfd (id_concours, id_user)</code>.
-        </span>
-      </div>
-    </div>
-
-    <form id="formCfdResponsable" class="card-body form-grid cfd-resp-form">
-      <div class="form-group">
-        <label>Concours</label>
-        <select id="cfdConcoursSelect">
-          <option value="">-- Sélectionner un concours --</option>
-          <option value="concours-2024-info">Concours 2024 - Informatique</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Membre CFD responsable</label>
-        <select id="cfdResponsableSelect">
-          <option value="">-- Sélectionner un membre CFD --</option>
-        </select>
-      </div>
-
-      <div class="form-actions">
-        <button type="submit" class="btn btn-primary">
-          <i class="uil uil-save"></i> Enregistrer le responsable CFD
-        </button>
-      </div>
-    </form>
-  </section>
-</div>
-
-      <!-- ============ VIEW: CORRECTEURS (SQUELETTE) ============ -->
+      <!-- ============ VIEW: CORRECTEURS ============ -->
       <div class="view" id="view-correcteurs" data-view="correcteurs">
         <section class="card">
           <div class="card-header">
@@ -272,7 +593,7 @@
                 Enregistre les correcteurs (membres + users rôle CORRECTEUR).
               </p>
             </div>
-            <button type="button" class="btn btn-primary" id="btnOpenModalCorrecteur">
+            <button type="button" class="btn secondary-btn" id="btnOpenModalCorrecteur">
               <i class="uil uil-plus"></i> Ajouter un correcteur
             </button>
           </div>
@@ -296,7 +617,7 @@
         </section>
       </div>
 
-      <!-- ============ VIEW: CELLULE D’ANONYMAT (SQUELETTE) ============ -->
+      <!-- ============ VIEW: CELLULE D’ANONYMAT ============ -->
       <div class="view" id="view-anonymat" data-view="anonymat">
         <section class="card">
           <div class="card-header">
@@ -304,7 +625,7 @@
               <h2>Cellule d’anonymat</h2>
               <p class="text-muted">Membres avec rôle CELLULE_ANONYMAT.</p>
             </div>
-            <button type="button" class="btn btn-primary" id="btnOpenModalAnonymat">
+            <button type="button" class="btn secondary-btn" id="btnOpenModalAnonymat">
               <i class="uil uil-plus"></i> Ajouter un membre anonymat
             </button>
           </div>
@@ -313,6 +634,7 @@
               <thead>
                 <tr>
                   <th>#</th>
+                  <th>Concours</th>
                   <th>Nom & prénom</th>
                   <th>Username</th>
                   <th>Email</th>
@@ -325,7 +647,7 @@
         </section>
       </div>
 
-      <!-- ============ VIEW: SURVEILLANTS & SALLES (SQUELETTE) ============ -->
+      <!-- ============ VIEW: SURVEILLANTS & SALLES ============ -->
       <div class="view" id="view-surveillants" data-view="surveillants">
         <section class="card">
           <div class="card-header">
@@ -333,7 +655,7 @@
               <h2>Salles</h2>
               <p class="text-muted">Gestion des salles du concours.</p>
             </div>
-            <button type="button" class="btn btn-primary" id="btnOpenModalSalle">
+            <button type="button" class="btn secondary-btn" id="btnOpenModalSalle">
               <i class="uil uil-plus"></i> Ajouter une salle
             </button>
           </div>
@@ -431,340 +753,917 @@
   </div>
 
   <!-- ================== MODAL : MEMBRE CFD ================== -->
-<!-- ================== MODAL : MEMBRE CFD ================== -->
-<div class="modal" id="modalCfdMembre">
-  <div class="modal-backdrop" data-close-modal></div>
+  <div class="modal" id="modalCfdMembre">
+    <div class="modal-backdrop" data-close-modal></div>
 
-  <div class="modal-dialog modal-dialog-large">
-    <div class="modal-header">
-      <h3>Nouveau membre CFD</h3>
-      <button class="btn-icon" data-close-modal>
-        <i class="uil uil-times"></i>
-      </button>
-    </div>
-
-    <form id="formCfdMembre" class="modal-body account-form">
-    <form id="formCfdMembre" class="account-form">
-  <!-- Ligne Nom / Prénom FR -->
-  <div class="form-row">
-    <div class="form-group">
-      <label>Nom (FR)</label>
-      <div class="input-wrapper">
-        <span class="field-icon"><i class="uil uil-user"></i></span>
-        <input type="text" id="nomMembreFr" placeholder="Ex : Djabar" />
+    <div class="modal-dialog modal-dialog-large">
+      <div class="modal-header">
+        <h3>Nouveau membre CFD</h3>
+        <button class="btn-icon" data-close-modal>
+          <i class="uil uil-times"></i>
+        </button>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label>Prénom (FR)</label>
-      <div class="input-wrapper">
-        <span class="field-icon"><i class="uil uil-user"></i></span>
-        <input type="text" id="prenomMembreFr" placeholder="Ex : Bensalem" />
-      </div>
-    </div>
-  </div>
+      <form id="formCfdMembre" class="modal-body account-form">
+        <!-- Nom / prénom FR -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nom (FR)</label>
+            <div class="input-wrapper">
+              <span class="field-icon"><i class="uil uil-user"></i></span>
+              <input type="text" id="nomMembreFr" placeholder="Ex : Djabar" required />
+            </div>
+          </div>
 
-  <!-- Ligne Nom / Prénom AR -->
-  <div class="form-row">
-    <div class="form-group">
-      <label dir="rtl">(AR) اللقب</label>
-      <div class="input-wrapper" dir="rtl">
-        <span class="field-icon"><i class="uil uil-user"></i></span>
-        <input type="text" id="nomMembreAr" placeholder="مثال: جبار" />
-      </div>
-    </div>
+          <div class="form-group">
+            <label>Prénom (FR)</label>
+            <div class="input-wrapper">
+              <span class="field-icon"><i class="uil uil-user"></i></span>
+              <input type="text" id="prenomMembreFr" placeholder="Ex : Bensalem" required />
+            </div>
+          </div>
+        </div>
 
-    <div class="form-group">
-      <label dir="rtl">(AR) الاسم</label>
-      <div class="input-wrapper" dir="rtl">
-        <span class="field-icon"><i class="uil uil-user"></i></span>
-        <input type="text" id="prenomMembreAr" placeholder="مثال: بن سالم" />
-      </div>
-    </div>
-  </div>
+        <!-- Nom / prénom AR -->
+        <div class="form-row">
+          <div class="form-group">
+            <label dir="rtl">(AR) اللقب</label>
+            <div class="input-wrapper" dir="rtl">
+              <span class="field-icon"><i class="uil uil-user"></i></span>
+              <input type="text" id="nomMembreAr" placeholder="مثال: جبار" />
+            </div>
+          </div>
 
-  <!-- 🔹 LIGNE Grade + Sexe (bien alignés) -->
-  <div class="form-row">
-    <!-- Grade = select classique -->
-    <div class="form-group">
-      <label>Grade</label>
-      <div class="input-wrapper">
-        <span class="field-icon"><i class="uil uil-graduation-cap"></i></span>
-        <select id="gradeMembre">
-          <option value="">Professeur, MCA, MCB…</option>
-          <option value="PROF">Professeur</option>
-          <option value="MCA">MCA</option>
-          <option value="MCB">MCB</option>
-        </select>
-      </div>
-    </div>
+          <div class="form-group">
+            <label dir="rtl">(AR) الاسم</label>
+            <div class="input-wrapper" dir="rtl">
+              <span class="field-icon"><i class="uil uil-user"></i></span>
+              <input type="text" id="prenomMembreAr" placeholder="مثال: بن سالم" />
+            </div>
+          </div>
+        </div>
 
-    <!-- Sexe = boutons, mais dans la largeur de la colonne -->
-    <div class="form-group form-group-sex">
-      <label>Sexe</label>
-      <div class="sex-toggle" id="sexeToggle">
-        <button type="button"
+        <!-- Grade + Sexe -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Grade</label>
+            <div class="input-wrapper">
+              <span class="field-icon"><i class="uil uil-graduation-cap"></i></span>
+              <select id="gradeMembre">
+                <option value="">Professeur, MCA, MCB…</option>
+                <option value="PROF">Professeur</option>
+                <option value="MCA">MCA</option>
+                <option value="MCB">MCB</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group form-group-sex">
+            <label>Sexe</label>
+            <div class="sex-toggle" id="sexeToggle">
+              <button
+                type="button"
                 class="sex-option sex-option-active"
                 data-sex-value="FEMME">
-          <span class="sex-icon-circle">
-            <i class="uil uil-female"></i>
-          </span>
-          <span>Femme</span>
-        </button>
+                <span class="sex-icon-circle">
+                  <i class="uil uil-female"></i>
+                </span>
+                <span>Femme</span>
+              </button>
 
-        <button type="button"
+              <button
+                type="button"
                 class="sex-option"
                 data-sex-value="HOMME">
-          <span class="sex-icon-circle">
-            <i class="uil uil-male"></i>
-          </span>
-          <span>Homme</span>
-        </button>
-      </div>
-      <input type="hidden" id="sexeMembre" value="FEMME" />
+                <span class="sex-icon-circle">
+                  <i class="uil uil-male"></i>
+                </span>
+                <span>Homme</span>
+              </button>
+            </div>
+            <input type="hidden" id="sexeMembre" value="FEMME" />
+          </div>
+        </div>
+
+        <div class="account-modal-footer modal-footer-full">
+          <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
+          <button type="submit" class="btn btn-primary">
+            Enregistrer le membre CFD
+          </button>
+        </div>
+      </form>
     </div>
   </div>
-      <!-- Ligne 4 : Email + Username -->
-      <div class="form-row">
-        <div class="form-group">
-          <label for="emailUser">Email institutionnel</label>
-          <div class="input-wrapper">
-            <span class="field-icon"><i class="uil uil-at"></i></span>
-            <input type="email" id="emailUser" placeholder="exemple@univ.dz" />
-          </div>
-          <div class="field-hint">Utilise l’email universitaire officiel.</div>
-        </div>
 
-        <div class="form-group">
-          <label for="usernameUser">Nom d’utilisateur</label>
-          <div class="input-wrapper">
-            <span class="field-icon"><i class="uil uil-user-circle"></i></span>
-            <input type="text" id="usernameUser" placeholder="username_cfd" />
-          </div>
-        </div>
+  <!-- ================== MODAL : CORRECTEUR ================== -->
+  <div class="modal" id="modalCorrecteur">
+    <div class="modal-backdrop" data-close-modal></div>
+
+    <div class="modal-dialog modal-dialog-large">
+      <div class="modal-header">
+        <h3>Nouveau correcteur</h3>
+        <button class="btn-icon" data-close-modal>
+          <i class="uil uil-times"></i>
+        </button>
       </div>
 
-      <!-- Ligne 5 : Mot de passe -->
-      <div class="form-row">
-        <div class="form-group">
-          <label for="passwordUser">Mot de passe provisoire</label>
-          <div class="input-wrapper">
-            <span class="field-icon"><i class="uil uil-lock"></i></span>
-            <input type="password" id="passwordUser" placeholder="••••••••" />
+      <form id="formCorrecteur" class="modal-body account-form">
+        <!-- Nom / prénom FR -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nom (FR)</label>
+            <div class="input-wrapper">
+              <span class="field-icon"><i class="uil uil-user"></i></span>
+              <input type="text" id="corrNomFr" placeholder="Ex : Djabar" required />
+            </div>
           </div>
-          <div class="field-hint">
-            Il pourra être changé par le membre CFD à la première connexion.
+
+          <div class="form-group">
+            <label>Prénom (FR)</label>
+            <div class="input-wrapper">
+              <span class="field-icon"><i class="uil uil-user"></i></span>
+              <input type="text" id="corrPrenomFr" placeholder="Ex : Bensalem" required />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="account-modal-footer modal-footer-full">
-        <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
-        <button type="submit" class="btn btn-primary">Enregistrer le membre CFD</button>
-      </div>
-    </form>
+        <!-- Nom / prénom AR -->
+        <div class="form-row">
+          <div class="form-group">
+            <label dir="rtl">(AR) اللقب</label>
+            <div class="input-wrapper" dir="rtl">
+              <span class="field-icon"><i class="uil uil-user"></i></span>
+              <input type="text" id="corrNomAr" placeholder="مثال: جبار" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label dir="rtl">(AR) الاسم</label>
+            <div class="input-wrapper" dir="rtl">
+              <span class="field-icon"><i class="uil uil-user"></i></span>
+              <input type="text" id="corrPrenomAr" placeholder="مثال: بن سالم" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Grade + Sexe -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Grade</label>
+            <div class="input-wrapper">
+              <span class="field-icon"><i class="uil uil-graduation-cap"></i></span>
+              <select id="corrGrade">
+                <option value="">Professeur, MCA, MCB…</option>
+                <option value="PROF">Professeur</option>
+                <option value="MCA">MCA</option>
+                <option value="MCB">MCB</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group form-group-sex">
+            <label>Sexe</label>
+            <div class="sex-toggle" id="sexeToggleCorrecteur">
+              <button
+                type="button"
+                class="sex-option sex-option-active"
+                data-sex-value="FEMME">
+                <span class="sex-icon-circle">
+                  <i class="uil uil-female"></i>
+                </span>
+                <span>Femme</span>
+              </button>
+
+              <button
+                type="button"
+                class="sex-option"
+                data-sex-value="HOMME">
+                <span class="sex-icon-circle">
+                  <i class="uil uil-male"></i>
+                </span>
+                <span>Homme</span>
+              </button>
+            </div>
+            <input type="hidden" id="sexeCorrecteur" value="FEMME" />
+          </div>
+        </div>
+
+        <!-- User : email + username + password -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="corrEmail">Email institutionnel</label>
+            <div class="input-wrapper">
+              <span class="field-icon"><i class="uil uil-at"></i></span>
+              <input type="email" id="corrEmail" placeholder="exemple@univ.dz" />
+            </div>
+            <div class="field-hint">Utilise l’email universitaire officiel.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="corrUsername">Nom d’utilisateur</label>
+            <div class="input-wrapper">
+              <span class="field-icon"><i class="uil uil-user-circle"></i></span>
+              <input type="text" id="corrUsername" placeholder="username_correcteur" required />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="corrPassword">Mot de passe provisoire</label>
+            <div class="input-wrapper">
+              <span class="field-icon"><i class="uil uil-lock"></i></span>
+              <input type="password" id="corrPassword" placeholder="••••••••" required />
+            </div>
+            <div class="field-hint">
+              Il pourra être changé par le correcteur à la première connexion.
+            </div>
+          </div>
+        </div>
+
+        <div class="account-modal-footer modal-footer-full">
+          <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
+          <button type="submit" class="btn btn-primary">
+            Enregistrer le correcteur
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 
+  <!-- ================== MODAL : CELLULE D'ANONYMAT ================== -->
+  <div class="modal" id="modalAnonymat">
+    <div class="modal-backdrop" data-close-modal></div>
 
-<script src="theme.js"></script>
-  <!-- ================== JS : Navigation + CFD (exemple complet) ================== -->
+    <div class="modal-dialog modal-dialog-large">
+      <div class="modal-header">
+        <h3>Nouveau membre – Cellule d’anonymat</h3>
+        <button class="btn-icon" data-close-modal>
+          <i class="uil uil-times"></i>
+        </button>
+      </div>
+
+      <form id="formAnonymat" class="modal-body account-form">
+        <!-- Concours -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="anonyConcoursSelect">Concours</label>
+            <div class="input-wrapper">
+              <span class="field-icon"><i class="uil uil-list-ul"></i></span>
+              <select id="anonyConcoursSelect" required>
+                <option value="">-- Sélectionner un concours --</option>
+                <!-- à remplir depuis la BDD, ou cloné du select PV/CFD -->
+              </select>
+            </div>
+            <div class="field-hint">
+              Un seul membre de la cellule d’anonymat par concours
+              (contrainte UNIQUE sur <code>id_concours</code>).
+            </div>
+          </div>
+        </div>
+
+        <!-- Nom / prénom FR -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nom (FR)</label>
+            <div class="input-wrapper">
+              <span class="field-icon"><i class="uil uil-user"></i></span>
+              <input type="text" id="anonyNomFr" placeholder="Ex : Djabar" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Prénom (FR)</label>
+            <div class="input-wrapper">
+              <span class="field-icon"><i class="uil uil-user"></i></span>
+              <input type="text" id="anonyPrenomFr" placeholder="Ex : Bensalem" required />
+            </div>
+          </div>
+        </div>
+
+        <!-- Grade + Sexe (optionnel) -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Grade</label>
+            <div class="input-wrapper">
+              <span class="field-icon"><i class="uil uil-graduation-cap"></i></span>
+              <select id="anonyGrade">
+                <option value="">Professeur, MCA, MCB…</option>
+                <option value="PROF">Professeur</option>
+                <option value="MCA">MCA</option>
+                <option value="MCB">MCB</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group form-group-sex">
+            <label>Sexe</label>
+            <div class="sex-toggle" id="sexeToggleAnonymat">
+              <button
+                type="button"
+                class="sex-option sex-option-active"
+                data-sex-value="FEMME">
+                <span class="sex-icon-circle">
+                  <i class="uil uil-female"></i>
+                </span>
+                <span>Femme</span>
+              </button>
+
+              <button
+                type="button"
+                class="sex-option"
+                data-sex-value="HOMME">
+                <span class="sex-icon-circle">
+                  <i class="uil uil-male"></i>
+                </span>
+                <span>Homme</span>
+              </button>
+            </div>
+            <input type="hidden" id="sexeAnonymat" value="FEMME" />
+          </div>
+        </div>
+
+        <!-- User -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="anonyEmail">Email institutionnel</label>
+            <div class="input-wrapper">
+              <span class="field-icon"><i class="uil uil-at"></i></span>
+              <input type="email" id="anonyEmail" placeholder="exemple@univ.dz" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="anonyUsername">Nom d’utilisateur</label>
+            <div class="input-wrapper">
+              <span class="field-icon"><i class="uil uil-user-circle"></i></span>
+              <input type="text" id="anonyUsername" placeholder="username_anonymat" required />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="anonyPassword">Mot de passe provisoire</label>
+            <div class="input-wrapper">
+              <span class="field-icon"><i class="uil uil-lock"></i></span>
+              <input type="password" id="anonyPassword" placeholder="••••••••" required />
+            </div>
+          </div>
+        </div>
+
+        <div class="account-modal-footer modal-footer-full">
+          <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
+          <button type="submit" class="btn btn-primary">
+            Enregistrer le membre
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="theme.js"></script>
+
+  <!-- ================== JS : Navigation + logique ================== -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
 
-            // ===== SEXE : toggle Femme / Homme =====
-    const sexeHidden = document.getElementById("sexeMembre");
-    const sexeToggle = document.getElementById("sexeToggle");
+      // ===== SEXE : toggle Femme / Homme pour CFD =====
+      const sexeHidden = document.getElementById("sexeMembre");
+      const sexeToggle = document.getElementById("sexeToggle");
 
-    if (sexeHidden && sexeToggle) {
-      const sexButtons = sexeToggle.querySelectorAll(".sex-option");
+      if (sexeHidden && sexeToggle) {
+        const sexButtons = sexeToggle.querySelectorAll(".sex-option");
 
-      sexButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const value = btn.dataset.sexValue || "FEMME";
+        sexButtons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const value = btn.dataset.sexValue || "FEMME";
 
-          // 1) mettre à jour le hidden
-          sexeHidden.value = value;
+            // 1) mettre à jour le hidden
+            sexeHidden.value = value;
 
-          // 2) switch visuel active
-          sexButtons.forEach((b) =>
-            b.classList.toggle(
-              "sex-option-active",
-              b === btn
-            )
-          );
-        });
-      });
-    }
-  /* ===== NAVIGATION SIDEBAR ===== */
-  const navItems = document.querySelectorAll(".sidebar-nav .nav-item");
-  const views = document.querySelectorAll(".view");
-
-  function showView(viewName) {
-    views.forEach(v => v.classList.toggle("view-active", v.dataset.view === viewName));
-    navItems.forEach(i => i.classList.toggle("nav-item-active", i.dataset.view === viewName));
-  }
-
-  navItems.forEach(item => {
-    item.addEventListener("click", (e) => {
-      e.preventDefault();
-      const target = item.dataset.view;
-      showView(target);
-    });
-  });
-
-  document.querySelectorAll("[data-go-view]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const target = btn.getAttribute("data-go-view");
-      showView(target);
-    });
-  });
-
-  /* ===== MODALS ===== */
-  const modalCfd = document.getElementById("modalCfdMembre");
-  const btnOpenModalCfdMembre = document.getElementById("btnOpenModalCfdMembre");
-
-  function openModal(modal) {
-    if (!modal) return;
-    modal.classList.add("modal-open");
-  }
-
-  function closeModal(modal) {
-    if (!modal) return;
-    modal.classList.remove("modal-open");
-  }
-
-  // Bouton + pour ouvrir la modale CFD
-  if (btnOpenModalCfdMembre) {
-          btnOpenModalCfdMembre.addEventListener("click", () => {
-        formCfdMembre.reset();
-
-        // reset sexe par défaut : FEMME
-        if (sexeHidden && sexeToggle) {
-          sexeHidden.value = "FEMME";
-          sexeToggle.querySelectorAll(".sex-option").forEach((btn) => {
-            btn.classList.toggle(
-              "sex-option-active",
-              btn.dataset.sexValue === "FEMME"
+            // 2) switch visuel active
+            sexButtons.forEach((b) =>
+              b.classList.toggle(
+                "sex-option-active",
+                b === btn
+              )
             );
           });
-        }
-
-        openModal(modalCfd);
-      });
-  }
-
-  
-
-  // Tout élément avec data-close-modal ferme la modale parente
-  document.querySelectorAll("[data-close-modal]").forEach(el => {
-    el.addEventListener("click", () => {
-      const m = el.closest(".modal");
-      closeModal(m);
-    });
-  });
-
-  /* ===== ÉTAT FRONT CFD ===== */
-  let cfdMembers = [];
-
-  const cfdMembersBody = document.getElementById("cfdMembersBody");
-  const cfdResponsableSelect = document.getElementById("cfdResponsableSelect");
-  const formCfdMembre = document.getElementById("formCfdMembre");
-
-  if (formCfdMembre) {
-    formCfdMembre.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      const nomFr = document.getElementById("nomMembreFr").value.trim();
-      const prenomFr = document.getElementById("prenomMembreFr").value.trim();
-      const nomAr = document.getElementById("nomMembreAr").value.trim();
-      const prenomAr = document.getElementById("prenomMembreAr").value.trim();
-      const grade = document.getElementById("gradeMembre").value.trim();
-      const sexe = document.getElementById("sexeMembre").value;
-      const email = document.getElementById("emailUser").value.trim();
-      const username = document.getElementById("usernameUser").value.trim();
-      const password = document.getElementById("passwordUser").value; // côté backend
-
-      if (!nomFr || !prenomFr || !username) {
-        alert("Nom, prénom et username sont obligatoires.");
-        return;
+        });
       }
 
-      const idMembre = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-m";
-      const idUser = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-u";
+      /* ===== NAVIGATION SIDEBAR ===== */
+      const navItems = document.querySelectorAll(".sidebar-nav .nav-item");
+      const views = document.querySelectorAll(".view");
 
-      cfdMembers.push({
-        idMembre,
-        idUser,
-        nomFr,
-        prenomFr,
-        nomAr,
-        prenomAr,
-        grade,
-        sexe,
-        email,
-        username
+      function showView(viewName) {
+        views.forEach(v => v.classList.toggle("view-active", v.dataset.view === viewName));
+        navItems.forEach(i => i.classList.toggle("nav-item-active", i.dataset.view === viewName));
+      }
+
+      navItems.forEach(item => {
+        item.addEventListener("click", (e) => {
+          e.preventDefault();
+          const target = item.dataset.view;
+          showView(target);
+        });
       });
 
-      renderCfdMembers();
-      closeModal(modalCfd);
-    });
-  }
-
-  function renderCfdMembers() {
-    if (!cfdMembersBody || !cfdResponsableSelect) return;
-
-    cfdMembersBody.innerHTML = "";
-    cfdResponsableSelect.innerHTML = '<option value="">-- Sélectionner un membre CFD --</option>';
-
-    cfdMembers.forEach((m, index) => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${index + 1}</td>
-        <td>${m.nomFr} ${m.prenomFr}</td>
-        <td dir="rtl">${(m.prenomAr || "")} ${(m.nomAr || "")}</td>
-        <td>${m.grade || ""}</td>
-        <td>${m.sexe}</td>
-        <td>${m.username}</td>
-        <td>${m.email || ""}</td>
-        <td class="table-actions">
-          <button class="btn-icon btn-icon-danger" data-remove="${m.idUser}">
-            <i class="uil uil-trash"></i>
-          </button>
-        </td>
-      `;
-      cfdMembersBody.appendChild(tr);
-
-      const opt = document.createElement("option");
-      opt.value = m.idUser;
-      opt.textContent = `${m.nomFr} ${m.prenomFr} (${m.username})`;
-      cfdResponsableSelect.appendChild(opt);
-    });
-
-    cfdMembersBody.querySelectorAll("[data-remove]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const idUser = btn.getAttribute("data-remove");
-        cfdMembers = cfdMembers.filter(m => m.idUser !== idUser);
-        renderCfdMembers();
+      document.querySelectorAll("[data-go-view]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const target = btn.getAttribute("data-go-view");
+          showView(target);
+        });
       });
-    });
-  }
 
-  renderCfdMembers();
+      /* ===== MODALS ===== */
+      const modalCfd = document.getElementById("modalCfdMembre");
+      const btnOpenModalCfdMembre = document.getElementById("btnOpenModalCfdMembre");
 
-  /* ===== PV : génération simple + impression ===== */
-  const pvTexteAr = document.getElementById("pvTexteAr");
-  const btnRegenererPv = document.getElementById("btnRegenererPv");
-  const btnImprimerPv = document.getElementById("btnImprimerPv");
-  const btnValiderPv = document.getElementById("btnValiderPv");
+      function openModal(modal) {
+        if (!modal) return;
+        modal.classList.add("modal-open");
+      }
 
-  if (btnRegenererPv && pvTexteAr) {
-    btnRegenererPv.addEventListener("click", () => {
-      const concoursLabel = document.getElementById("pvConcoursSelect").value || "مسابقة الدكتوراه";
-      const dateDecision = document.getElementById("pvDateDecision").value || "....";
-      const numDecision = document.getElementById("pvNumDecision").value || "…/…/…";
+      function closeModal(modal) {
+        if (!modal) return;
+        modal.classList.remove("modal-open");
+      }
 
-      pvTexteAr.value =
+      // Bouton + pour ouvrir la modale CFD
+      if (btnOpenModalCfdMembre) {
+        btnOpenModalCfdMembre.addEventListener("click", () => {
+          formCfdMembre.reset();
+
+          // reset sexe par défaut : FEMME
+          if (sexeHidden && sexeToggle) {
+            sexeHidden.value = "FEMME";
+            sexeToggle.querySelectorAll(".sex-option").forEach((btn) => {
+              btn.classList.toggle(
+                "sex-option-active",
+                btn.dataset.sexValue === "FEMME"
+              );
+            });
+          }
+
+          openModal(modalCfd);
+        });
+      }
+
+      // Tout élément avec data-close-modal ferme la modale parente
+      document.querySelectorAll("[data-close-modal]").forEach(el => {
+        el.addEventListener("click", () => {
+          const m = el.closest(".modal");
+          closeModal(m);
+        });
+      });
+
+      /* ===== ÉTAT FRONT CFD ===== */
+      // Représente les lignes de la table "membres" côté front
+      let cfdMembers = [];
+
+      const cfdMembersBody = document.getElementById("cfdMembersBody");
+      const cfdResponsableSelect = document.getElementById("cfdResponsableSelect");
+      const cfdCount = document.getElementById("cfdCount");
+      const cfdSearchInput = document.getElementById("cfdSearchInput");
+      const formCfdMembre = document.getElementById("formCfdMembre");
+
+      // Ouverture modale membre CFD (déjà géré plus haut mais on garde la sécurité)
+      if (btnOpenModalCfdMembre && formCfdMembre) {
+        btnOpenModalCfdMembre.addEventListener("click", () => {
+          formCfdMembre.reset();
+
+          // reset sexe : FEMME
+          if (sexeHidden && sexeToggle) {
+            sexeHidden.value = "FEMME";
+            sexeToggle.querySelectorAll(".sex-option").forEach((btn) => {
+              btn.classList.toggle(
+                "sex-option-active",
+                btn.dataset.sexValue === "FEMME"
+              );
+            });
+          }
+
+          openModal(modalCfd);
+        });
+      }
+
+      // Soumission création membre CFD (table membres)
+      if (formCfdMembre) {
+        formCfdMembre.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const nomFr = document.getElementById("nomMembreFr").value.trim();
+          const prenomFr = document.getElementById("prenomMembreFr").value.trim();
+          const nomAr = document.getElementById("nomMembreAr").value.trim();
+          const prenomAr = document.getElementById("prenomMembreAr").value.trim();
+          const grade = document.getElementById("gradeMembre").value.trim();
+          const sexe = document.getElementById("sexeMembre").value;
+
+          if (!nomFr || !prenomFr) {
+            alert("Nom et prénom (FR) sont obligatoires.");
+            return;
+          }
+
+          // côté backend ce sera gen_random_uuid(), ici on simule
+          const idMembre = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-m";
+
+          cfdMembers.push({
+            idMembre,
+            nomFr,
+            prenomFr,
+            nomAr,
+            prenomAr,
+            grade,
+            sexe
+          });
+
+          renderCfdMembers();
+          closeModal(modalCfd);
+        });
+      }
+
+      // Rendu de la table + combo responsable
+      function renderCfdMembers() {
+        if (!cfdMembersBody || !cfdResponsableSelect) return;
+
+        // filtre recherche
+        const search = (cfdSearchInput?.value || "").toLowerCase();
+
+        cfdMembersBody.innerHTML = "";
+        cfdResponsableSelect.innerHTML = '<option value="">-- Sélectionner un membre CFD --</option>';
+
+        let displayIndex = 0;
+
+        cfdMembers.forEach((m) => {
+          const fullNameFr = `${m.nomFr} ${m.prenomFr}`.toLowerCase();
+          const fullNameAr = `${m.prenomAr || ""} ${m.nomAr || ""}`.toLowerCase();
+
+          if (search && !fullNameFr.includes(search) && !fullNameAr.includes(search)) {
+            return;
+          }
+
+          displayIndex += 1;
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${displayIndex}</td>
+            <td>${m.nomFr} ${m.prenomFr}</td>
+            <td dir="rtl">${(m.prenomAr || "")} ${(m.nomAr || "")}</td>
+            <td>${m.grade || ""}</td>
+            <td>${m.sexe}</td>
+            <td class="table-actions">
+              <button class="btn-icon btn-icon-danger" data-remove="${m.idMembre}">
+                <i class="uil uil-trash"></i>
+              </button>
+            </td>
+          `;
+          cfdMembersBody.appendChild(tr);
+
+          // option dans la liste des responsables possibles
+          const opt = document.createElement("option");
+          opt.value = m.idMembre;
+          opt.textContent = `${m.nomFr} ${m.prenomFr}`;
+          cfdResponsableSelect.appendChild(opt);
+        });
+
+        if (cfdCount) cfdCount.textContent = String(cfdMembers.length);
+
+        // suppression
+        cfdMembersBody.querySelectorAll("[data-remove]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const idMembre = btn.getAttribute("data-remove");
+            cfdMembers = cfdMembers.filter((m) => m.idMembre !== idMembre);
+            renderCfdMembers();
+          });
+        });
+      }
+
+      if (cfdSearchInput) {
+        cfdSearchInput.addEventListener("input", renderCfdMembers);
+      }
+
+      renderCfdMembers(); // initial (liste vide)
+
+      /* ===== CORRECTEURS : membres + users (role CORRECTEUR) ===== */
+      let correcteurs = [];
+
+      const correcteursBody = document.getElementById("correcteursBody");
+      const modalCorrecteur = document.getElementById("modalCorrecteur");
+      const btnOpenModalCorrecteur = document.getElementById("btnOpenModalCorrecteur");
+      const formCorrecteur = document.getElementById("formCorrecteur");
+      const sexeCorrHidden = document.getElementById("sexeCorrecteur");
+      const sexeToggleCorr = document.getElementById("sexeToggleCorrecteur");
+
+      // Toggle sexe correcteur
+      if (sexeCorrHidden && sexeToggleCorr) {
+        const sexButtons = sexeToggleCorr.querySelectorAll(".sex-option");
+        sexButtons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const value = btn.dataset.sexValue || "FEMME";
+            sexeCorrHidden.value = value;
+            sexButtons.forEach((b) =>
+              b.classList.toggle("sex-option-active", b === btn)
+            );
+          });
+        });
+      }
+
+      // Ouvrir la modale correcteur
+      if (btnOpenModalCorrecteur && formCorrecteur) {
+        btnOpenModalCorrecteur.addEventListener("click", () => {
+          formCorrecteur.reset();
+
+          // reset sexe = FEMME
+          if (sexeCorrHidden && sexeToggleCorr) {
+            sexeCorrHidden.value = "FEMME";
+            sexeToggleCorr.querySelectorAll(".sex-option").forEach((btn) => {
+              btn.classList.toggle(
+                "sex-option-active",
+                btn.dataset.sexValue === "FEMME"
+              );
+            });
+          }
+
+          openModal(modalCorrecteur);
+        });
+      }
+
+      // Soumission création correcteur : membre + user (role = CORRECTEUR)
+      if (formCorrecteur) {
+        formCorrecteur.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const nomFr = document.getElementById("corrNomFr").value.trim();
+          const prenomFr = document.getElementById("corrPrenomFr").value.trim();
+          const nomAr = document.getElementById("corrNomAr").value.trim();
+          const prenomAr = document.getElementById("corrPrenomAr").value.trim();
+          const grade = document.getElementById("corrGrade").value.trim();
+          const sexe = document.getElementById("sexeCorrecteur").value;
+          const email = document.getElementById("corrEmail").value.trim();
+          const username = document.getElementById("corrUsername").value.trim();
+          const password = document.getElementById("corrPassword").value;
+
+          if (!nomFr || !prenomFr || !username || !password) {
+            alert("Nom, prénom, username et mot de passe sont obligatoires.");
+            return;
+          }
+
+          const idMembre = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-m";
+          const idUser = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-u";
+
+          correcteurs.push({
+            idMembre,
+            idUser,
+            nomFr,
+            prenomFr,
+            nomAr,
+            prenomAr,
+            grade,
+            sexe,
+            email,
+            username,
+            role: "CORRECTEUR"
+          });
+
+          // TODO backend : POST /correcteurs -> crée membre + user (role CORRECTEUR)
+
+          renderCorrecteurs();
+          closeModal(modalCorrecteur);
+        });
+      }
+
+      function renderCorrecteurs() {
+        if (!correcteursBody) return;
+        correcteursBody.innerHTML = "";
+
+        correcteurs.forEach((c, index) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${c.nomFr} ${c.prenomFr}</td>
+            <td>${c.grade || ""}</td>
+            <td>${c.username}</td>
+            <td>${c.email || ""}</td>
+            <td class="table-actions">
+              <button class="btn-icon btn-icon-danger" data-remove-corr="${c.idUser}">
+                <i class="uil uil-trash"></i>
+              </button>
+            </td>
+          `;
+          correcteursBody.appendChild(tr);
+        });
+
+        correcteursBody.querySelectorAll("[data-remove-corr]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const idUser = btn.getAttribute("data-remove-corr");
+            correcteurs = correcteurs.filter((c) => c.idUser !== idUser);
+            renderCorrecteurs();
+          });
+        });
+      }
+
+      renderCorrecteurs();
+
+      /* ===== CELLULE D'ANONYMAT : user + lien cellule_anonymat ===== */
+      let anonymatMembers = [];
+
+      const anonymatBody = document.getElementById("anonymatBody");
+      const modalAnonymat = document.getElementById("modalAnonymat");
+      const btnOpenModalAnonymat = document.getElementById("btnOpenModalAnonymat");
+      const formAnonymat = document.getElementById("formAnonymat");
+      const sexeAnonyHidden = document.getElementById("sexeAnonymat");
+      const sexeToggleAnony = document.getElementById("sexeToggleAnonymat");
+      const anonyConcoursSelect = document.getElementById("anonyConcoursSelect");
+
+      // 🔁 Copier les concours depuis le select PV
+      const pvConcoursSelect = document.getElementById("pvConcoursSelect");
+      if (pvConcoursSelect && anonyConcoursSelect && anonyConcoursSelect.options.length === 1) {
+        Array.from(pvConcoursSelect.options).forEach((opt, idx) => {
+          if (idx === 0) return;
+          const clone = opt.cloneNode(true);
+          anonyConcoursSelect.appendChild(clone);
+        });
+      }
+
+      // Toggle sexe anonymat
+      if (sexeAnonyHidden && sexeToggleAnony) {
+        const sexButtons = sexeToggleAnony.querySelectorAll(".sex-option");
+        sexButtons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const value = btn.dataset.sexValue || "FEMME";
+            sexeAnonyHidden.value = value;
+            sexButtons.forEach((b) =>
+              b.classList.toggle("sex-option-active", b === btn)
+            );
+          });
+        });
+      }
+
+      // Ouvrir modale anonymat
+      if (btnOpenModalAnonymat && formAnonymat) {
+        btnOpenModalAnonymat.addEventListener("click", () => {
+          formAnonymat.reset();
+          if (sexeAnonyHidden && sexeToggleAnony) {
+            sexeAnonyHidden.value = "FEMME";
+            sexeToggleAnony.querySelectorAll(".sex-option").forEach((btn) => {
+              btn.classList.toggle(
+                "sex-option-active",
+                btn.dataset.sexValue === "FEMME"
+              );
+            });
+          }
+          openModal(modalAnonymat);
+        });
+      }
+
+      // Soumission création membre anonymat
+      if (formAnonymat) {
+        formAnonymat.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const concoursId = anonyConcoursSelect.value;
+          const concoursLabel =
+            anonyConcoursSelect.options[anonyConcoursSelect.selectedIndex]?.text || "";
+
+          const nomFr = document.getElementById("anonyNomFr").value.trim();
+          const prenomFr = document.getElementById("anonyPrenomFr").value.trim();
+          const grade = document.getElementById("anonyGrade").value.trim();
+          const sexe = document.getElementById("sexeAnonymat").value;
+          const email = document.getElementById("anonyEmail").value.trim();
+          const username = document.getElementById("anonyUsername").value.trim();
+          const password = document.getElementById("anonyPassword").value;
+
+          if (!concoursId) {
+            alert("Veuillez sélectionner un concours.");
+            return;
+          }
+          if (!nomFr || !prenomFr || !username || !password) {
+            alert("Nom, prénom, username et mot de passe sont obligatoires.");
+            return;
+          }
+
+          // Respect de la contrainte UNIQUE(id_concours)
+          if (anonymatMembers.some((m) => m.concoursId === concoursId)) {
+            alert("Une cellule d’anonymat est déjà définie pour ce concours.");
+            return;
+          }
+
+          const idMembre = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-m";
+          const idUser = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-u";
+          const idCellule = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-ca";
+
+          anonymatMembers.push({
+            idCellule,
+            concoursId,
+            concoursLabel,
+            idMembre,
+            idUser,
+            nomFr,
+            prenomFr,
+            grade,
+            sexe,
+            email,
+            username,
+            role: "CELLULE_ANONYMAT"
+          });
+
+          // TODO backend :
+          // 1) INSERT INTO membres (...)
+          // 2) INSERT INTO users (..., role = 'CELLULE_ANONYMAT', id_membre = idMembre)
+          // 3) INSERT INTO cellule_anonymat (id_cellule_anonymat, id_concours, id_user)
+
+          renderAnonymat();
+          closeModal(modalAnonymat);
+        });
+      }
+
+      function renderAnonymat() {
+        if (!anonymatBody) return;
+        anonymatBody.innerHTML = "";
+
+        anonymatMembers.forEach((m, index) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${m.concoursLabel}</td>
+            <td>${m.nomFr} ${m.prenomFr}</td>
+            <td>${m.username}</td>
+            <td>${m.email || ""}</td>
+            <td class="table-actions">
+              <button class="btn-icon btn-icon-danger" data-remove-anony="${m.idCellule}">
+                <i class="uil uil-trash"></i>
+              </button>
+            </td>
+          `;
+          anonymatBody.appendChild(tr);
+        });
+
+        anonymatBody.querySelectorAll("[data-remove-anony]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const idCellule = btn.getAttribute("data-remove-anony");
+            anonymatMembers = anonymatMembers.filter((m) => m.idCellule !== idCellule);
+            renderAnonymat();
+          });
+        });
+      }
+
+      renderAnonymat();
+
+      /* ===== RESPONSABLE CFD : création user (table users) ===== */
+      const formCfdResponsable = document.getElementById("formCfdResponsable");
+
+      if (formCfdResponsable) {
+        formCfdResponsable.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const concoursId = document.getElementById("cfdConcoursSelect").value;
+          const membreId = document.getElementById("cfdResponsableSelect").value;
+          const email = document.getElementById("cfdRespEmail").value.trim();
+          const username = document.getElementById("cfdRespUsername").value.trim();
+          const password = document.getElementById("cfdRespPassword").value;
+
+          if (!concoursId) {
+            alert("Veuillez sélectionner un concours.");
+            return;
+          }
+          if (!membreId) {
+            alert("Veuillez sélectionner le membre CFD responsable.");
+            return;
+          }
+          if (!username || !password) {
+            alert("Username et mot de passe sont obligatoires pour le compte utilisateur.");
+            return;
+          }
+
+          console.log("Créer responsable CFD :", {
+            concoursId,
+            membreId,
+            username,
+            email,
+            password,
+            role: "CFD"
+          });
+
+          alert("Responsable CFD enregistré (simulation front, à connecter au backend).");
+          formCfdResponsable.reset();
+        });
+      }
+
+      /* ===== PV : génération simple + impression ===== */
+      const pvTexteAr = document.getElementById("pvTexteAr");
+      const btnRegenererPv = document.getElementById("btnRegenererPv");
+      const btnImprimerPv = document.getElementById("btnImprimerPv");
+      const btnValiderPv = document.getElementById("btnValiderPv");
+
+      if (btnRegenererPv && pvTexteAr) {
+        btnRegenererPv.addEventListener("click", () => {
+          const concoursLabel = document.getElementById("pvConcoursSelect").value || "مسابقة الدكتوراه";
+          const dateDecision = document.getElementById("pvDateDecision").value || "....";
+          const numDecision = document.getElementById("pvNumDecision").value || "…/…/…";
+
+          pvTexteAr.value =
 `بمقتضى القوانين والتنظيمات السارية، 
 وبناء على محاضر لجان التكوين في الدكتوراه (CFD) ولجان التصحيح والترتيب،
 يقرر ما يلي:
@@ -775,19 +1674,22 @@
 تحت رقم ${numDecision}.
 
 يمكنك تعديل هذا النص قبل الطباعة.`;
-    });
-  }
+        });
+      }
 
-  if (btnImprimerPv) {
-    btnImprimerPv.addEventListener("click", () => window.print());
-  }
+      if (btnImprimerPv) {
+        btnImprimerPv.addEventListener("click", () => window.print());
+      }
 
-  if (btnValiderPv) {
-    btnValiderPv.addEventListener("click", () => {
-      alert("PV validé (plus tard : sauvegarde en base + génération PDF).");
+      if (btnValiderPv) {
+        btnValiderPv.addEventListener("click", () => {
+          alert("PV validé (plus tard : sauvegarde en base + génération PDF).");
+        });
+      }
+
+      // Vue par défaut = Accueil
+      showView("home");
     });
-  }
-});
   </script>
 
 </body>
