@@ -364,6 +364,12 @@
           <span>Dashboard</span>
         </a>
 
+
+        <a href="#" class="nav-item" data-view="pv">
+          <i class="uil uil-file-alt"></i>
+          <span>Informations generales</span>
+        </a>
+
         <a href="#" class="nav-item" data-view="cfd">
           <i class="uil uil-briefcase"></i>
           <span>Comité CFD</span>
@@ -388,10 +394,7 @@
           <span>Surveillants & salles</span>
         </a>
 
-        <a href="#" class="nav-item" data-view="pv">
-          <i class="uil uil-file-alt"></i>
-          <span>Génération des PV</span>
-        </a>
+        
       </nav>
     </aside>
 
@@ -452,10 +455,29 @@
 
     <!-- PIPELINE -->
     <div class="pipeline">
+
+
+      
+
+      <div class="pipeline-step" data-step="pv" data-go-view="pv">
+        <div class="pipeline-icon"><i class="uil uil-file-alt"></i></div>
+        <div class="pipeline-content"><span class="pipeline-title">Info</span></div>
+      </div>
+
+      <div class="pipeline-connector"></div>
+
       <div class="pipeline-step" data-step="cfd" data-go-view="cfd">
         <div class="pipeline-icon"><i class="uil uil-briefcase"></i></div>
         <div class="pipeline-content"><span class="pipeline-title">CFD</span></div>
       </div>
+
+      <div class="pipeline-connector"></div>
+
+      <div class="pipeline-step" data-step="sujets" data-go-view="sujet">
+        <div class="pipeline-icon"><i class="uil uil-file-alt"></i></div>
+        <div class="pipeline-content"><span class="pipeline-title">Sujets</span></div>
+      </div>
+
 
       <div class="pipeline-connector"></div>
 
@@ -468,7 +490,7 @@
 
       <div class="pipeline-step" data-step="anonymat" data-go-view="anonymat">
         <div class="pipeline-icon"><i class="uil uil-shield-check"></i></div>
-        <div class="pipeline-content"><span class="pipeline-title">Cellule d’anonymat</span></div>
+        <div class="pipeline-content"><span class="pipeline-title">Anonymat</span></div>
       </div>
 
       <div class="pipeline-connector"></div>
@@ -478,12 +500,9 @@
         <div class="pipeline-content"><span class="pipeline-title">Surveillants</span></div>
       </div>
 
-      <div class="pipeline-connector"></div>
+      
 
-      <div class="pipeline-step" data-step="pv" data-go-view="pv">
-        <div class="pipeline-icon"><i class="uil uil-file-alt"></i></div>
-        <div class="pipeline-content"><span class="pipeline-title">PV</span></div>
-      </div>
+      
     </div>
 
     <!-- GRILLE ACCUEIL -->
@@ -617,7 +636,7 @@
                 <i class="uil uil-file-alt"></i>
               </div>
               <div class="pipeline-content">
-                <span class="pipeline-title">PV</span>
+                <span class="pipeline-title">Info</span>
               </div>
             </div>
           </div>
@@ -818,6 +837,9 @@
           <i class="uil uil-plus"></i>
           <span>Ajouter un membre CFD</span>
         </button>
+            <!-- 🔽 Bouton d'impression des membres CFD -->
+   
+    <!-- 🔼 -->
       </div>
 
       <div class="table-wrapper slim">
@@ -865,11 +887,20 @@
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="primary-btn">
-          Suivant
+        <button type="submit" class="primary-btn" id="btnSaveCFD">
+          Enregistrer Le responsable CFD
           <i class="uil uil-angle-right"></i>
         </button>
       </div>
+
+       <div class="form-actions" style="text-align:right; margin-bottom:12px;">
+      <button type="button" class="primary-btn" id="btnPrintCfdMembers">
+        <i class="uil uil-print"></i> طباعة أعضاء لجنة الإشراف
+      </button>
+      
+
+    </div>
+    
     </form>
   </section>
 
@@ -1007,6 +1038,18 @@
       <div class="view-header-left">
         <div class="pipeline">
 
+
+          <!-- PV -->
+          <div class="pipeline-node" data-step="pv" data-go-view="pv">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-file-alt"></i>
+            </div>
+          </div>
+
+ <div class="pipeline-connector"></div>
+
+
+
           <!-- CFD -->
           <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
             <div class="setting-icon btn-icon-danger">
@@ -1053,14 +1096,6 @@
             </div>
           </div>
 
-          <div class="pipeline-connector"></div>
-
-          <!-- PV -->
-          <div class="pipeline-node" data-step="pv" data-go-view="pv">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-file-alt"></i>
-            </div>
-          </div>
 
         </div>
       </div>
@@ -1099,7 +1134,7 @@
         </button>
       </div>
 
-      <div class="table-wrapper">
+      <div class="table-wrapper slim">
         <table class="table">
           <thead>
             <tr>
@@ -1115,7 +1150,15 @@
             <!-- à remplir en JS -->
           </tbody>
         </table>
+
       </div>
+          <div class="form-actions" style="text-align:right; margin-bottom:12px;">
+      <button type="button" class="primary-btn" id="btnPrintCorrecteursMembers">
+        <i class="uil uil-print"></i>  طباعة أعضاء لجنة التصحيح
+      </button>
+      
+
+    </div>
     </div>
   </section>
 
@@ -1131,6 +1174,15 @@
       <!-- GAUCHE : pipeline -->
       <div class="view-header-left">
         <div class="pipeline">
+
+
+          <div class="pipeline-node" data-step="pv" data-go-view="pv">
+            <div class="setting-icon btn-icon-danger">
+              <i class="uil uil-file-alt"></i>
+            </div>
+          </div>
+
+          <div class="pipeline-connector"></div>
 
           <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
             <div class="setting-icon btn-icon-danger">
@@ -1174,13 +1226,7 @@
             </div>
           </div>
 
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="pv" data-go-view="pv">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-file-alt"></i>
-            </div>
-          </div>
+          
 
         </div>
       </div>
@@ -1235,6 +1281,14 @@
           <tbody id="anonymatBody"></tbody>
         </table>
       </div>
+
+        <div class="form-actions" style="text-align:right; margin-bottom:12px;">
+      <button type="button" class="primary-btn" id="btnPrintAnonymatMembers">
+        <i class="uil uil-print"></i>  طباعة أعضاء خليّة التشفير
+      </button>
+      
+
+    </div>
     </div>
   </section>
 
@@ -1370,23 +1424,35 @@
 
 </div>
 
-<!-- ============ VIEW: GENERATION DES PV / DECISION FINALE ============ -->
+<!-- ============ VIEW: INFORMATIONS GÉNÉRALES ============ -->
+
+
 <div class="view" id="view-pv" data-view="pv">
+ <!-- HEADER : pipeline + taux d’avancement -->
+  <section class="card dashboard-card view-header-card fade-in-up">
+    <div class="view-header-layout">
 
-  <!-- En-tête + pipeline + taux d’avancement -->
-  <section class="card dashboard-card pv-header-card fade-in-up">
-    <h2>Génération des PV & décision finale</h2>
-    <div class="pv-header-layout">
-      
+      <!-- GAUCHE : pipeline -->
+      <div class="view-header-left">
+        <div class="pipeline">
 
-      <!-- PIPELINE (gauche) -->
-      <div class="pv-pipeline-wrapper">
-        <div class="pipeline pv-pipeline">
+
+          <div class="pipeline-step" data-step="pv" data-go-view="pv">
+            <div class="pipeline-icon">
+              <i class="uil uil-file-alt"></i>
+              <div class="pipeline-content">
+              <span class="pipeline-title">Info</span>
+            </div>
+            </div>
+          </div>
+
+           <div class="pipeline-connector"></div>
 
           <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
             <div class="setting-icon btn-icon-danger">
               <i class="uil uil-briefcase"></i>
             </div>
+            
           </div>
 
           <div class="pipeline-connector"></div>
@@ -1421,102 +1487,171 @@
             </div>
           </div>
 
-          <div class="pipeline-connector"></div>
-
-          <!-- PV (active) -->
-          <div class="pipeline-step pipeline-step-active" data-step="pv" data-go-view="pv">
-            <div class="pipeline-icon">
-              <i class="uil uil-file-alt"></i>
-            </div>
-            <div class="pipeline-content">
-              <span class="pipeline-title">PV</span>
-              <span class="pipeline-meta">Étape finale</span>
-            </div>
-          </div>
 
         </div>
       </div>
 
-      <!-- TAUX D’AVANCEMENT (droite) -->
-      <div class="pv-progress-wrapper fade-in-up stagger-1">
-        <div class="dashboard-summary pv-summary">
-          <span class="summary-label">Taux d’avancement</span>
+      <!-- DROITE : taux d’avancement -->
+      <div class="view-header-right">
+        <div class="dashboard-header" style="align-items: center; padding: 10px 5px;">
+          <div class="dashboard-summary">
+            <span class="summary-label">Taux d’avancement</span>
 
-          <div class="summary-progress">
-            <span class="summary-value" id="dashPvProgress">0%</span>
-            <span class="summary-chip success">En cours</span>
+            <div class="summary-progress">
+              <span class="summary-value" id="dashGlobalProgress">0%</span>
+              <span class="summary-chip success">En cours</span>
+            </div>
+
+            <span class="summary-hint">Basé sur 6 étapes principales</span>
           </div>
-
-          <span class="summary-hint">Basé sur 6 étapes principales</span>
         </div>
       </div>
 
     </div>
   </section>
+  <section class="card view-main-card fade-in-up">
 
-
-  <section class="card pv-config-card fade-in-up stagger-1">
+   
     <div class="card-header">
-      
-      <p class="text-muted">
-        Génération automatique (en arabe) à partir des données (CFD, correcteurs, anonymat, surveillants,
-        classement, etc.),
-        tout en te laissant modifier les dates, numéros et détails avant impression.
-      </p>
-    </div>
-
-    <div class="card-body form-grid">
-     
-
-      <div class="form-group">
-        <label>Date de la décision / المقرر بتاريخ</label>
-        <input type="date" id="pvDateDecision" />
-      </div>
-
-      <div class="form-group">
-        <label>N° de la décision / المقرر رقم</label>
-        <input type="text" id="pvNumDecision" placeholder="…/…/1445 هـ / 2024 م" />
-      </div>
-    </div>
-  </section>
-
-  <!-- Texte PV -->
-  <section class="card pv-text-card fade-in-up stagger-2">
-    <div class="card-header pv-text-header">
       <div>
-        <h2>نص المقرر النهائي (قابل للتعديل)</h2>
-        <p class="text-muted small-text">سيتم توليد النص اعتمادا على المعطيات النهائية للمسابقة.</p>
+        <h2>Informations générales – Arrêté du doyen</h2>
+        <p class="text-muted">Ces informations seront utilisées pour générer les PV et décisions officielles.</p>
       </div>
-      <button type="button" class="btn btn-secondary btn-ghost" id="btnRegenererPv">
-        إعادة توليد النص
-      </button>
+      <h2 dir="rtl" style="font-family: 'Cairo','Tajawal',sans-serif;">المعلومات العامة</h2>
     </div>
 
-    <div class="card-body">
-      <textarea id="pvTexteAr" rows="12" class="pv-textarea" dir="rtl">
-سيتم توليد نص المقرر هنا اعتمادا على:
-- الجامعة والكلية والقسم
-- لجنة التكوين في الدكتوراه (CFD)
-- أعضاء خلية إخفاء الهوية
-- المراقبين ومسؤولي القاعات
-- محاضر التصحيح والترتيب النهائي للمترشحين
+    <form id="formInfosGenerales" class="card-body">
+<div class="form-grid"
+     style="display:grid; grid-template-columns:1fr 1fr; gap:30px; align-items:start;">
 
-يمكنك تعديل هذا النص يدويا قبل الطباعة.
-      </textarea>
 
-      <div class="form-actions pv-actions">
-        <button type="button" class="primary-btn" id="btnValiderPv">
-          <i class="uil uil-check-circle"></i> Valider le PV
-        </button>
-        <button type="button" class="btn btn-secondary" id="btnImprimerPv">
-          <i class="uil uil-print"></i> Imprimer
-        </button>
-      </div>
+
+
+  <!-- Champ AR -->
+  <div class="form-group" style="width:100%;" dir="rtl">
+    <label style="font-weight:600; display:block; margin-bottom:6px;" dir="rtl">
+      اسم الكلية (AR)
+    </label>
+
+    <div class="input-wrapper"
+         style="
+            display:flex;
+            align-items:center;
+            border-bottom:1px solid var(--input-border,#d1d5db);
+            height:46px;
+            padding:0 4px;
+         "
+         dir="rtl">
+
+      <i class="uil uil-university" 
+         style="font-size:18px; opacity:0.7; margin-left:8px;"></i>
+
+      <input 
+        type="text" 
+        id="infoNomFaculteAr"
+        placeholder="كلية الرياضيات والإعلام الآلي"
+        style="
+          flex:1;
+          border:none;
+          outline:none;
+          background:none;
+          font-family:'Cairo','Tajawal';
+        "
+      />
     </div>
-  </section>
+  </div>
+ 
+
+<!-- Ajouter un département (AR) -->
+<div class="form-group" style="width:100%;" dir="rtl">
+  <label style="font-weight:600; display:block; margin-bottom:6px;" dir="rtl">
+    القسم (AR)
+  </label>
+
+  <div class="input-wrapper"
+       style="
+          display:flex;
+          align-items:center;
+          border-bottom:1px solid var(--input-border,#d1d5db);
+          height:46px;
+          padding:0 4px;
+       "
+       dir="rtl">
+
+    <i class="uil uil-building"
+       style="font-size:18px; opacity:0.7; margin-left:8px;"></i>
+
+    <input
+      type="text"
+      id="newDepartementAr"
+      placeholder="مثال: قسم الفيزياء"
+      style="
+        flex:1;
+        border:none;
+        outline:none;
+        background:none;
+        font-family:'Cairo','Tajawal';
+      "
+    />
+
+    <button type="button"
+            id="btnAddDepartementAr"
+            style="
+              border:none;
+              background:#16a34a;
+              color:#fff;
+              padding:4px 10px;
+              border-radius:999px;
+              font-size:13px;
+              margin-right:6px;
+              cursor:pointer;
+            ">
+      + إضافة
+    </button>
+  </div>
+</div>
+<p id="paragraph" style="display:none;" dir="rtl">
+
+  <ul id="departementList"  dir="rtl"  style="font-family:'Cairo','Tajawal'; padding-right:20px;"></ul>
+</p>
 
 </div>
 
+      <!-- Texte intégral de l'arrêté (le textarea est en dessous) -->
+      <div class="form-group" style="margin-top:20px;">
+        <label dir="rtl" style="font-weight:bold;">النّص الكامل للمقررات (قابل للتعديل)</label>
+
+        <textarea id="infosTexteAr"
+  class="pv-textarea"
+  rows="10"
+  dir="rtl"
+  style="font-family:'Cairo','Tajawal',sans-serif; line-height:1.9; white-space:pre-wrap;"
+>
+
+إن السّيد عميد كلية الرياضيات والإعلام الآلي لدى جامعة فرحات عباس للعلوم والتكنولوجيا محمد بوضياف،
+- بمقتضى القانون رقم 75–58 المؤرخ في 26 سبتمبر 1975 المتضمن القانون المدني، المعدل والمتمم؛
+- وبمقتضى الأمر رقم 03–06 المؤرخ في 15 يوليو 2006 المتضمن القانون الأساسي العام للوظيفة العمومية، والمتمم؛
+- وبمقتضى المرسوم التنفيذي رقم 98–253 المؤرخ في 17/08/1998 المتضمن القانون الأساسي للجامعات؛
+- وبمقتضى المرسوم التنفيذي رقم 04–279 المؤرخ في 11/12/2004 الذي يحدد كيفيات تنظيم المسابقات؛
+- وبمقتضى المرسوم التنفيذي رقم 21–03 المؤرخ في 22 جمادى الأولى 1442 الموافق لـ 03 جوان 2021؛
+- وبمقتضى قرار مدير جامعة العلوم والتكنولوجيا محمد بوضياف المتعلق بتنظيم مسابقة الدكتوراه لسنة 2022؛
+- وبمقتضى محضر اجتماع لجنة التكوين في الدكتوراه المنعقد بتاريخ 03 ديسمبر 2022؛
+
+</textarea>
+      </div>
+
+      <div class="form-actions" style="text-align:right; margin-top:15px;">
+        <button id="btnSaveFaculte" type="submit" class="primary-btn">
+          <i class="uil uil-check-circle"></i> حفظ المعلومات
+        </button>
+      </div>
+    
+
+    </form>
+  </section>
+
+</div>
+ <section id="pvPrintArea" class="pv-print-area"></section>
     </main>
   </div>
 
@@ -1606,10 +1741,28 @@
             <input type="hidden" id="sexeMembre" value="FEMME" />
           </div>
         </div>
+        <!-- Rôle dans la CFD (AR) -->
+<div class="form-row">
+  <div class="form-group" style="width:100%;" dir="rtl">
+    <label style="font-weight:600; display:block; margin-bottom:6px;" dir="rtl">
+      الدور في لجنة التكوين في الدكتوراه
+    </label>
+    <div class="input-wrapper" dir="rtl">
+      <span class="field-icon"><i class="uil uil-briefcase"></i></span>
+      <!-- on remplira les options en JS -->
+      <select id="cfdRoleSelect">
+        <option value="">-- اختر الدور --</option>
+      </select>
+    </div>
+    <small style="font-size:12px; opacity:.8;">
+      الأدوار ترتبط بالأقسام التي أدخلتها في المعلومات العامة.
+    </small>
+  </div>
+</div>
 
         <div class="account-modal-footer modal-footer-full">
           <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" class="btn btn-primary" id="btnCfd">
             Enregistrer le membre CFD
           </button>
         </div>
@@ -1838,849 +1991,14 @@
       </form>
     </div>
   </div>
+   
 
   <script src="theme.js"></script>
 
-  <!-- ================== JS : Navigation + logique ================== -->
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
 
-
-     const calDays = document.getElementById("calDays");
-  const calMonthLabel = document.getElementById("calMonthLabel");
-  const calTodayLabel = document.getElementById("calTodayLabel");
-  const btnPrev = document.getElementById("calPrev");
-  const btnNext = document.getElementById("calNext");
-
-  let current = new Date();   // mois affiché
-
-  // formatte "Aujourd'hui : mercredi 5 mars 2025"
-  function updateTodayLabel() {
-    const now = new Date();
-    const label = now.toLocaleDateString("fr-FR", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-    calTodayLabel.textContent = "Aujourd'hui : " + label;
-  }
-
-  function renderCalendar() {
-    const year = current.getFullYear();
-    const month = current.getMonth(); // 0-11
-
-    // Titre mois + année
-    calMonthLabel.textContent = current.toLocaleString("en-US", {
-      month: "long",
-      year: "numeric",
-    });
-
-    calDays.innerHTML = "";
-
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const totalDays = lastDay.getDate();
-
-    // JS: 0 = dimanche, 1 = lundi, ... | on veut LUNDI en premier
-    let startIndex = firstDay.getDay(); // 0-6
-    // adapter pour que lundi = 0, mardi = 1, ..., dimanche = 6
-    startIndex = (startIndex + 6) % 7;
-
-    // Cases vides avant le 1er
-    for (let i = 0; i < startIndex; i++) {
-      const empty = document.createElement("div");
-      empty.className = "cal-day cal-day-empty";
-      calDays.appendChild(empty);
-    }
-
-    const today = new Date();
-
-    for (let d = 1; d <= totalDays; d++) {
-      const cell = document.createElement("div");
-      cell.className = "cal-day";
-      cell.textContent = d;
-
-      // est-ce aujourd'hui ?
-      if (
-        d === today.getDate() &&
-        month === today.getMonth() &&
-        year === today.getFullYear()
-      ) {
-        cell.classList.add("cal-day-today");
-      }
-
-      calDays.appendChild(cell);
-    }
-  }
-
-  btnPrev.addEventListener("click", () => {
-    current.setMonth(current.getMonth() - 1);
-    renderCalendar();
-  });
-
-  btnNext.addEventListener("click", () => {
-    current.setMonth(current.getMonth() + 1);
-    renderCalendar();
-  });
-
-  // initialisation
-  renderCalendar();
-  updateTodayLabel();
-
-    /* =========================
-       TOASTS
-       ========================= */
-    const toastArea = document.getElementById("toastArea");
-
-    function showToast(message, type = "info", duration = 3000) {
-      if (!toastArea) {
-        // fallback si la zone n'existe pas
-        alert(message);
-        return;
-      }
-
-      const toast = document.createElement("div");
-      toast.className = `toast toast-${type}`;
-      toast.textContent = message;
-      toastArea.appendChild(toast);
-
-      // apparition
-      requestAnimationFrame(() => {
-        toast.classList.add("toast-visible");
-      });
-
-      // disparition auto
-      setTimeout(() => {
-        toast.classList.remove("toast-visible");
-        setTimeout(() => toast.remove(), 300);
-      }, duration);
-    }
-
-    // ===== SEXE : toggle Femme / Homme pour CFD =====
-    const sexeHidden = document.getElementById("sexeMembre");
-    const sexeToggle = document.getElementById("sexeToggle");
-
-    if (sexeHidden && sexeToggle) {
-      const sexButtons = sexeToggle.querySelectorAll(".sex-option");
-
-      sexButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const value = btn.dataset.sexValue || "FEMME";
-
-          // 1) mettre à jour le hidden
-          sexeHidden.value = value;
-
-          // 2) switch visuel active
-          sexButtons.forEach((b) =>
-            b.classList.toggle(
-              "sex-option-active",
-              b === btn
-            )
-          );
-        });
-      });
-    }
-
-    /* ===== NAVIGATION SIDEBAR + PIPELINE ===== */
-    const navItems = document.querySelectorAll(".sidebar-nav .nav-item");
-    const views = document.querySelectorAll(".view");
-
-    // Ordre logique des étapes du concours
-    const stepOrder = ["cfd","sujet", "correcteurs", "anonymat", "surveillants", "pv"];
-    const pipelineSteps = document.querySelectorAll(".pipeline-step[data-step]");
-
-    function updatePipeline(viewName) {
-      if (!pipelineSteps.length) return;
-
-      // Si la vue n'est pas une étape, on enlève les états
-      if (!stepOrder.includes(viewName)) {
-        pipelineSteps.forEach(step => {
-          step.classList.remove("pipeline-step-active", "pipeline-step-done");
-        });
-        return;
-      }
-
-      const activeIndex = stepOrder.indexOf(viewName);
-
-      pipelineSteps.forEach(step => {
-        const stepName = step.dataset.step;
-        const index = stepOrder.indexOf(stepName);
-
-        step.classList.remove("pipeline-step-active", "pipeline-step-done");
-        if (index === -1) return;
-
-        if (index < activeIndex) {
-          step.classList.add("pipeline-step-done");
-        } else if (index === activeIndex) {
-          step.classList.add("pipeline-step-active");
-        }
-      });
-    }
-
-    function showView(viewName) {
-      // afficher/masquer les vues
-      views.forEach(v =>
-        v.classList.toggle("view-active", v.dataset.view === viewName)
-      );
-
-      // activer l'item de la sidebar
-      navItems.forEach(i =>
-        i.classList.toggle("nav-item-active", i.dataset.view === viewName)
-      );
-
-      // mettre à jour le pipeline
-      updatePipeline(viewName);
-    }
-
-    navItems.forEach(item => {
-      item.addEventListener("click", (e) => {
-        e.preventDefault();
-        const target = item.dataset.view;
-        showView(target);
-      });
-    });
-
-    // Tous les boutons / steps avec data-go-view (pipeline)
-    document.querySelectorAll("[data-go-view]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const target = btn.getAttribute("data-go-view");
-        showView(target);
-      });
-    });
-
-    /* ===== MODALS ===== */
-    const modalCfd = document.getElementById("modalCfdMembre");
-    const btnOpenModalCfdMembre = document.getElementById("btnOpenModalCfdMembre");
-
-    function openModal(modal) {
-      if (!modal) return;
-      modal.classList.add("modal-open");
-    }
-
-    function closeModal(modal) {
-      if (!modal) return;
-      modal.classList.remove("modal-open");
-    }
-
-    // Bouton + pour ouvrir la modale CFD
-    if (btnOpenModalCfdMembre) {
-      btnOpenModalCfdMembre.addEventListener("click", () => {
-        formCfdMembre.reset();
-
-        // reset sexe par défaut : FEMME
-        if (sexeHidden && sexeToggle) {
-          sexeHidden.value = "FEMME";
-          sexeToggle.querySelectorAll(".sex-option").forEach((btn) => {
-            btn.classList.toggle(
-              "sex-option-active",
-              btn.dataset.sexValue === "FEMME"
-            );
-          });
-        }
-
-        openModal(modalCfd);
-      });
-    }
-
-    // Tout élément avec data-close-modal ferme la modale parente
-    document.querySelectorAll("[data-close-modal]").forEach(el => {
-      el.addEventListener("click", () => {
-        const m = el.closest(".modal");
-        closeModal(m);
-      });
-    });
-
-    /* ===== ÉTAT FRONT CFD ===== */
-    // Représente les lignes de la table "membres" côté front
-    let cfdMembers = [];
-
-    const cfdMembersBody = document.getElementById("cfdMembersBody");
-    const cfdResponsableSelect = document.getElementById("cfdResponsableSelect");
-    const cfdCount = document.getElementById("cfdCount");
-    const cfdSearchInput = document.getElementById("cfdSearchInput");
-    const formCfdMembre = document.getElementById("formCfdMembre");
-
-    // Ouverture modale membre CFD (sécurité)
-    if (btnOpenModalCfdMembre && formCfdMembre) {
-      btnOpenModalCfdMembre.addEventListener("click", () => {
-        formCfdMembre.reset();
-
-        // reset sexe : FEMME
-        if (sexeHidden && sexeToggle) {
-          sexeHidden.value = "FEMME";
-          sexeToggle.querySelectorAll(".sex-option").forEach((btn) => {
-            btn.classList.toggle(
-              "sex-option-active",
-              btn.dataset.sexValue === "FEMME"
-            );
-          });
-        }
-
-        openModal(modalCfd);
-      });
-    }
-
-    // Soumission création membre CFD (table membres)
-    if (formCfdMembre) {
-      formCfdMembre.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const nomFr = document.getElementById("nomMembreFr").value.trim();
-        const prenomFr = document.getElementById("prenomMembreFr").value.trim();
-        const nomAr = document.getElementById("nomMembreAr").value.trim();
-        const prenomAr = document.getElementById("prenomMembreAr").value.trim();
-        const grade = document.getElementById("gradeMembre").value.trim();
-        const sexe = document.getElementById("sexeMembre").value;
-
-        if (!nomFr || !prenomFr) {
-          showToast("Nom et prénom (FR) sont obligatoires.", "warning");
-          return;
-        }
-
-        // côté backend ce sera gen_random_uuid(), ici on simule
-        const idMembre = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-m";
-
-        cfdMembers.push({
-          idMembre,
-          nomFr,
-          prenomFr,
-          nomAr,
-          prenomAr,
-          role: "" 
-        });
-
-        renderCfdMembers();
-        closeModal(modalCfd);
-        showToast("Membre CFD ajouté.", "success");
-      });
-    }
-
-    // Rendu de la table + combo responsable
-    function renderCfdMembers() {
-      if (!cfdMembersBody || !cfdResponsableSelect) return;
-
-      // filtre recherche
-      const search = (cfdSearchInput?.value || "").toLowerCase();
-
-      cfdMembersBody.innerHTML = "";
-      cfdResponsableSelect.innerHTML = '<option value="">-- Sélectionner un membre CFD --</option>';
-
-      let displayIndex = 0;
-
-      cfdMembers.forEach((m) => {
-        const fullNameFr = `${m.nomFr} ${m.prenomFr}`.toLowerCase();
-        const fullNameAr = `${m.prenomAr || ""} ${m.nomAr || ""}`.toLowerCase();
-
-        if (search && !fullNameFr.includes(search) && !fullNameAr.includes(search)) {
-          return;
-        }
-
-        displayIndex += 1;
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-      <td>${displayIndex}</td>
-      <td>${m.nomFr} ${m.prenomFr}</td>
-      <td dir="rtl">${(m.prenomAr || "")} ${(m.nomAr || "")}</td>
-      <td>
-        <select class="cfd-role-select" data-id="${m.idMembre}">
-          <option value="">-- Rôle --</option>
-          <option value="PRESIDENT" ${m.role === "PRESIDENT" ? "selected" : ""}>رئيس / Président</option>
-          <option value="MEMBRE" ${m.role === "MEMBRE" ? "selected" : ""}>عضو / Membre</option>
-          <option value="RAPPORTEUR" ${m.role === "RAPPORTEUR" ? "selected" : ""}>مقرر / Rapporteur</option>
-        </select>
-      </td>
-      <td class="table-actions">
-        <button class="btn-icon btn-icon-danger" data-remove="${m.idMembre}">
-          <i class="uil uil-trash"></i>
-        </button>
-      </td>
-    `;
-        cfdMembersBody.appendChild(tr);
-
-        // option dans la liste des responsables possibles
-        const opt = document.createElement("option");
-        opt.value = m.idMembre;
-        opt.textContent = `${m.nomFr} ${m.prenomFr}`;
-        cfdResponsableSelect.appendChild(opt);
-      });
-
-      if (cfdCount) cfdCount.textContent = String(cfdMembers.length);
-
-      // suppression
-      cfdMembersBody.querySelectorAll("[data-remove]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const idMembre = btn.getAttribute("data-remove");
-          cfdMembers = cfdMembers.filter((m) => m.idMembre !== idMembre);
-          renderCfdMembers();
-          showToast("Membre CFD supprimé.", "danger");
-        });
-      });
-
-      // 🆕 gestion du changement de rôle
-      cfdMembersBody.querySelectorAll(".cfd-role-select").forEach((select) => {
-        select.addEventListener("change", () => {
-          const id = select.dataset.id;
-          const roleValue = select.value;
-          const member = cfdMembers.find((m) => m.idMembre === id);
-          if (member) {
-            member.role = roleValue;
-            // plus tard : envoyer au backend
-          }
-        });
-      });
-    }
-    if (cfdSearchInput) {
-      cfdSearchInput.addEventListener("input", renderCfdMembers);
-    }
-
-    renderCfdMembers(); // initial (liste vide)
-
-    /* ===== CORRECTEURS : membres + users (role CORRECTEUR) ===== */
-    let correcteurs = [];
-
-    const correcteursBody = document.getElementById("correcteursBody");
-    const modalCorrecteur = document.getElementById("modalCorrecteur");
-    const btnOpenModalCorrecteur = document.getElementById("btnOpenModalCorrecteur");
-    const formCorrecteur = document.getElementById("formCorrecteur");
-    const sexeCorrHidden = document.getElementById("sexeCorrecteur");
-    const sexeToggleCorr = document.getElementById("sexeToggleCorrecteur");
-
-    // Toggle sexe correcteur
-    if (sexeCorrHidden && sexeToggleCorr) {
-      const sexButtons = sexeToggleCorr.querySelectorAll(".sex-option");
-      sexButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const value = btn.dataset.sexValue || "FEMME";
-          sexeCorrHidden.value = value;
-          sexButtons.forEach((b) =>
-            b.classList.toggle("sex-option-active", b === btn)
-          );
-        });
-      });
-    }
-
-    // Ouvrir la modale correcteur
-    if (btnOpenModalCorrecteur && formCorrecteur) {
-      btnOpenModalCorrecteur.addEventListener("click", () => {
-        formCorrecteur.reset();
-
-        // reset sexe = FEMME
-        if (sexeCorrHidden && sexeToggleCorr) {
-          sexeCorrHidden.value = "FEMME";
-          sexeToggleCorr.querySelectorAll(".sex-option").forEach((btn) => {
-            btn.classList.toggle(
-              "sex-option-active",
-              btn.dataset.sexValue === "FEMME"
-            );
-          });
-        }
-
-        openModal(modalCorrecteur);
-      });
-    }
-
-    // Soumission création correcteur : membre + user (role = CORRECTEUR)
-    if (formCorrecteur) {
-      formCorrecteur.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const nomFr = document.getElementById("corrNomFr").value.trim();
-        const prenomFr = document.getElementById("corrPrenomFr").value.trim();
-        const nomAr = document.getElementById("corrNomAr").value.trim();
-        const prenomAr = document.getElementById("corrPrenomAr").value.trim();
-        const grade = document.getElementById("corrGrade").value.trim();
-        const sexe = document.getElementById("sexeCorrecteur").value;
-        const email = document.getElementById("corrEmail").value.trim();
-      
-
-        if (!nomFr || !prenomFr  ) {
-          showToast("Nom, prénom  et mot de passe sont obligatoires.", "warning");
-          return;
-        }
-
-        const idMembre = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-m";
-        const idUser = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-u";
-
-        correcteurs.push({
-          idMembre,
-          idUser,
-          nomFr,
-          prenomFr,
-          nomAr,
-          prenomAr,
-          grade,
-          sexe,
-          email,
-          role: "CORRECTEUR"
-        });
-
-        // TODO backend : POST /correcteurs
-
-        renderCorrecteurs();
-        closeModal(modalCorrecteur);
-        showToast("Correcteur ajouté.", "success");
-      });
-    }
-
-    function renderCorrecteurs() {
-      if (!correcteursBody) return;
-      correcteursBody.innerHTML = "";
-
-      correcteurs.forEach((c, index) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${c.nomFr} ${c.prenomFr}</td>
-            <td>${c.grade || ""}</td>
-            <td>${c.email || ""}</td>
-            <td class="table-actions">
-              <button class="btn-icon btn-icon-danger" data-remove-corr="${c.idUser}">
-                <i class="uil uil-trash"></i>
-              </button>
-            </td>
-          `;
-        correcteursBody.appendChild(tr);
-      });
-
-      correcteursBody.querySelectorAll("[data-remove-corr]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const idUser = btn.getAttribute("data-remove-corr");
-          correcteurs = correcteurs.filter((c) => c.idUser !== idUser);
-          renderCorrecteurs();
-          showToast("Correcteur supprimé.", "danger");
-        });
-      });
-    }
-
-    renderCorrecteurs();
-
-    /* ===== CELLULE D'ANONYMAT : user + lien cellule_anonymat ===== */
-    let anonymatMembers = [];
-
-    const anonymatBody = document.getElementById("anonymatBody");
-    const modalAnonymat = document.getElementById("modalAnonymat");
-    const btnOpenModalAnonymat = document.getElementById("btnOpenModalAnonymat");
-    const formAnonymat = document.getElementById("formAnonymat");
-    const sexeAnonyHidden = document.getElementById("sexeAnonymat");
-    const sexeToggleAnony = document.getElementById("sexeToggleAnonymat");
-    const anonyConcoursSelect = document.getElementById("anonyConcoursSelect");
-
-    // 🔁 Copier les concours depuis le select PV
-    const pvConcoursSelect = document.getElementById("pvConcoursSelect");
-    if (pvConcoursSelect && anonyConcoursSelect && anonyConcoursSelect.options.length === 1) {
-      Array.from(pvConcoursSelect.options).forEach((opt, idx) => {
-        if (idx === 0) return;
-        const clone = opt.cloneNode(true);
-        anonyConcoursSelect.appendChild(clone);
-      });
-    }
-
-    // Toggle sexe anonymat
-    if (sexeAnonyHidden && sexeToggleAnony) {
-      const sexButtons = sexeToggleAnony.querySelectorAll(".sex-option");
-      sexButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const value = btn.dataset.sexValue || "FEMME";
-          sexeAnonyHidden.value = value;
-          sexButtons.forEach((b) =>
-            b.classList.toggle("sex-option-active", b === btn)
-          );
-        });
-      });
-    }
-
-    // Ouvrir modale anonymat
-    if (btnOpenModalAnonymat && formAnonymat) {
-      btnOpenModalAnonymat.addEventListener("click", () => {
-        formAnonymat.reset();
-        if (sexeAnonyHidden && sexeToggleAnony) {
-          sexeAnonyHidden.value = "FEMME";
-          sexeToggleAnony.querySelectorAll(".sex-option").forEach((btn) => {
-            btn.classList.toggle(
-              "sex-option-active",
-              btn.dataset.sexValue === "FEMME"
-            );
-          });
-        }
-        openModal(modalAnonymat);
-      });
-    }
-
-    // Soumission création membre anonymat
-    if (formAnonymat) {
-      formAnonymat.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const concoursId = anonyConcoursSelect.value;
-        const concoursLabel =
-          anonyConcoursSelect.options[anonyConcoursSelect.selectedIndex]?.text || "";
-
-        const nomFr = document.getElementById("anonyNomFr").value.trim();
-        const prenomFr = document.getElementById("anonyPrenomFr").value.trim();
-        const grade = document.getElementById("anonyGrade").value.trim();
-        const sexe = document.getElementById("sexeAnonymat").value;
-        const email = document.getElementById("anonyEmail").value.trim();
-
-        if (!concoursId) {
-          showToast("Veuillez sélectionner un concours.", "warning");
-          return;
-        }
-        if (!nomFr || !prenomFr ) {
-          showToast("Nom, prénom sont obligatoires.", "warning");
-          return;
-        }
-
-        // Respect de la contrainte UNIQUE(id_concours)
-        if (anonymatMembers.some((m) => m.concoursId === concoursId)) {
-          showToast("Une cellule d’anonymat est déjà définie pour ce concours.", "danger");
-          return;
-        }
-
-        const idMembre = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-m";
-        const idUser = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-u";
-        const idCellule = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-ca";
-
-        anonymatMembers.push({
-          idCellule,
-          concoursId,
-          concoursLabel,
-          idMembre,
-          idUser,
-          nomFr,
-          prenomFr,
-          grade,
-          sexe,
-          email,
-         
-          role: "CELLULE_ANONYMAT"
-        });
-
-        renderAnonymat();
-        closeModal(modalAnonymat);
-        showToast("Membre anonymat ajouté.", "success");
-      });
-    }
-
-    function renderAnonymat() {
-      if (!anonymatBody) return;
-      anonymatBody.innerHTML = "";
-
-      anonymatMembers.forEach((m, index) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${m.concoursLabel}</td>
-            <td>${m.nomFr} ${m.prenomFr}</td>
-           
-            <td>${m.email || ""}</td>
-            <td class="table-actions">
-              <button class="btn-icon btn-icon-danger" data-remove-anony="${m.idCellule}">
-                <i class="uil uil-trash"></i>
-              </button>
-            </td>
-          `;
-        anonymatBody.appendChild(tr);
-      });
-
-      anonymatBody.querySelectorAll("[data-remove-anony]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const idCellule = btn.getAttribute("data-remove-anony");
-          anonymatMembers = anonymatMembers.filter((m) => m.idCellule !== idCellule);
-          renderAnonymat();
-          showToast("Membre anonymat supprimé.", "danger");
-        });
-      });
-    }
-
-    renderAnonymat();
-
-    /* ===== RESPONSABLE CFD : création user (table users) ===== */
-    const formCfdResponsable = document.getElementById("formCfdResponsable");
-
-    if (formCfdResponsable) {
-      formCfdResponsable.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const concoursId = document.getElementById("cfdConcoursSelect").value;
-        const membreId = document.getElementById("cfdResponsableSelect").value;
-        const email = document.getElementById("cfdRespEmail").value.trim();
-        
-        if (!concoursId) {
-          showToast("Veuillez sélectionner un concours.", "warning");
-          return;
-        }
-        if (!membreId) {
-          showToast("Veuillez sélectionner le membre CFD responsable.", "warning");
-          return;
-        }
-       
-
-        console.log("Créer responsable CFD :", {
-          concoursId,
-          membreId,
-          email,
-          role: "CFD"
-        });
-
-        showToast("Responsable CFD enregistré (simulation front).", "success");
-        formCfdResponsable.reset();
-      });
-    }
-
-    /* ===== PV : génération simple + impression ===== */
-    const pvTexteAr = document.getElementById("pvTexteAr");
-    const btnRegenererPv = document.getElementById("btnRegenererPv");
-    const btnImprimerPv = document.getElementById("btnImprimerPv");
-    const btnValiderPv = document.getElementById("btnValiderPv");
-
-    if (btnRegenererPv && pvTexteAr) {
-      btnRegenererPv.addEventListener("click", () => {
-        const concoursLabel =  "مسابقة الدكتوراه";
-        const dateDecision = document.getElementById("pvDateDecision").value || "....";
-        const numDecision = document.getElementById("pvNumDecision").value || "…/…/…";
-
-        pvTexteAr.value =
-`بمقتضى القوانين والتنظيمات السارية، 
-وبناء على محاضر لجان التكوين في الدكتوراه (CFD) ولجان التصحيح والترتيب،
-يقرر ما يلي:
-
-المادة 1: يعلن عن نتائج مسابقة الالتحاق بالتكوين في الطور الثالث (دكتوراه) بعنوان السنة الجامعية ${concoursLabel}.
-المادة 2: تضبط قائمة المترشحين الناجحين نهائيا كما هو مبين في الملحق المرفق بهذا المقرر.
-المادة 3: يكلف السيد/السيدة عميد الكلية بتنفيذ هذا المقرر الذي يسري ابتداء من تاريخ ${dateDecision} 
-تحت رقم ${numDecision}.
-
-يمكنك تعديل هذا النص قبل الطباعة.`;
-        showToast("نص المقرر أُعيد توليده.", "info");
-      });
-    }
-
-    if (btnImprimerPv) {
-      btnImprimerPv.addEventListener("click", () => {
-        window.print();
-        showToast("Ouverture de la boîte de dialogue d’impression.", "info");
-      });
-    }
-
-    if (btnValiderPv) {
-      btnValiderPv.addEventListener("click", () => {
-        showToast("PV validé (plus tard : sauvegarde + génération PDF).", "success");
-      });
-    }
-
-
-    showView("home");
-
-    // ====== GRAPHIQUE : Répartition des candidats par faculté ======
-function initFaculteChart() {
-  const canvas = document.getElementById("chartFaculte");
-  if (!canvas) return;
-
-  const ctx = canvas.getContext("2d");
-
-  const labels = [
-    "Sciences Exactes",
-    "Sciences & Technologie",
-    "Génie Civil",
-    "Chimie",
-    "Lettres & Langues"
-  ];
-
-  const dataValues = [450, 340, 235, 155, 120];
-
-  const colors = [
-    "#4f46e5", // bleu
-    "#a855f7", // violet
-    "#f97316", // orange
-    "#ec4899", // rose
-    "#22c55e"  // vert
-  ];
-
-  // Optionnel : un léger gradient vertical pour chaque barre
-  const backgroundColors = colors.map((c) => {
-    const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    grad.addColorStop(0, c);
-    grad.addColorStop(1, c + "33"); // couleur + transparence
-    return grad;
-  });
-
-  new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels,
-      datasets: [
-        {
-          label: "Nombre de candidats",
-          data: dataValues,
-          backgroundColor: backgroundColors,
-          borderRadius: 10,
-          borderSkipped: false,
-          maxBarThickness: 40
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      layout: {
-        padding: { top: 10, right: 10, left: 0, bottom: 0 }
-      },
-      plugins: {
-        legend: {
-          display: false
-        },
-        tooltip: {
-          backgroundColor: "#111827",
-          titleFont: { size: 12, weight: "600" },
-          bodyFont: { size: 11 },
-          padding: 10,
-          cornerRadius: 10
-        }
-      },
-      scales: {
-        x: {
-          ticks: {
-            autoSkip: false,
-            maxRotation: 40,
-            minRotation: 40,
-            font: { size: 11 }
-          },
-          grid: { display: false }
-        },
-        y: {
-          beginAtZero: true,
-          ticks: {
-            stepSize: 50,
-            font: { size: 11 }
-          },
-          grid: {
-            color: "#e5e7eb"
-          }
-        }
-      },
-      animation: {
-        duration: 900,
-        easing: "easeOutQuart",
-        delay: (ctx) => {
-          // petite animation échelonnée barre par barre
-          let delay = 0;
-          if (ctx.type === "data" && ctx.mode === "default") {
-            delay = ctx.dataIndex * 120;
-          }
-          return delay;
-        }
-      }
-    }
-  });
-}
-
-// Appel après tout le reste
-initFaculteChart();
-  });
-</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<script src="doyen.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
 
 </html>
