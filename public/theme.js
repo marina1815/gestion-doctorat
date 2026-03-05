@@ -88,8 +88,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
             });
 
-            // Nettoyage côté front
-            localStorage.removeItem("user");
+           
+           localStorage.removeItem("dg-user"); 
 
             showToast("Déconnexion réussie", "success", 1500);
 

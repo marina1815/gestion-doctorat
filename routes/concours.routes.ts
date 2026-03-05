@@ -7,7 +7,8 @@ import {
   getConcoursByDepartement,
   updateConcours,
   deleteConcours,
-  
+  getConcoursByViceDoyen,
+  getConcoursByDoyen,
 } from "../controllers/concours.controller";
 
 import {
@@ -26,6 +27,16 @@ router.get(
  authMiddleware,
   getConcours
 );
+
+router.get(
+  "/vicedoyen/:idUser",
+  getConcoursByViceDoyen
+);
+router.get(
+  "/doyen/:idUser",
+  getConcoursByDoyen
+);
+
 
 
 

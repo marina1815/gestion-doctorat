@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Dashboard Vice Doyen | Gestion Doctorale</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+</head>
+
+<body>
+<div id="toastArea" class="toast-area"></div>
+
+<div class="app-layout">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-icon">
+                <img id="mainLogo" src="img/iconlight.png" alt="Logo USTO" class="logo-img" />
+            </div>
+            <div class="logo-text">
+                <span class="logo-title">Gestion Doctorale</span>
+                <span class="logo-subtitle">USTO MB</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <p class="sidebar-section-title">Menu</p>
+
+            <!-- Accueil / Dashboard -->
+            <a href="vice-doyen-dashboard.html" class="nav-item active">
+                <i class="uil uil-estate"></i>
+                <span>Accueil</span>
+            </a>
+
+            <!-- Import candidats -->
+            <a href="vice-doyen-import.html" class="nav-item">
+                <i class="uil uil-upload-alt nav-icon"></i>
+                <span>Import candidats</span>
+            </a>
+
+            <!-- Calendrier -->
+            <a href="vice-doyen-calendrier.html" class="nav-item">
+                <i class="uil uil-calendar-alt"></i>
+                <span>Calendrier des concours</span>
+            </a>
+
+            <!-- Historique -->
+            <a href="vice-doyen-historique.html" class="nav-item">
+                <i class="uil uil-history nav-icon"></i>
+                <span>Historique des actions</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- ===== MAIN ===== -->
+    <main class="main">
+
+        <!-- ===== TOPBAR ===== -->
+        <header class="topbar">
+            <div class="search-wrapper">
+                <i class="uil uil-search"></i>
+                <input type="text" placeholder="Rechercher" />
+            </div>
+
+            <div class="topbar-actions">
+                <button class="icon-btn">
+                    <i class="uil uil-envelope"></i>
+                </button>
+                <button class="icon-btn notification-btn">
+                    <i class="uil uil-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <button id="themeToggle" class="icon-btn">
+                    <i id="themeIcon" class="uil uil-moon"></i>
+                </button>
+
+                <div class="user-menu">
+                    <button class="user-menu-trigger" id="userMenuBtn">
+                        <img src="img/user.png" alt="Vice Doyen" class="user-avatar">
+                        <span class="user-name">Vice Doyen</span>
+                        <i class="uil uil-angle-down"></i>
+                    </button>
+
+                    <div class="user-menu-dropdown" id="userMenuDropdown">
+                        <button class="user-menu-item" id="logoutBtn">
+                            <i class="uil uil-signout"></i>
+                            Déconnexion
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ===== CONTENT ===== -->
+        <section class="content">
+
+            <!-- En-tête -->
+            <div class="content-header">
+                <div>
+                    <h1>Dashboard Vice Doyen</h1>
+                    <p class="content-subtitle">
+                        Vue globale des concours de doctorat, des candidats et des validations.
+                    </p>
+                </div>
+
+                <!-- Filtres globaux -->
+                <div class="filters-inline">
+                    <div class="filter-field">
+                        <label for="anneeSelect">Année universitaire</label>
+                        <select id="anneeSelect">
+                            <option>2024 / 2025</option>
+                            <option>2023 / 2024</option>
+                            <option>2022 / 2023</option>
+                        </select>
+                    </div>
+                    <div class="filter-field">
+                        <label for="faculteSelect">Faculté</label>
+                        <select id="faculteSelect">
+                            <option value="all">Toutes les facultés</option>
+                            <option>Sciences Exactes</option>
+                            <option>Sciences & Technologie</option>
+                            <option>Génie Civil</option>
+                            <option>Lettres & Langues</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistiques rapides -->
+            <section class="stats-grid">
+                <article class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Concours actifs</span>
+                        <span class="stat-icon icon-blue">
+                            <i class="uil uil-clipboard-alt"></i>
+                        </span>
+                    </div>
+                    <div class="stat-value">4</div>
+                    <div class="stat-footer">
+                        <span class="stat-note">Année universitaire 2024/2025</span>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Candidats inscrits</span>
+                        <span class="stat-icon icon-purple">
+                            <i class="uil uil-users-alt"></i>
+                        </span>
+                    </div>
+                    <div class="stat-value">1 238</div>
+                    <div class="stat-footer">
+                        <span class="stat-note">toutes facultés confondues</span>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">PV en attente</span>
+                        <span class="stat-icon icon-orange">
+                            <i class="uil uil-file-info-alt"></i>
+                        </span>
+                    </div>
+                    <div class="stat-value">3</div>
+                    <div class="stat-footer">
+                        <span class="stat-note">à valider cette semaine</span>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">PV validés</span>
+                        <span class="stat-icon icon-green">
+                            <i class="uil uil-check-circle"></i>
+                        </span>
+                    </div>
+                    <div class="stat-value">6</div>
+                    <div class="stat-footer">
+                        <span class="stat-note">sur les 3 dernières années</span>
+                    </div>
+                </article>
+            </section>
+
+            <!-- Concours + À faire aujourd'hui -->
+            <section class="two-column">
+                <!-- Prochains concours -->
+                <article class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2>Prochains concours</h2>
+                            <span class="card-subtitle">
+                                Concours planifiés pour l’année universitaire sélectionnée.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-wrapper">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Concours</th>
+                                    <th>Faculté</th>
+                                    <th>Département</th>
+                                    <th>Date</th>
+                                    <th>Statut</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Doctorat 2024 – Informatique</td>
+                                    <td>Sciences Exactes</td>
+                                    <td>Informatique</td>
+                                    <td>05/03/2026</td>
+                                    <td><span class="status-pill status-open">Actif</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Doctorat 2024 – Électronique</td>
+                                    <td>Sciences & Technologie</td>
+                                    <td>Électronique</td>
+                                    <td>12/03/2026</td>
+                                    <td><span class="status-pill status-prep">Préparation</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Doctorat 2024 – Génie Civil</td>
+                                    <td>Génie Civil</td>
+                                    <td>Structures</td>
+                                    <td>20/03/2026</td>
+                                    <td><span class="status-pill status-wait">En attente</span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- À faire aujourd'hui -->
+                <article class="card todo-card">
+                    <div class="card-header">
+                        <div>
+                            <h2>À faire aujourd’hui</h2>
+                            <span class="card-subtitle">
+                                Actions prioritaires pour le Vice Doyen.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="todo-list">
+                            <li class="todo-item">
+                                <span class="todo-dot todo-high"></span>
+                                <div class="todo-text">
+                                    Valider l’import des 568 candidats (Faculté des Sciences – Informatique).
+                                </div>
+                                <button class="link-btn small">
+                                    Ouvrir l’import
+                                    <i class="uil uil-angle-right"></i>
+                                </button>
+                            </li>
+                            <li class="todo-item">
+                                <span class="todo-dot todo-medium"></span>
+                                <div class="todo-text">
+                                    Vérifier les dates de concours pour Génie Civil et Électronique.
+                                </div>
+                            </li>
+                            <li class="todo-item">
+                                <span class="todo-dot todo-low"></span>
+                                <div class="todo-text">
+                                    Consulter les PV en attente de validation pour Chimie.
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </article>
+            </section>
+
+            <!-- Analytique + Activités récentes -->
+            <section class="two-column">
+                <!-- Analytique rapide -->
+                <article class="card analytics-card">
+                    <div class="card-header">
+                        <div>
+                            <h2>Analytique rapide</h2>
+                            <span class="card-subtitle">
+                                Vue d’ensemble des candidats inscrits et de leur répartition par statut.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Ici on utilise une image statique du graphique -->
+                        <img src="img/analytics-rapid.png"
+                             alt="Graphique des candidats par faculté et par statut"
+                             class="analytics-image" />
+                        <!--
+                           Plus tard, si tu veux un vrai graphique dynamique,
+                           tu peux remplacer l'image par 2 <canvas> pour Chart.js :
+                           <div class="charts-grid">
+                               <canvas id="candidatesByFacultyChart"></canvas>
+                               <canvas id="statusDistributionChart"></canvas>
+                           </div>
+                        -->
+                    </div>
+                </article>
+
+                <!-- Activités récentes -->
+                <article class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2>Activités récentes</h2>
+                            <span class="card-subtitle">
+                                Dernières opérations effectuées sur les concours et candidats.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="timeline">
+                            <li class="timeline-item">
+                                <span class="timeline-dot status-open"></span>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">Import des candidats terminé</div>
+                                    <div class="timeline-text">
+                                        568 candidats importés pour Doctorat INFO & Math – Faculté des Sciences.
+                                    </div>
+                                    <span class="timeline-meta">Aujourd’hui • 10:34</span>
+                                </div>
+                            </li>
+                            <li class="timeline-item">
+                                <span class="timeline-dot status-prep"></span>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">Mise à jour des dates des concours</div>
+                                    <div class="timeline-text">
+                                        Dates ajustées pour Génie Civil et Électronique.
+                                    </div>
+                                    <span class="timeline-meta">Hier • 16:20</span>
+                                </div>
+                            </li>
+                            <li class="timeline-item">
+                                <span class="timeline-dot status-closed"></span>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">PV validé – Doctorat Chimie</div>
+                                    <div class="timeline-text">
+                                        PV final signé et transmis au Rectorat.
+                                    </div>
+                                    <span class="timeline-meta">Il y a 3 jours</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </article>
+            </section>
+
+        </section>
+    </main>
+</div>
+
+<script src="vice-doyen-accueil.js"></script>
+<script src="theme.js"></script>
+</body>
+
+</html>

@@ -370,141 +370,190 @@
         </button>
     </div>
 
-    <form id="accountForm" class="account-form">
+   <form id="accountForm" class="account-form">
 
-    <div class="form-row">
-        <div class="form-group">
-            <label>Nom</label>
-            <input type="text" id="lastName" required>
-        </div>
-
-        <div class="form-group">
-            <label>Prénom</label>
-            <input type="text" id="firstName" required>
-        </div>
+  <!-- Nom / Prénom FR -->
+  <div class="form-row">
+    <div class="form-group">
+      <label>Nom</label>
+      <div class="input-wrapper">
+        <span class="field-icon"><i class="uil uil-user"></i></span>
+        <input type="text" id="lastName" required placeholder="Ex : Djabar">
+      </div>
     </div>
 
-    <div class="form-row">
-        <div class="form-group">
-            <label>اللقب</label>
-            <input type="text" id="lastNameAr" dir="rtl" required>
-        </div>
+    <div class="form-group">
+      <label>Prénom</label>
+      <div class="input-wrapper">
+        <span class="field-icon"><i class="uil uil-user"></i></span>
+        <input type="text" id="firstName" required placeholder="Ex : Bensalem">
+      </div>
+    </div>
+  </div>
 
-        <div class="form-group">
-            <label>الاسم</label>
-            <input type="text" id="firstNameAr" dir="rtl" required>
-        </div>
+  <!-- Nom / Prénom AR -->
+  <div class="form-row">
+    <div class="form-group">
+      <label dir="rtl">اللقب</label>
+      <div class="input-wrapper" dir="rtl">
+        <span class="field-icon"><i class="uil uil-user"></i></span>
+        <input type="text" id="lastNameAr" dir="rtl" required placeholder="مثال: جبار">
+      </div>
     </div>
 
-    <div class="form-row">
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" id="newEmail" required>
-        </div>
+    <div class="form-group">
+      <label dir="rtl">الاسم</label>
+      <div class="input-wrapper" dir="rtl">
+        <span class="field-icon"><i class="uil uil-user"></i></span>
+        <input type="text" id="firstNameAr" dir="rtl" required placeholder="مثال: بن سالم">
+      </div>
+    </div>
+  </div>
 
-        <div class="form-group">
-            <label>Nom d’utilisateur</label>
-            <input type="text" id="newUsername" required>
-        </div>
+  <!-- Email / Username -->
+  <div class="form-row">
+    <div class="form-group">
+      <label>Email</label>
+      <div class="input-wrapper">
+        <span class="field-icon"><i class="uil uil-envelope"></i></span>
+        <input type="email" id="newEmail" required placeholder="exemple@univ.dz">
+      </div>
     </div>
 
-    <div class="form-row">
-        <div class="form-group">
-            <label>Mot de passe</label>
-            <input type="password" id="newPassword" required>
-        </div>
+    <div class="form-group">
+      <label>Nom d’utilisateur</label>
+      <div class="input-wrapper">
+        <span class="field-icon"><i class="uil uil-at"></i></span>
+        <input type="text" id="newUsername" required placeholder="username">
+      </div>
+    </div>
+  </div>
 
-        <div class="form-group">
-            <label>Sexe</label>
-            <select id="gender" required>
-                <option value="HOMME">Homme</option>
-                <option value="FEMME">Femme</option>
-            </select>
-        </div>
+  <!-- Mot de passe / Sexe -->
+  <div class="form-row">
+    <div class="form-group">
+      <label>Mot de passe</label>
+      <div class="input-wrapper">
+        <span class="field-icon"><i class="uil uil-lock-alt"></i></span>
+        <input type="password" id="newPassword" required placeholder="••••••••">
+      </div>
     </div>
 
-    <div class="form-row">
-        <div class="form-group">
-            <label>Grade</label>
-            <select id="grade" required>
-                <option value="MAITRE_ASSISTANT_A">Maître Assistant A</option>
-                <option value="MAITRE_ASSISTANT_A">Maître Assistant B</option>
-                <option value="MAITRE_DE_CONFERENCES_A">Maître de Conférences A</option>
-                <option value="MAITRE_DE_CONFERENCES_A">Maître de Conférences B</option>
-                <option value="PROFESSEUR">Professeur</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Rôle</label>
-            <select id="newRole" required>
-                <option value="ADMIN">Admin</option>
-                            <option value="CHEFDEPARTEMENT">Chef de Département</option>
-                            <option value="CFD">CFD</option>
-
-                            <option value="CELLULE_ANONYMAT">Cellule d’anonymat</option>
-                            <option value="CORRECTEUR">Correcteur</option>
-
-                            <option value="RESPONSABLE_SALLE">Responsable de Salle</option>
-
-                            <option value="DOYEN">Doyen</option>
-                            <option value="VICEDOYEN">Vice-Doyen</option>
-                            <option value="RECTEUR">Recteur</option>
-            </select>
-        </div>
+    <div class="form-group">
+      <label>Sexe</label>
+      <div class="input-wrapper">
+        <span class="field-icon"><i class="uil uil-venus-mars"></i></span>
+        <select id="gender" required>
+          <option value="HOMME">Homme</option>
+          <option value="FEMME">Femme</option>
+        </select>
+      </div>
     </div>
-        <!-- Champs dépendants du rôle -->
-    <div class="form-row role-extra-row" id="rowSalle" style="display: none;">
-        <div class="form-group">
-            <label>Salle</label>
-            <select id="salleSelect">
-                <option value="">Sélectionner une salle</option>
-                <!-- À remplir dynamiquement ou en dur -->
-                <option value="S1">Salle 1</option>
-                <option value="S2">Salle 2</option>
-            </select>
-        </div>
+  </div>
+
+  <!-- Grade / Rôle -->
+  <div class="form-row">
+    <div class="form-group">
+      <label>Grade</label>
+      <div class="input-wrapper">
+        <span class="field-icon"><i class="uil uil-graduation-cap"></i></span>
+        <select id="grade" required>
+          <option value="MAITRE_ASSISTANT_A">Maître Assistant A</option>
+          <option value="MAITRE_ASSISTANT_A">Maître Assistant B</option>
+          <option value="MAITRE_DE_CONFERENCES_A">Maître de Conférences A</option>
+          <option value="MAITRE_DE_CONFERENCES_A">Maître de Conférences B</option>
+          <option value="PROFESSEUR">Professeur</option>
+        </select>
+      </div>
     </div>
 
-    <div class="form-row role-extra-row" id="rowFaculte" style="display: none;">
-        <div class="form-group">
-            <label>Faculté</label>
-            <select id="faculteSelect">
-                <option value="">Sélectionner une faculté</option>
-                <!-- Exemple, à adapter -->
-                <option value="FST">Faculté des Sciences et Technologies</option>
-                <option value="FMI">Faculté de Math & Info</option>
-            </select>
-        </div>
+    <div class="form-group">
+      <label>Rôle</label>
+      <div class="input-wrapper">
+        <span class="field-icon"><i class="uil uil-users-alt"></i></span>
+        <select id="newRole" required>
+          <option value="ADMIN">Admin</option>
+          <option value="CHEFDEPARTEMENT">Chef de Département</option>
+          <option value="CFD">CFD</option>
+          <option value="CELLULE_ANONYMAT">Cellule d’anonymat</option>
+          <option value="CORRECTEUR">Correcteur</option>
+          <option value="RESPONSABLE_SALLE">Responsable de Salle</option>
+          <option value="DOYEN">Doyen</option>
+          <option value="VICEDOYEN">Vice-Doyen</option>
+          <option value="RECTEUR">Recteur</option>
+        </select>
+      </div>
     </div>
+  </div>
 
-    <div class="form-row role-extra-row" id="rowDepartement" style="display: none;">
-        <div class="form-group">
-            <label>Département</label>
-            <select id="departementSelect">
-                <option value="">Sélectionner un département</option>
-                <!-- Exemple, à adapter -->
-                <option value="INFO">Informatique</option>
-                <option value="ELEC">Électronique</option>
-            </select>
-        </div>
+  <!-- Champs dépendants du rôle : Salle -->
+  <div class="form-row role-extra-row" id="rowSalle" style="display: none;">
+    <div class="form-group">
+      <label>Salle</label>
+      <div class="input-wrapper">
+        <span class="field-icon"><i class="uil uil-building"></i></span>
+        <select id="salleSelect">
+          <option value="">Sélectionner une salle</option>
+          <option value="S1">Salle 1</option>
+          <option value="S2">Salle 2</option>
+        </select>
+      </div>
     </div>
+  </div>
 
-    <div class="form-row role-extra-row" id="rowConcours" style="display: none;">
-        <div class="form-group">
-            <label>Concours</label>
-            <select id="concoursSelect">
-                <option value="">Sélectionner un concours</option>
-             
-                <option value="C2025-INFO">Concours 2025 - Informatique</option>
-                <option value="C2025-ELEC">Concours 2025 - Électronique</option>
-            </select>
-        </div>
+  <!-- Faculté -->
+  <div class="form-row role-extra-row" id="rowFaculte" style="display: none;">
+    <div class="form-group">
+      <label>Faculté</label>
+      <div class="input-wrapper">
+        <span class="field-icon"><i class="uil uil-university"></i></span>
+        <select id="faculteSelect">
+          <option value="">Sélectionner une faculté</option>
+          <option value="FST">Faculté des Sciences et Technologies</option>
+          <option value="FMI">Faculté de Math & Info</option>
+        </select>
+      </div>
     </div>
+  </div>
 
-    <div class="account-modal-footer">
-        <button type="submit" class="btn btn-primary accounts-new-btn">Créer</button>
+  <!-- Département -->
+  <div class="form-row role-extra-row" id="rowDepartement" style="display: none;">
+    <div class="form-group">
+      <label>Département</label>
+      <div class="input-wrapper">
+        <span class="field-icon"><i class="uil uil-books"></i></span>
+        <select id="departementSelect">
+          <option value="">Sélectionner un département</option>
+          <option value="INFO">Informatique</option>
+          <option value="ELEC">Électronique</option>
+        </select>
+      </div>
     </div>
+  </div>
+
+  <!-- Concours -->
+  <div class="form-row role-extra-row" id="rowConcours" style="display: none;">
+    <div class="form-group">
+      <label>Concours</label>
+      <div class="input-wrapper">
+        <span class="field-icon"><i class="uil uil-file-alt"></i></span>
+        <select id="concoursSelect">
+          <option value="">Sélectionner un concours</option>
+          <option value="C2025-INFO">Concours 2025 - Informatique</option>
+          <option value="C2025-ELEC">Concours 2025 - Électronique</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="account-modal-footer">
+    <button type="submit" class="btn btn-primary accounts-new-btn">
+      <i class="uil uil-user-plus"></i>
+      Créer
+    </button>
+  </div>
+
 </form>
 </div>
             </div>

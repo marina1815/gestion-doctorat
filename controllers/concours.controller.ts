@@ -230,6 +230,12 @@ export async function getDepartementsByConcours(req: Request, res: Response) {
             [idConcours]
         );
 
+
+
+
+
+
+
         if (result.rowCount === 0) {
             return res.status(404).json({ error: "Concours introuvable" });
         }
@@ -242,6 +248,122 @@ export async function getDepartementsByConcours(req: Request, res: Response) {
         });
     } catch (err) {
         console.error("Error getDepartementsByConcours:", err);
+        return res.status(500).json({ error: "Erreur serveur" });
+    }
+}
+
+export async function getConcoursByViceDoyen(req: Request, res: Response) {
+    try {
+        const { idUser } = req.params;
+
+        if (!idUser) {
+            return res.status(400).json({ error: "idUser manquant" });
+        }
+
+        const result = await pool.query<{
+            date_concours : Date ;
+            id_faculte: string;
+            nom_faculte: string;
+            id_departement: string;
+            nom_departement: string;
+            id_concours: string;
+            nom_councours: string;
+            id_specialite: string;
+            nom_specialite: string;
+        }>(
+            `
+            SELECT
+                c.date_concours, 
+                f.id_faculte,
+                f.nom_faculte,
+                d.id_departement,
+                d.nom_departement,
+                c.id_concours,
+                c.nom_councours,
+                s.id_specialite,
+                s.nom_specialite
+            FROM vice_doyen AS vd
+            JOIN faculte AS f
+                ON f.id_faculte = vd.id_faculte
+            JOIN departement AS d
+                ON d.id_faculte = f.id_faculte
+            JOIN concours AS c
+                ON c.id_departement = d.id_departement
+            JOIN specialite AS s
+                ON s.id_concours = c.id_concours
+            WHERE vd.id_user = $1;
+            `,
+            [idUser]
+        );
+
+
+      
+
+        return res.json({
+            total: result.rowCount,
+            data: result.rows
+        });
+
+    } catch (err) {
+        console.error("Error getConcoursByViceDoyen:", err);
+        return res.status(500).json({ error: "Erreur serveur" });
+    }
+}
+
+export async function getConcoursByDoyen(req: Request, res: Response) {
+    try {
+        const { idUser } = req.params;
+
+        if (!idUser) {
+            return res.status(400).json({ error: "idUser manquant" });
+        }
+
+        const result = await pool.query<{
+            date_concours : Date ;
+            id_faculte: string;
+            nom_faculte: string;
+            id_departement: string;
+            nom_departement: string;
+            id_concours: string;
+            nom_councours: string;
+            id_specialite: string;
+            nom_specialite: string;
+        }>(
+            `
+            SELECT
+                c.date_concours, 
+                f.id_faculte,
+                f.nom_faculte,
+                d.id_departement,
+                d.nom_departement,
+                c.id_concours,
+                c.nom_councours,
+                s.id_specialite,
+                s.nom_specialite
+            FROM doyen AS vd
+            JOIN faculte AS f
+                ON f.id_faculte = vd.id_faculte
+            JOIN departement AS d
+                ON d.id_faculte = f.id_faculte
+            JOIN concours AS c
+                ON c.id_departement = d.id_departement
+            JOIN specialite AS s
+                ON s.id_concours = c.id_concours
+            WHERE vd.id_user = $1;
+            `,
+            [idUser]
+        );
+
+
+      
+
+        return res.json({
+            total: result.rowCount,
+            data: result.rows
+        });
+
+    } catch (err) {
+        console.error("Error getConcoursByDoyen:", err);
         return res.status(500).json({ error: "Erreur serveur" });
     }
 }

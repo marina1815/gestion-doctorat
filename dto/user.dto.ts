@@ -16,7 +16,7 @@ export const userRoleSchema = z.enum([
 export const createUserSchema = z
   .object({
     username: z.string().min(3).max(50),
-    email: z.string().email(),
+    email: z.string().email().optional(),
     password: z.string().min(4),
     role: userRoleSchema,
     // ✅ camelCase comme dans ton controller

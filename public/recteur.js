@@ -22,14 +22,7 @@ async function refreshSession() {
  
 }
 
-function handleSessionExpired() {
 
-    localStorage.removeItem("user");
-    showToast("Votre session a expiré, veuillez vous reconnecter.", "warning", 4000);
-    setTimeout(() => {
-        window.location.href = "login.html";
-    }, 1500);
-}
 
 /* =========================
    TOASTS

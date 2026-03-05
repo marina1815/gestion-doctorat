@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
         membres: "/membres",
         facultes: "/facultes",
         vice_doyen: "/vice-doyens",
+        doyen: "/doyens",
     };
 
     async function refreshSession() {
@@ -163,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function handleSessionExpired() {
-        localStorage.removeItem("user");
+        localStorage.removeItem("dg-user");
         showToast(
             "Votre session a expiré, veuillez vous reconnecter.",
             "warning",
@@ -467,9 +468,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
                 showToast("Compte mis à jour avec succès.", "success");
 
-                // (optionnel) ici tu pourrais aussi gérer la MAJ du vice_doyen
+               
             } else {
-                // MODE CRÉATION
+                
                 const createdUser = await apiRequest(
                     ENDPOINTS.users,
                     "POST",
@@ -486,7 +487,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                 if (
-                    (role === "DOYEN" || role === "VICEDOYEN") &&
+                    ( role === "VICEDOYEN") &&
                     faculteSelect?.value
                 ) {
                     try {
@@ -502,6 +503,31 @@ document.addEventListener("DOMContentLoaded", () => {
                         );
                         // Tu peux afficher un toast si tu veux :
                         // showToast("Vice-doyen associé à la faculté.", "success");
+                    } catch (err) {
+                        console.error("Erreur lors de la création du vice-doyen:", err);
+                        showToast(
+                            "Compte créé, mais erreur lors de l'association à la faculté.",
+                            "warning",
+                            5000
+                        );
+                    }
+                }
+                else if (
+                    (role === "DOYEN") &&
+                    faculteSelect?.value
+                ) {
+                    try {
+                        console.log(createdUser);
+
+                        await apiRequest(
+                            ENDPOINTS.doyen,
+                            "POST",
+                            {
+                                idFaculte: faculteSelect.value,
+                                idUser: createdUser.user.idUser, 
+                            }
+                        );
+                        
                     } catch (err) {
                         console.error("Erreur lors de la création du vice-doyen:", err);
                         showToast(

@@ -10,15 +10,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const eyeIcon = document.getElementById("eyeIcon");
     const eyeIconOff = document.getElementById("eyeIconOff");
 
-    const generalError = document.getElementById("generalError"); 
+    const generalError = document.getElementById("generalError");
 
-    const API_URL = "http://localhost:4000"; // adapte si ton backend est ailleurs
-    const LOGIN_ENDPOINT = "/auth/login";    // adapte si besoin
+    const API_URL = "http://localhost:4000";
+    const LOGIN_ENDPOINT = "/auth/login";
 
-    // 🧠 On garde l'utilisateur loggé ici pour l'utiliser après (modal, redirection)
     let loggedUser = null;
 
-   
+    // ======================
+    //  SHOW / HIDE PASSWORD
+    // ======================
     eyeIcon.addEventListener("click", () => {
         pwdInput.type = "text";
         eyeIcon.style.display = "none";
@@ -31,7 +32,9 @@ document.addEventListener("DOMContentLoaded", () => {
         eyeIcon.style.display = "block";
     });
 
-   
+    // ======================
+    //  ERROR HANDLING
+    // ======================
     function showError(input, message) {
         let error = input.parentElement.querySelector(".error-text");
 
@@ -64,35 +67,46 @@ document.addEventListener("DOMContentLoaded", () => {
         generalError.style.display = "none";
     }
 
-    // =========================
-    //   REDIRECTION PAR RÔLE
-    // =========================
+    // ======================
+    //   REDIRECTION PAR ROLE
+    // ======================
     function redirectByRole() {
-        if (!loggedUser) {
-            // au cas où : si pas d'utilisateur, on va vers une page générique
+        const user = JSON.parse(localStorage.getItem("dg-user"));
+
+        if (!user) {
             window.location.href = "/login.html";
             return;
         }
 
-        const role = loggedUser.role;
+        const role = user.role;
 
-        if (role === "ADMIN") {
-            window.location.href = "/admin-dashb.html";
-        } else if (role === "CHEFDEPARTEMENT") {
-            window.location.href = "/chef-home.html";
-        } else if (role === "DOYEN") {
-            window.location.href = "/doyen-dashboard.html";
-        } else if (role === "CELLULE_ANONYMAT") {
-            window.location.href = "/cellule-accueil.html";
-        } else if (role === "RECTEUR") {
-          
-            window.location.href = "/recteur.html";
-        }else {
-            window.location.href = "/login.html"; 
+        switch (role) {
+            case "ADMIN":
+                window.location.href = "/admin-dashb.html";
+                break;
+            case "CHEFDEPARTEMENT":
+                window.location.href = "/chef-home.html";
+                break;
+            case "DOYEN":
+                window.location.href = "/doyen-dashboard.html";
+                break;
+            case "CELLULE_ANONYMAT":
+                window.location.href = "/cellule-accueil.html";
+                break;
+            case "RECTEUR":
+                window.location.href = "/recteur.html";
+                break;
+            case "VICEDOYEN":
+                window.location.href = "/vice-doyen.html";
+                break;
+            default:
+                window.location.href = "/login.html";
         }
     }
 
-
+    // ======================
+    //         LOGIN
+    // ======================
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -152,16 +166,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // ✅ Succès : on sauvegarde l'utilisateur
-            loggedUser = data?.user || null;
-            console.log("Login successful:", loggedUser);
 
-            // Affichage du modal de succès
+            loggedUser = data?.user || null;
+            console.log("Login success:", loggedUser);
+
+
+            localStorage.setItem("dg-user", JSON.stringify(loggedUser));
+
+
             successModal.classList.remove("is-visible");
-            void successModal.offsetWidth; // reset animation
+            void successModal.offsetWidth;
             successModal.classList.add("is-visible");
 
-            // Redirection automatique après un petit délai (optionnel)
             setTimeout(() => {
                 redirectByRole();
             }, 1500);
@@ -183,9 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
         redirectByRole();
     });
 
-
     successModal.addEventListener("click", (e) => {
-        // si on clique sur l’overlay (pas le contenu)
         if (e.target === successModal) {
             successModal.classList.remove("is-visible");
             redirectByRole();

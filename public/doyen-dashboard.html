@@ -12,6 +12,32 @@
   <!-- Styles spécifiques pour le pipeline / onglets -->
   <style>
 /* ====== Mise en page header PV ====== */
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-wrapper input[disabled] {
+  background: #f1f5f9;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* Tooltip custom */
+.tooltip-wrapper input[disabled]:hover::after {
+  content: "يجب اختيار التخصص أولاً";
+  position: absolute;
+  bottom: -35px;
+  right: 0;
+  background: #111827;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  z-index: 10;
+}
 .toast-area {
   position: fixed;
   top: 20px;
@@ -1028,6 +1054,7 @@
 </div>
 
 <!-- ============ VIEW: CORRECTEURS ============ -->
+ 
 <div class="view" id="view-correcteurs" data-view="correcteurs">
 
   <!-- HEADER : pipeline + taux d’avancement -->
@@ -1129,6 +1156,28 @@
 
     <div class="card-body">
       <div class="card-body form-grid cfd-resp-form">
+
+         <div class="form-group">
+        <label for="selectSpecialite"></label>
+        <select id="selectSpecialite">
+          <option value="">Choisir une spécialité</option>
+        </select>
+      </div>
+      <div class="form-group">
+  <label for="inputSpecialiteAr">
+   
+  </label>
+  <div class="input tooltip-wrapper">
+  <input id="inputSpecialiteAr"
+         type="text"
+         dir="rtl"
+         placeholder="اكتب التخصص بالعربية"
+         disabled
+         title="يجب اختيار التخصص أولاً" />
+</div>
+  </div>
+</div>
+        
         <button type="button" class="btn-back align-right" id="btnOpenModalCorrecteur">
           <i class="uil uil-plus"></i> Ajouter un correcteur
         </button>
@@ -1142,7 +1191,6 @@
               <th>Nom & prénom</th>
               <th>Grade</th>
               <th>Username</th>
-              <th>Email</th>
               <th class="col-actions"></th>
             </tr>
           </thead>
@@ -1159,7 +1207,7 @@
       
 
     </div>
-    </div>
+  
   </section>
 
 </div>
@@ -1271,10 +1319,8 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Concours</th>
               <th>Nom & prénom</th>
-              <th>Username</th>
-              <th>Email</th>
+              <th>Rôle</th>
               <th class="col-actions"></th>
             </tr>
           </thead>
@@ -1398,9 +1444,9 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Nom salle</th>
-              <th>Capacité</th>
-              <th>Responsable</th>
+              <th>Nom et Prenom</th>
+              <th>Salle</th>
+              <th>Role</th>
               <th class="col-actions"></th>
             </tr>
           </thead>
@@ -1410,17 +1456,7 @@
     </div>
   </section>
 
-  <section class="card view-main-card fade-in-up stagger-2">
-    <div class="card-header">
-      <h2>Surveillants par salle</h2>
-    </div>
-    <div class="card-body">
-      <p class="text-muted">
-        Plus tard : assigner plusieurs surveillants (users rôle RESPONSABLE_SALLE /
-        SURVEILLANT) par salle.
-      </p>
-    </div>
-  </section>
+
 
 </div>
 
@@ -1636,7 +1672,7 @@
 - وبمقتضى المرسوم التنفيذي رقم 21–03 المؤرخ في 22 جمادى الأولى 1442 الموافق لـ 03 جوان 2021؛
 - وبمقتضى قرار مدير جامعة العلوم والتكنولوجيا محمد بوضياف المتعلق بتنظيم مسابقة الدكتوراه لسنة 2022؛
 - وبمقتضى محضر اجتماع لجنة التكوين في الدكتوراه المنعقد بتاريخ 03 ديسمبر 2022؛
-
+يقرر 
 </textarea>
       </div>
 
@@ -1857,21 +1893,6 @@
           </div>
         </div>
 
-    
-        <div class="form-row">
-          <div class="form-group">
-            <label for="corrEmail">Email institutionnel</label>
-            <div class="input-wrapper">
-              <span class="field-icon"><i class="uil uil-at"></i></span>
-              <input type="email" id="corrEmail" placeholder="exemple@univ.dz" />
-            </div>
-            <div class="field-hint">Utilise l’email universitaire officiel.</div>
-          </div>
-
-         
-
-        
-
         <div class="account-modal-footer modal-footer-full">
           <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
           <button type="submit" class="btn btn-primary">
@@ -1895,24 +1916,8 @@
       </div>
 
       <form id="formAnonymat" class="modal-body account-form">
-        <!-- Concours -->
-        <div class="form-row">
-          <div class="form-group">
-            <label for="anonyConcoursSelect">Concours</label>
-            <div class="input-wrapper">
-              <span class="field-icon"><i class="uil uil-list-ul"></i></span>
-              <select id="anonyConcoursSelect" required>
-                <option value="">-- Sélectionner un concours --</option>
-                <!-- à remplir depuis la BDD, ou cloné du select PV/CFD -->
-              </select>
-            </div>
-            <div class="field-hint">
-              Un seul membre de la cellule d’anonymat par concours
-              (contrainte UNIQUE sur <code>id_concours</code>).
-            </div>
-          </div>
-        </div>
-
+     
+      
         <!-- Nom / prénom FR -->
         <div class="form-row">
           <div class="form-group">
@@ -1928,6 +1933,24 @@
             <div class="input-wrapper">
               <span class="field-icon"><i class="uil uil-user"></i></span>
               <input type="text" id="anonyPrenomFr" placeholder="Ex : Bensalem" required />
+            </div>
+          </div>
+        </div>
+
+         <div class="form-row">
+          <div class="form-group">
+            <label dir="rtl">(AR) اللقب</label>
+            <div class="input-wrapper" dir="rtl">
+              <span class="field-icon"><i class="uil uil-user"></i></span>
+              <input type="text" id="anonyNomAr" placeholder="مثال: جبار" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label dir="rtl">(AR) الاسم</label>
+            <div class="input-wrapper" dir="rtl">
+              <span class="field-icon"><i class="uil uil-user"></i></span>
+              <input type="text" id="anonyPrenomAr" placeholder="مثال: بن سالم" />
             </div>
           </div>
         </div>
@@ -1968,15 +1991,28 @@
           </div>
         </div>
 
-        <!-- User -->
-        <div class="form-row">
-          <div class="form-group">
-            <label for="anonyEmail">Email institutionnel</label>
-            <div class="input-wrapper">
-              <span class="field-icon"><i class="uil uil-at"></i></span>
-              <input type="email" id="anonyEmail" placeholder="exemple@univ.dz" />
-            </div>
-          </div>
+       <div class="form-row">
+  <div class="form-group" dir="rtl">
+    <label for="anonymatRoleSelect">      الدور في لجنة التكوين في الدكتوراه
+</label>
+
+    <div class="input-wrapper" dir="rtl">
+      <span class="field-icon">
+        <i class="uil uil-list-ul"></i>
+      </span>
+
+      <select id="anonymatRoleSelect" required dir="rtl">
+        <option value="">-- اختر الدور --</option>
+        <!-- rempli depuis la base de données -->
+      </select>
+    </div>
+
+    <small style="font-size:12px; opacity:.8;">
+      الأدوار ترتبط بالأقسام التي أدخلتها في المعلومات العامة.
+    </small>
+
+  </div>
+</div>
 
         
 
@@ -1984,13 +2020,178 @@
 
         <div class="account-modal-footer modal-footer-full">
           <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
-          <button type="submit" class="btn btn-primary">
+          <button id="btnSaveAnonymat" type="submit" class="primary-btn">
+            <i class="uil uil-check"></i>
             Enregistrer le membre
           </button>
         </div>
       </form>
     </div>
   </div>
+
+  <!-- MODALE ORGANISATION SURVEILLANCE -->
+
+<div class="modal" id="modalSurveillance">
+  <div class="modal-backdrop" data-close-modal></div>
+
+  <div class="modal-dialog modal-dialog-large">
+    <div class="modal-header">
+      <h3>Nouveau membre – Organisation de surveillance</h3>
+      <button class="btn-icon" data-close-modal>
+        <i class="uil uil-times"></i>
+      </button>
+    </div>
+
+    <form id="formSurveillance" class="modal-body account-form">
+
+      <!-- Nom / prénom FR -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nom (FR)</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="survNomFr" placeholder="Ex : Djabar" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Prénom (FR)</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="survPrenomFr" placeholder="Ex : Bensalem" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- Nom / prénom AR -->
+      <div class="form-row">
+        <div class="form-group">
+          <label dir="rtl">(AR) اللقب</label>
+          <div class="input-wrapper" dir="rtl">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="survNomAr" placeholder="مثال: جبار" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label dir="rtl">(AR) الاسم</label>
+          <div class="input-wrapper" dir="rtl">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="survPrenomAr" placeholder="مثال: بن سالم" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Grade + Sexe -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Grade</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-graduation-cap"></i></span>
+            <select id="survGrade">
+              <option value="">Professeur, MCA, MCB…</option>
+              <option value="PROF">Professeur</option>
+              <option value="MCA">MCA</option>
+              <option value="MCB">MCB</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group form-group-sex">
+          <label>Sexe</label>
+
+          <div class="sex-toggle" id="sexeToggleSurveillance">
+            <button type="button" class="sex-option sex-option-active" data-sex-value="FEMME">
+              <span class="sex-icon-circle">
+                <i class="uil uil-female"></i>
+              </span>
+              <span>Femme</span>
+            </button>
+
+            <button type="button" class="sex-option" data-sex-value="HOMME">
+              <span class="sex-icon-circle">
+                <i class="uil uil-male"></i>
+              </span>
+              <span>Homme</span>
+            </button>
+          </div>
+
+          <input type="hidden" id="sexeSurveillance" value="FEMME" />
+        </div>
+      </div>
+
+      <!-- Salle + Capacité -->
+      <div class="form-row">
+
+        <div class="form-group" dir="rtl">
+          <label for="survSalle">القاعة</label>
+          <div class="input-wrapper" dir="rtl">
+            <span class="field-icon"><i class="uil uil-building"></i></span>
+            <input type="text" id="survSalle" placeholder="مثال: A12 / Amphithéâtre 3" required />
+          </div>
+        </div>
+
+        <div class="form-group" dir="rtl">
+          <label for="survCapacite">السعة</label>
+          <div class="input-wrapper" dir="rtl">
+            <span class="field-icon"><i class="uil uil-users-alt"></i></span>
+            <input type="number" id="survCapacite" min="1" step="1" placeholder="مثال: 40" required />
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Responsable -->
+      <div class="form-row">
+
+        <div class="form-group" dir="rtl">
+          <label>هل هو مسؤول؟</label>
+
+          <div class="sex-toggle" id="survResponsableToggle">
+
+            <button type="button" class="sex-option sex-option-active" data-resp="YES">
+              <span class="sex-icon-circle">
+                <i class="uil uil-check"></i>
+              </span>
+              <span>نعم (مسؤول)</span>
+            </button>
+
+            <button type="button" class="sex-option" data-resp="NO">
+              <span class="sex-icon-circle">
+                <i class="uil uil-times"></i>
+              </span>
+              <span>لا</span>
+            </button>
+
+          </div>
+
+          <input type="hidden" id="survEstResponsable" value="YES" />
+
+          <small style="font-size:12px; opacity:.8;">
+            مسؤول واحد فقط لكل فريق.
+          </small>
+
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="account-modal-footer modal-footer-full">
+
+        <button type="button" class="btn btn-secondary" data-close-modal>
+          Annuler
+        </button>
+
+        <button id="btnSaveSurveillance" type="submit" class="primary-btn">
+          <i class="uil uil-check"></i>
+          Enregistrer le membre
+        </button>
+
+      </div>
+
+    </form>
+  </div>
+</div>
    
 
   <script src="theme.js"></script>
@@ -1999,6 +2200,14 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="doyen.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 </body>
 
 </html>
