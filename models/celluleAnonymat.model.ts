@@ -1,13 +1,13 @@
 export interface CelluleAnonymatRow {
   id_cellule_anonymat: string;
   id_concours: string;
-  id_user: string;
+  id_membre: string;
 }
 
 export interface CelluleAnonymat {
   idCelluleAnonymat: string;
   idConcours: string;
-  idUser: string;
+  idMembre: string;
 }
 
 export function mapCelluleAnonymatRowToModel(
@@ -16,6 +16,6 @@ export function mapCelluleAnonymatRowToModel(
   return {
     idCelluleAnonymat: row.id_cellule_anonymat,
     idConcours: row.id_concours,
-    idUser: row.id_user,
+    idMembre: row.id_membre,
   };
 }

@@ -2,13 +2,13 @@ import { z } from "zod";
 
 export const createCorrecteurSchema = z.object({
   idConcours: z.string().uuid("idConcours doit être un UUID valide"),
-  idUser: z.string().uuid("idUser doit être un UUID valide"),
+  idMembre: z.string().uuid("idMembre doit être un UUID valide"),
   idSpecialite: z.string().uuid("idSpecialite doit être un UUID valide"),
 });
 
 export const updateCorrecteurSchema = z.object({
   idConcours: z.string().uuid("idConcours doit être un UUID valide").optional(),
-  idUser: z.string().uuid("idUser doit être un UUID valide").optional(),
+  idMembre: z.string().uuid("idMembre doit être un UUID valide").optional(),
   idSpecialite: z
     .string()
     .uuid("idSpecialite doit être un UUID valide")

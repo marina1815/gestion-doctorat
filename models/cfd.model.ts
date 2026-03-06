@@ -2,19 +2,19 @@
 export interface CfdRow {
   id_cfd: string;
   id_concours: string;
-  id_user: string;
+  id_membre: string;
 }
 
 export interface Cfd {
   idCfd: string;
   idConcours: string;
-  idUser: string;
+  idMembre: string;
 }
 
 export function mapCfdRowToModel(row: CfdRow): Cfd {
   return {
     idCfd: row.id_cfd,
     idConcours: row.id_concours,
-    idUser: row.id_user,
+    idMembre: row.id_membre,
   };
 }

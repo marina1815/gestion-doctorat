@@ -15,7 +15,7 @@ import { CreateViceDoyenInput, UpdateViceDoyenInput } from "../dto/viceDoyen.dto
 export async function getViceDoyens(req: Request, res: Response) {
   try {
     const result = await pool.query<ViceDoyenRow>(
-      `SELECT id_vice_doyen, id_faculte, id_user
+      `SELECT id_vice_doyen, id_faculte, id_membre
        FROM vice_doyen
        ORDER BY id_vice_doyen`
     );
@@ -34,7 +34,7 @@ export async function getViceDoyenById(req: Request, res: Response) {
 
   try {
     const result = await pool.query<ViceDoyenRow>(
-      `SELECT id_vice_doyen, id_faculte, id_user
+      `SELECT id_vice_doyen, id_faculte, id_membre
        FROM vice_doyen
        WHERE id_vice_doyen = $1`,
       [id]
@@ -62,13 +62,13 @@ export async function createViceDoyen(req: Request, res: Response) {
 
   try {
     const result = await pool.query<ViceDoyenRow>(
-      `INSERT INTO vice_doyen (id_faculte, id_user)
+      `INSERT INTO vice_doyen (id_faculte, id_membre)
        VALUES ($1, $2)
-       RETURNING id_vice_doyen, id_faculte, id_user`,
-      [body.idFaculte, body.idUser]
+       RETURNING id_vice_doyen, id_faculte, id_membre`,
+      [body.idFaculte, body.idMembre]
     );
     if (!result.rows[0]){
-        return res.status(404).json({ error: "Imossiple de cree." });
+        return res.status(404).json({ error: "Impossible de créer." });
     }
 
     const created = mapViceDoyenRowToModel(result.rows[0]);
@@ -93,9 +93,9 @@ export async function updateViceDoyen(req: Request, res: Response) {
   const { id } = req.params;
   const body = req.body as UpdateViceDoyenInput;
 
-  if (!body.idFaculte && !body.idUser) {
+  if (!body.idFaculte && !body.idMembre) {
     return res.status(400).json({
-      error: "Aucune donnée à mettre à jour (idFaculte ou idUser requis).",
+      error: "Aucune donnée à mettre à jour (idFaculte ou idMembre requis).",
     });
   }
 
@@ -107,9 +107,9 @@ export async function updateViceDoyen(req: Request, res: Response) {
     fields.push(`id_faculte = $${idx++}`);
     values.push(body.idFaculte);
   }
-  if (body.idUser) {
-    fields.push(`id_user = $${idx++}`);
-    values.push(body.idUser);
+  if (body.idMembre) {
+    fields.push(`id_membre = $${idx++}`);
+    values.push(body.idMembre);
   }
 
   values.push(id);
@@ -118,7 +118,7 @@ export async function updateViceDoyen(req: Request, res: Response) {
     UPDATE vice_doyen
        SET ${fields.join(", ")}
      WHERE id_vice_doyen = $${idx}
-     RETURNING id_vice_doyen, id_faculte, id_user
+     RETURNING id_vice_doyen, id_faculte, id_membre
   `;
 
   try {

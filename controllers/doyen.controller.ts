@@ -18,7 +18,7 @@ import {
 export async function getDoyens(req: Request, res: Response) {
   try {
     const result = await pool.query<DoyenRow>(
-      `SELECT id_doyen, id_faculte, id_user
+      `SELECT id_doyen, id_faculte, id_membre
        FROM doyen
        ORDER BY id_doyen`
     );
@@ -41,7 +41,7 @@ export async function getDoyenById(req: Request, res: Response) {
 
   try {
     const result = await pool.query<DoyenRow>(
-      `SELECT id_doyen, id_faculte, id_user
+      `SELECT id_doyen, id_faculte, id_membre
        FROM doyen
        WHERE id_doyen = $1`,
       [id]
@@ -63,17 +63,17 @@ export async function getDoyenById(req: Request, res: Response) {
 
 /**
  * GET /doyens/user/:idUser
- * Récupérer un doyen selon son id_user
+ * Récupérer un doyen selon son id_membre
  */
 export async function getDoyenByUser(req: Request, res: Response) {
-  const { idUser } = req.params;
+  const { idMembre } = req.params;
 
   try {
     const result = await pool.query<DoyenRow>(
-      `SELECT id_doyen, id_faculte, id_user
+      `SELECT id_doyen, id_faculte, id_membre
        FROM doyen
-       WHERE id_user = $1`,
-      [idUser]
+       WHERE id_membre = $1`,
+      [idMembre]
     );
 
     if (!result.rows[0]) {
@@ -98,10 +98,10 @@ export async function createDoyen(req: Request, res: Response) {
 
   try {
     const result = await pool.query<DoyenRow>(
-      `INSERT INTO doyen (id_faculte, id_user)
+      `INSERT INTO doyen (id_faculte, id_membre)
        VALUES ($1, $2)
-       RETURNING id_doyen, id_faculte, id_user`,
-      [body.idFaculte, body.idUser]
+       RETURNING id_doyen, id_faculte, id_membre`,
+      [body.idFaculte, body.idMembre]
     );
 
     if (!result.rows[0]) {
@@ -133,9 +133,9 @@ export async function updateDoyen(req: Request, res: Response) {
   const { id } = req.params;
   const body = req.body as UpdateDoyenInput;
 
-  if (!body.idFaculte && !body.idUser) {
+  if (!body.idFaculte && !body.idMembre) {
     return res.status(400).json({
-      error: "Aucune donnée à mettre à jour (idFaculte ou idUser requis).",
+      error: "Aucune donnée à mettre à jour (idFaculte ou idMembre requis).",
     });
   }
 
@@ -148,9 +148,9 @@ export async function updateDoyen(req: Request, res: Response) {
     values.push(body.idFaculte);
   }
 
-  if (body.idUser) {
-    fields.push(`id_user = $${idx++}`);
-    values.push(body.idUser);
+  if (body.idMembre) {
+    fields.push(`id_membre = $${idx++}`);
+    values.push(body.idMembre);
   }
 
   values.push(id);
@@ -159,7 +159,7 @@ export async function updateDoyen(req: Request, res: Response) {
     UPDATE doyen
        SET ${fields.join(", ")}
      WHERE id_doyen = $${idx}
-     RETURNING id_doyen, id_faculte, id_user
+     RETURNING id_doyen, id_faculte, id_membre
   `;
 
   try {

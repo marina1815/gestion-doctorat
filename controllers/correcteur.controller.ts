@@ -14,7 +14,7 @@ export async function getCorrecteurs(req: Request, res: Response) {
     const result = await pool.query<CorrecteurRow>(`
       SELECT *
       FROM correcteur
-      ORDER BY id_concours, id_user, id_specialite
+      ORDER BY id_concours, id_membre, id_specialite
     `);
 
     const correcteurs: Correcteur[] = result.rows.map(mapCorrecteurRowToModel);
@@ -59,7 +59,7 @@ export async function getCorrecteursByConcours(req: Request, res: Response) {
       SELECT *
       FROM correcteur
       WHERE id_concours = $1
-      ORDER BY id_user, id_specialite
+      ORDER BY id_membre, id_specialite
       `,
       [idConcours]
     );
@@ -74,19 +74,19 @@ export async function getCorrecteursByConcours(req: Request, res: Response) {
 
 export async function createCorrecteur(req: Request, res: Response) {
   try {
-    const { idConcours, idUser, idSpecialite } = req.body as {
+    const { idConcours, idMembre, idSpecialite } = req.body as {
       idConcours: string;
-      idUser: string;
+      idMembre: string;
       idSpecialite: string;
     };
 
     const result = await pool.query<CorrecteurRow>(
       `
-      INSERT INTO correcteur (id_concours, id_user, id_specialite)
+      INSERT INTO correcteur (id_concours, id_membre, id_specialite)
       VALUES ($1, $2, $3)
       RETURNING *
       `,
-      [idConcours, idUser, idSpecialite]
+      [idConcours, idMembre, idSpecialite]
     );
 
     if (!result.rows[0]) {
@@ -115,9 +115,9 @@ export async function createCorrecteur(req: Request, res: Response) {
 export async function updateCorrecteur(req: Request, res: Response) {
   try {
     const { idCorrecteur } = req.params;
-    const { idConcours, idUser, idSpecialite } = req.body as {
+    const { idConcours, idMembre, idSpecialite } = req.body as {
       idConcours?: string;
-      idUser?: string;
+      idMembre?: string;
       idSpecialite?: string;
     };
 
@@ -133,14 +133,14 @@ export async function updateCorrecteur(req: Request, res: Response) {
     const current = existing.rows[0];
 
     const newIdConcours = idConcours ?? current.id_concours;
-    const newIdUser = idUser ?? current.id_user;
+    const newIdUser = idMembre ?? current.id_membre;
     const newIdSpecialite = idSpecialite ?? current.id_specialite;
 
     const result = await pool.query<CorrecteurRow>(
       `
       UPDATE correcteur
       SET id_concours = $1,
-          id_user = $2,
+          id_membre = $2,
           id_specialite = $3
       WHERE id_correcteur = $4
       RETURNING *

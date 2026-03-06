@@ -8,6 +8,7 @@
 
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+  
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
   <!-- Styles spécifiques pour le pipeline / onglets -->
   <style>
@@ -111,11 +112,20 @@
    HEADER DES VIEWS (pipeline + taux)
    ========================= */
 
-.view-header-card {
-  margin-bottom: 18px;
-  overflow: hidden;
-}
 
+
+.view-header-card{
+  margin-bottom: 18px;
+  position: sticky;
+  top: var(--topbar-height, 0px);
+  z-index: 120;
+  background: #fbfcff;
+  border-bottom: 1px solid var(--color-border-soft);
+  backdrop-filter: blur(6px);
+
+  box-shadow: none !important;
+  overflow: visible;
+}
 .view-header-layout {
   display: flex;
   justify-content: space-between;
@@ -137,12 +147,23 @@
   justify-content: flex-end;
 }
 
+.view-header-left .pipeline {
+  background: transparent;
+  padding: 6px 0;
+}
+
+.pipeline {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
 /* Summary à droite (bloc "Taux d’avancement") */
 
 .view-header-right .dashboard-summary {
   padding: 12px 14px;
   border-radius: 14px;
-  background: rgba(15, 23, 42, 0.02);
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 :root[data-theme="dark"] .view-header-right .dashboard-summary {
@@ -164,6 +185,23 @@
 .pipeline-node:hover .setting-icon {
   transform: translateY(-1px) scale(1.03);
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12);
+}
+
+/* état actif (icône en mode "step") */
+.pipeline-node.pipeline-active {
+  background: rgba(22, 163, 74, 0.12);
+  box-shadow: 0 12px 22px rgba(22, 163, 74, 0.16);
+}
+
+.pipeline-node.pipeline-active .setting-icon {
+  background: #16a34a !important;
+  color: #fff !important;
+}
+
+
+/* dark mode */
+:root[data-theme="dark"] .pipeline-node.pipeline-active {
+  background: transparent;
 }
 
 /* On peut aussi appliquer ça aux pipelines-step, si tu veux tout interactif */
@@ -277,16 +315,32 @@
 }
 
 /* Bouton "ghost" (regen texte) */
-
-.btn-ghost {
-  background: transparent;
-  border: 1px solid rgba(148, 163, 184, 0.5);
-  color: inherit;
+.action-row {
+  display: flex;
+  flex-direction: row !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
 }
 
-.btn-ghost:hover {
-  background: rgba(148, 163, 184, 0.08);
+.action-row .icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
 }
+
+.action-row .btn-delete-row,
+.action-row .btn-save-row {
+  margin: 0;
+}
+
+
 
 /* ====== Animations d’apparition ====== */
 
@@ -295,6 +349,8 @@
   transform: translateY(8px);
   animation: fadeInUp 0.35s ease-out forwards;
 }
+
+
 
 .stagger-1 {
   animation-delay: 0.08s;
@@ -342,7 +398,121 @@
 }
 
 
+.combo-search-group {
+  width: 100%;
+  position: relative;
+}
 
+.combo-input-wrapper {
+  position: relative;
+  background: #fff;
+  border: 1.2px solid #d9e2f2;
+  border-radius: 12px;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px 0 42px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 5px rgba(15, 23, 42, 0.04);
+}
+
+.combo-input-wrapper:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
+}
+
+.combo-input-wrapper .field-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#searchMembreExistant {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #1e293b;
+  padding: 10px 0;
+}
+
+#searchMembreExistant::placeholder {
+  color: #9aa4b2;
+  font-size: 14px;
+}
+
+.combo-help {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #667085;
+}
+
+.combo-suggestions {
+  position: absolute;
+  top: calc(100% - 38px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+  max-height: 180px;
+  overflow-y: auto;
+  z-index: 9999;
+  display: none;
+  padding: 4px 0;
+}
+
+.combo-suggestions::-webkit-scrollbar {
+  width: 6px;
+}
+
+.combo-suggestions::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 20px;
+}
+
+.combo-suggestions::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.combo-suggestion-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #0f172a;
+  transition: background 0.18s ease;
+  border: none;
+}
+
+.combo-suggestion-item:hover {
+  background: #f8fafc;
+}
+
+.combo-suggestion-item + .combo-suggestion-item {
+  border-top: 1px solid #f1f5f9;
+}
+
+.combo-empty {
+  padding: 10px 14px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.combo-suggestion-grade {
+  color: #2563eb;
+  font-weight: 600;
+  margin-left: 4px;
+}
 /* Pour que le bouton garde sa taille normale */
 .btn-back {
   width: fit-content;
@@ -375,11 +545,12 @@
         </div>
       </div>
 
+      
       <nav class="sidebar-nav">
         <p class="sidebar-section-title">Doyen</p>
 
         <!-- ACCUEIL (vue simple) -->
-        <a href="#" class="nav-item nav-item-active" data-view="home">
+        <a href="#" class="nav-item" data-view="home">
           <i class="uil uil-estate"></i>
           <span>Accueil</span>
         </a>
@@ -602,13 +773,15 @@
 
             <!-- Résumé général -->
             <div class="dashboard-summary">
-              <span class="summary-label">Taux d’avancement</span>
-              <div class="summary-progress">
-                <span class="summary-value" id="dashGlobalProgress2">35%</span>
-                <span class="summary-chip success">En cours</span>
-              </div>
-              <span class="summary-hint">Basé sur 5 étapes principales</span>
+            <span class="summary-label">Taux d’avancement</span>
+
+            <div class="summary-progress">
+              <span class="summary-value" id="dashGlobalProgress">0%</span>
+              <span class="summary-chip success">En cours</span>
             </div>
+
+            <span class="summary-hint">Basé sur 6 étapes principales</span>
+          </div>
           </div>
 
           <!-- PIPELINE DES ÉTAPES (même bloc, cliquable) -->
@@ -762,86 +935,80 @@
 <div class="view" id="view-cfd" data-view="cfd">
 
   <!-- HEADER : pipeline + taux d’avancement -->
+   
   <section class="card dashboard-card view-header-card fade-in-up">
-    <div class="view-header-layout">
+  <div class="view-header-layout">
 
-      <!-- GAUCHE : pipeline -->
-      <div class="view-header-left">
-        <div class="pipeline">
+    <!-- GAUCHE : pipeline -->
+    <div class="view-header-left">
+      <div class="pipeline">
 
-          <div class="pipeline-step" data-step="cfd" data-go-view="cfd">
-            <div class="pipeline-icon">
-              <i class="uil uil-briefcase"></i>
-            </div>
-            <div class="pipeline-content">
-              <span class="pipeline-title">CFD</span>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="sujet" data-go-view="sujet">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-file-alt"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="correcteurs" data-go-view="correcteurs">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-edit"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="anonymat" data-go-view="anonymat">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-shield-check"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="surveillants" data-go-view="surveillants">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-users-alt"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="pv" data-go-view="pv">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-file-alt"></i>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- DROITE : taux d’avancement -->
-      <div class="view-header-right">
-        <div class="dashboard-header" style="align-items: center; padding: 10px 5px;">
-          <div class="dashboard-summary">
-            <span class="summary-label">Taux d’avancement</span>
-
-            <div class="summary-progress">
-              <span class="summary-value" id="dashGlobalProgress">0%</span>
-              <span class="summary-chip success">En cours</span>
-            </div>
-
-            <span class="summary-hint">Basé sur 6 étapes principales</span>
+        <div class="pipeline-node" data-step="pv" data-go-view="pv">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-file-alt"></i>
           </div>
         </div>
-      </div>
 
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-briefcase"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="sujet" data-go-view="sujet">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-file-alt"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="correcteurs" data-go-view="correcteurs">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-edit"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="anonymat" data-go-view="anonymat">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-shield-check"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="surveillants" data-go-view="surveillants">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-users-alt"></i>
+          </div>
+        </div>
+
+      </div>
     </div>
-  </section>
+
+    <!-- DROITE : Taux d’avancement -->
+    <div class="view-header-right">
+      <div class="dashboard-summary">
+        <span class="summary-label">Taux d’avancement</span>
+        <div class="summary-progress">
+          <span class="summary-value" id="dashGlobalProgress">0%</span>
+          <span class="summary-chip success">En cours</span>
+        </div>
+        <span class="summary-hint">Basé sur 6 étapes principales</span>
+      </div>
+    </div>
+
+  </div>
+</section>
 
   <!-- Membres CFD -->
-  <section class="card cfd-card view-main-card fade-in-up stagger-1">
+  <section class=" cfd-card view-main-card fade-in-up stagger-1">
     <div class="card-header cfd-header">
       <div class="cfd-header-main">
         <h2>Comité de formation doctorale (CFD)</h2>
@@ -880,15 +1047,16 @@
             </tr>
           </thead>
           <tbody id="cfdMembersBody">
-            <!-- rempli par JS -->
+         
           </tbody>
         </table>
+       
       </div>
     </div>
   </section>
 
   <!-- Responsable CFD pour un concours -->
-  <section class="card cfd-card view-main-card fade-in-up stagger-2">
+  <section class="cfd-card view-main-card fade-in-up stagger-2">
     <div class="card-header">
       <div>
         <h2>Responsable CFD du concours</h2>
@@ -936,88 +1104,79 @@
 <div class="view" id="view-sujet" data-view="sujet">
 
   <!-- HEADER : pipeline + taux d’avancement -->
-  <section class="card dashboard-card view-header-card fade-in-up">
-    <div class="view-header-layout">
+ <section class="card dashboard-card view-header-card fade-in-up">
+  <div class="view-header-layout">
 
-      <!-- GAUCHE : pipeline -->
-      <div class="view-header-left">
-        <div class="pipeline">
+    <!-- GAUCHE : pipeline -->
+    <div class="view-header-left">
+      <div class="pipeline">
 
-          <!-- CFD -->
-          <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-briefcase"></i>
-            </div>
+        <div class="pipeline-node" data-step="pv" data-go-view="pv">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-file-alt"></i>
           </div>
-
-          <div class="pipeline-connector"></div>
-
-          <!-- SUJET (active) -->
-          <div class="pipeline-step pipeline-step-active" data-step="sujet" data-go-view="sujet">
-            <div class="pipeline-icon">
-              <i class="uil uil-file-alt"></i>
-            </div>
-            <div class="pipeline-content">
-              <span class="pipeline-title">Élaboration </span>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <!-- Correcteurs -->
-          <div class="pipeline-node" data-step="correcteurs" data-go-view="correcteurs">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-edit"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <!-- Anonymat -->
-          <div class="pipeline-node" data-step="anonymat" data-go-view="anonymat">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-shield-check"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <!-- Surveillants -->
-          <div class="pipeline-node" data-step="surveillants" data-go-view="surveillants">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-users-alt"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <!-- PV -->
-          <div class="pipeline-node" data-step="pv" data-go-view="pv">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-file-alt"></i>
-            </div>
-          </div>
-
         </div>
-      </div>
 
-      <!-- DROITE : Taux d’avancement -->
-      <div class="view-header-right">
-        <div class="dashboard-summary">
-          <span class="summary-label">Taux d’avancement</span>
-          <div class="summary-progress">
-            <span class="summary-value" id="dashGlobalProgress">60%</span>
-            <span class="summary-chip success">En cours</span>
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-briefcase"></i>
           </div>
-          <span class="summary-hint">Basé sur 5 étapes principales</span>
         </div>
-      </div>
 
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="sujet" data-go-view="sujet">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-file-alt"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="correcteurs" data-go-view="correcteurs">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-edit"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="anonymat" data-go-view="anonymat">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-shield-check"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="surveillants" data-go-view="surveillants">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-users-alt"></i>
+          </div>
+        </div>
+
+      </div>
     </div>
-  </section>
+
+    <!-- DROITE : Taux d’avancement -->
+    <div class="view-header-right">
+      <div class="dashboard-summary">
+        <span class="summary-label">Taux d’avancement</span>
+        <div class="summary-progress">
+          <span class="summary-value" id="dashGlobalProgress">0%</span>
+          <span class="summary-chip success">En cours</span>
+        </div>
+        <span class="summary-hint">Basé sur 6 étapes principales</span>
+      </div>
+    </div>
+
+  </div>
+</section>
 
   <!-- Commission d’élaboration des sujets -->
-  <section class="card view-main-card fade-in-up stagger-1">
+  <section class=" view-main-card fade-in-up stagger-1">
     <div class="card-header">
       <div>
         <h2>Commission d’élaboration des sujets</h2>
@@ -1027,7 +1186,7 @@
 
     <div class="card-body">
       <div class="card-body form-grid cfd-resp-form">
-        <button type="button" class="btn-back align-right" id="btnOpenModalSujet">
+        <button type="button" class="btn-back align-right" id="btnOpenModalCommissionSujets">
           <i class="uil uil-plus"></i> Ajouter un membre commission
         </button>
       </div>
@@ -1039,15 +1198,23 @@
               <th>#</th>
               <th>Nom & prénom</th>
               <th>Grade</th>
-              <th>Rôle</th>
-              <th>Spécialité du sujet</th>
+              <th>Université</th>
+              <th>Actions</th>
               <th class="col-actions"></th>
             </tr>
           </thead>
-          <tbody id="sujetBody">
+          <tbody id="commissionSujetsBody">
           </tbody>
         </table>
       </div>
+        <div class="form-actions" style="text-align:right; margin-bottom:12px;">
+      <button type="button" class="primary-btn" id="btnPrintSujetMembers">
+        <i class="uil uil-print"></i> طباعة أعضاء   لجنة إعداد المواضيع
+
+      </button>
+      
+
+    </div>
     </div>
   </section>
 
@@ -1059,94 +1226,77 @@
 
   <!-- HEADER : pipeline + taux d’avancement -->
   <section class="card dashboard-card view-header-card fade-in-up">
-    <div class="view-header-layout">
+  <div class="view-header-layout">
 
-      <!-- GAUCHE : pipeline -->
-      <div class="view-header-left">
-        <div class="pipeline">
+    <!-- GAUCHE : pipeline -->
+    <div class="view-header-left">
+      <div class="pipeline">
 
-
-          <!-- PV -->
-          <div class="pipeline-node" data-step="pv" data-go-view="pv">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-file-alt"></i>
-            </div>
-          </div>
-
- <div class="pipeline-connector"></div>
-
-
-
-          <!-- CFD -->
-          <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-briefcase"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <!-- Commission d’élaboration des sujets -->
-          <div class="pipeline-node" data-step="sujet" data-go-view="sujet">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-file-alt"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <!-- Correcteurs (active) -->
-          <div class="pipeline-step pipeline-step-active" data-step="correcteurs" data-go-view="correcteurs">
-            <div class="pipeline-icon">
-              <i class="uil uil-edit"></i>
-            </div>
-            <div class="pipeline-content">
-              <span class="pipeline-title">Correcteurs</span>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <!-- Anonymat -->
-          <div class="pipeline-node" data-step="anonymat" data-go-view="anonymat">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-shield-check"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <!-- Surveillants -->
-          <div class="pipeline-node" data-step="surveillants" data-go-view="surveillants">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-users-alt"></i>
-            </div>
-          </div>
-
-
-        </div>
-      </div>
-
-      <!-- DROITE : Taux d’avancement -->
-      <div class="view-header-right">
-        <div class="dashboard-header" style="align-items: center; padding: 10px 5px;">
-          <div class="dashboard-summary">
-            <span class="summary-label">Taux d’avancement</span>
-
-            <div class="summary-progress">
-              <span class="summary-value" id="dashGlobalProgress">0%</span>
-              <span class="summary-chip success">En cours</span>
-            </div>
-
-            <span class="summary-hint">Basé sur 6 étapes principales</span>
+        <div class="pipeline-node" data-step="pv" data-go-view="pv">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-file-alt"></i>
           </div>
         </div>
-      </div>
 
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-briefcase"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="sujet" data-go-view="sujet">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-file-alt"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="correcteurs" data-go-view="correcteurs">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-edit"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="anonymat" data-go-view="anonymat">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-shield-check"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="surveillants" data-go-view="surveillants">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-users-alt"></i>
+          </div>
+        </div>
+
+      </div>
     </div>
-  </section>
 
-  <section class="card view-main-card fade-in-up stagger-1">
+    <!-- DROITE : Taux d’avancement -->
+    <div class="view-header-right">
+      <div class="dashboard-summary">
+        <span class="summary-label">Taux d’avancement</span>
+        <div class="summary-progress">
+          <span class="summary-value" id="dashGlobalProgress">0%</span>
+          <span class="summary-chip success">En cours</span>
+        </div>
+        <span class="summary-hint">Basé sur 6 étapes principales</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+  <section class=" view-main-card fade-in-up stagger-1">
     <div class="card-header">
       <div>
         <h2>Correcteurs</h2>
@@ -1217,88 +1367,77 @@
 
   <!-- HEADER : pipeline + taux d’avancement -->
   <section class="card dashboard-card view-header-card fade-in-up">
-    <div class="view-header-layout">
+  <div class="view-header-layout">
 
-      <!-- GAUCHE : pipeline -->
-      <div class="view-header-left">
-        <div class="pipeline">
+    <!-- GAUCHE : pipeline -->
+    <div class="view-header-left">
+      <div class="pipeline">
 
-
-          <div class="pipeline-node" data-step="pv" data-go-view="pv">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-file-alt"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-briefcase"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="sujet" data-go-view="sujet">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-file-alt"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="correcteurs" data-go-view="correcteurs">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-edit"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <!-- Anonymat (active) -->
-          <div class="pipeline-step pipeline-step-active" data-step="anonymat" data-go-view="anonymat">
-            <div class="pipeline-icon">
-              <i class="uil uil-shield-check"></i>
-            </div>
-            <div class="pipeline-content">
-              <span class="pipeline-title">Anonymat</span>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="surveillants" data-go-view="surveillants">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-users-alt"></i>
-            </div>
-          </div>
-
-          
-
-        </div>
-      </div>
-
-      <!-- DROITE : Taux d’avancement -->
-      <div class="view-header-right">
-        <div class="dashboard-header" style="align-items: center; padding: 10px 5px;">
-          <div class="dashboard-summary">
-            <span class="summary-label">Taux d’avancement</span>
-
-            <div class="summary-progress">
-              <span class="summary-value" id="dashGlobalProgress">0%</span>
-              <span class="summary-chip success">En cours</span>
-            </div>
-
-            <span class="summary-hint">Basé sur 6 étapes principales</span>
+        <div class="pipeline-node" data-step="pv" data-go-view="pv">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-file-alt"></i>
           </div>
         </div>
-      </div>
 
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-briefcase"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="sujet" data-go-view="sujet">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-file-alt"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="correcteurs" data-go-view="correcteurs">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-edit"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="anonymat" data-go-view="anonymat">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-shield-check"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="surveillants" data-go-view="surveillants">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-users-alt"></i>
+          </div>
+        </div>
+
+      </div>
     </div>
-  </section>
 
-  <section class="card view-main-card fade-in-up stagger-1">
+    <!-- DROITE : Taux d’avancement -->
+    <div class="view-header-right">
+      <div class="dashboard-summary">
+        <span class="summary-label">Taux d’avancement</span>
+        <div class="summary-progress">
+          <span class="summary-value" id="dashGlobalProgress">0%</span>
+          <span class="summary-chip success">En cours</span>
+        </div>
+        <span class="summary-hint">Basé sur 6 étapes principales</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+  <section class=" view-main-card fade-in-up stagger-1">
     <div class="card-header">
       <div>
         <h2>Cellule d’anonymat</h2>
@@ -1344,86 +1483,78 @@
 <div class="view" id="view-surveillants" data-view="surveillants">
 
   <!-- HEADER : pipeline + taux d’avancement -->
-  <section class="card dashboard-card view-header-card fade-in-up">
-    <div class="view-header-layout">
+ <section class="card dashboard-card view-header-card fade-in-up">
+  <div class="view-header-layout">
 
-      <!-- GAUCHE : pipeline -->
-      <div class="view-header-left">
-        <div class="pipeline">
+    <!-- GAUCHE : pipeline -->
+    <div class="view-header-left">
+      <div class="pipeline">
 
-          <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-briefcase"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="sujet" data-go-view="sujet">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-file-alt"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="correcteurs" data-go-view="correcteurs">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-edit"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="anonymat" data-go-view="anonymat">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-shield-check"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <!-- Surveillants (active) -->
-          <div class="pipeline-step pipeline-step-active" data-step="surveillants" data-go-view="surveillants">
-            <div class="pipeline-icon">
-              <i class="uil uil-users-alt"></i>
-            </div>
-            <div class="pipeline-content">
-              <span class="pipeline-title">Surveillant</span>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="pv" data-go-view="pv">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-file-alt"></i>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- DROITE : Taux d’avancement -->
-      <div class="view-header-right">
-        <div class="dashboard-header" style="align-items: center; padding: 10px 5px;">
-          <div class="dashboard-summary">
-            <span class="summary-label">Taux d’avancement</span>
-
-            <div class="summary-progress">
-              <span class="summary-value" id="dashSurveillantsProgress">0%</span>
-              <span class="summary-chip success">En cours</span>
-            </div>
-
-            <span class="summary-hint">Basé sur 6 étapes principales</span>
+        <div class="pipeline-node" data-step="pv" data-go-view="pv">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-file-alt"></i>
           </div>
         </div>
-      </div>
 
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-briefcase"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="sujet" data-go-view="sujet">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-file-alt"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="correcteurs" data-go-view="correcteurs">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-edit"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="anonymat" data-go-view="anonymat">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-shield-check"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="surveillants" data-go-view="surveillants">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-users-alt"></i>
+          </div>
+        </div>
+
+      </div>
     </div>
-  </section>
 
-  <section class="card view-main-card fade-in-up stagger-1">
+    <!-- DROITE : Taux d’avancement -->
+    <div class="view-header-right">
+      <div class="dashboard-summary">
+        <span class="summary-label">Taux d’avancement</span>
+        <div class="summary-progress">
+          <span class="summary-value" id="dashGlobalProgress">0%</span>
+          <span class="summary-chip success">En cours</span>
+        </div>
+        <span class="summary-hint">Basé sur 6 étapes principales</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+  <section class=" view-main-card fade-in-up stagger-1">
     <div class="card-header">
       <div>
         <h2>Surveillants</h2>
@@ -1432,10 +1563,73 @@
       <h2>لجنة الحراسة</h2>
     </div>
 
+
+
+    <div class="card-subsection">
+                            <div class="card-subsection-header">
+                                <h3>Salles et capacités</h3>
+                                <p>Définissez les salles disponibles pour le concours et leurs capacités</p>
+                            </div>
+
+                            <div class="table-wrapper slim">
+                                <table class="data-table no-border specialties-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom de Salle(FR)</th>
+                                             <th>اسم القاعة(AR)</th>
+                                            <th>Capacité</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <input id="input-salle-nom" type="text" class="input-inline"
+                                                    placeholder="Ex : AMPHI03">
+                                            </td>
+                                            <td>
+                                                <input  type="text" class="input-inline"
+                                                    placeholder="Ex : المدرج 03">
+                                            </td>
+                                            <td>
+                                                <div class="places-control">
+                                                    <button type="button" class="places-btn places-minus">−</button>
+                                                    <input id="input-salle-cap" type="number" min="0" value="25">
+                                                    <button type="button" class="places-btn places-plus">+</button>
+                                                </div>
+                                            </td>
+                                           <td>
+  <div class="action-row">
+    <button type="button" class="icon-btn btn-icon-danger  btn-delete-row" title="Supprimer">
+      <i class="uil uil-trash-alt"></i>
+    </button>
+
+    <button type="button" class="icon-btn icon-green btn-save-row" title="Enregistrer">
+      <i class="uil uil-check-circle"></i>
+    </button>
+  </div>
+</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <button type="button" class="link-btn" id="addSalleBtn">
+                                <i class="uil uil-plus"></i>
+                                Ajouter une salle
+                            </button>
+                        </div>
+
+
+                      
+
+
+
     <div class="card-body">
       <div class="card-body form-grid cfd-resp-form">
+
         <button type="button" class="btn-back align-right" id="btnOpenModalSalle">
-          <i class="uil uil-plus"></i> Ajouter une salle
+          <i class="uil uil-plus"></i> Ajouter un surveillant
         </button>
       </div>
 
@@ -1466,86 +1660,76 @@
 <div class="view" id="view-pv" data-view="pv">
  <!-- HEADER : pipeline + taux d’avancement -->
   <section class="card dashboard-card view-header-card fade-in-up">
-    <div class="view-header-layout">
+  <div class="view-header-layout">
 
-      <!-- GAUCHE : pipeline -->
-      <div class="view-header-left">
-        <div class="pipeline">
+    <!-- GAUCHE : pipeline -->
+    <div class="view-header-left">
+      <div class="pipeline">
 
-
-          <div class="pipeline-step" data-step="pv" data-go-view="pv">
-            <div class="pipeline-icon">
-              <i class="uil uil-file-alt"></i>
-              <div class="pipeline-content">
-              <span class="pipeline-title">Info</span>
-            </div>
-            </div>
-          </div>
-
-           <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-briefcase"></i>
-            </div>
-            
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="sujet" data-go-view="sujet">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-file-alt"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="correcteurs" data-go-view="correcteurs">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-edit"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="anonymat" data-go-view="anonymat">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-shield-check"></i>
-            </div>
-          </div>
-
-          <div class="pipeline-connector"></div>
-
-          <div class="pipeline-node" data-step="surveillants" data-go-view="surveillants">
-            <div class="setting-icon btn-icon-danger">
-              <i class="uil uil-users-alt"></i>
-            </div>
-          </div>
-
-
-        </div>
-      </div>
-
-      <!-- DROITE : taux d’avancement -->
-      <div class="view-header-right">
-        <div class="dashboard-header" style="align-items: center; padding: 10px 5px;">
-          <div class="dashboard-summary">
-            <span class="summary-label">Taux d’avancement</span>
-
-            <div class="summary-progress">
-              <span class="summary-value" id="dashGlobalProgress">0%</span>
-              <span class="summary-chip success">En cours</span>
-            </div>
-
-            <span class="summary-hint">Basé sur 6 étapes principales</span>
+        <div class="pipeline-node" data-step="pv" data-go-view="pv">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-file-alt"></i>
           </div>
         </div>
-      </div>
 
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="cfd" data-go-view="cfd">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-briefcase"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="sujet" data-go-view="sujet">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-file-alt"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="correcteurs" data-go-view="correcteurs">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-edit"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="anonymat" data-go-view="anonymat">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-shield-check"></i>
+          </div>
+        </div>
+
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node" data-step="surveillants" data-go-view="surveillants">
+          <div class="setting-icon btn-icon-danger">
+            <i class="uil uil-users-alt"></i>
+          </div>
+        </div>
+
+      </div>
     </div>
-  </section>
-  <section class="card view-main-card fade-in-up">
+
+    <!-- DROITE : Taux d’avancement -->
+    <div class="view-header-right">
+      <div class="dashboard-summary">
+        <span class="summary-label">Taux d’avancement</span>
+        <div class="summary-progress">
+          <span class="summary-value" id="dashGlobalProgress">0%</span>
+          <span class="summary-chip success">En cours</span>
+        </div>
+        <span class="summary-hint">Basé sur 6 étapes principales</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+  <section class="view-main-card fade-in-up">
 
    
     <div class="card-header">
@@ -1557,6 +1741,38 @@
     </div>
 
     <form id="formInfosGenerales" class="card-body">
+      <div class="form-group" style="width:100%;" dir="rtl">
+    <label style="font-weight:600; display:block; margin-bottom:6px;" dir="rtl">
+      اسم المقرر
+    </label>
+
+    <div class="input-wrapper"
+         style="
+            display:flex;
+            align-items:center;
+            border-bottom:1px solid var(--input-border,#d1d5db);
+            height:46px;
+            padding:0 4px;
+         "
+         dir="rtl">
+
+      <i class="uil uil-key-skeleton"
+         style="font-size:18px; opacity:0.7; margin-left:8px;"></i>
+
+      <input 
+        type="text" 
+        id="numeroConcours"
+        placeholder=" الرقم /ج.ع.ت.و./ك.ر.أ.أ/2023  "
+        style="
+          flex:1;
+          border:none;
+          outline:none;
+          background:none;
+          font-family:'Cairo','Tajawal';
+        "
+      />
+    </div>
+  </div>
 <div class="form-grid"
      style="display:grid; grid-template-columns:1fr 1fr; gap:30px; align-items:start;">
 
@@ -1651,6 +1867,10 @@
   <ul id="departementList"  dir="rtl"  style="font-family:'Cairo','Tajawal'; padding-right:20px;"></ul>
 </p>
 
+
+
+
+
 </div>
 
       <!-- Texte intégral de l'arrêté (le textarea est en dessous) -->
@@ -1693,341 +1913,417 @@
 
   <!-- ================== MODAL : MEMBRE CFD ================== -->
   <div class="modal" id="modalCfdMembre">
-    <div class="modal-backdrop" data-close-modal></div>
+  <div class="modal-backdrop" data-close-modal></div>
 
-    <div class="modal-dialog modal-dialog-large">
-      <div class="modal-header">
-        <h3>Nouveau membre CFD</h3>
-        <button class="btn-icon" data-close-modal>
-          <i class="uil uil-times"></i>
-        </button>
-      </div>
-
-      <form id="formCfdMembre" class="modal-body account-form">
-        <!-- Nom / prénom FR -->
-        <div class="form-row">
-          <div class="form-group">
-            <label>Nom (FR)</label>
-            <div class="input-wrapper">
-              <span class="field-icon"><i class="uil uil-user"></i></span>
-              <input type="text" id="nomMembreFr" placeholder="Ex : Djabar" required />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>Prénom (FR)</label>
-            <div class="input-wrapper">
-              <span class="field-icon"><i class="uil uil-user"></i></span>
-              <input type="text" id="prenomMembreFr" placeholder="Ex : Bensalem" required />
-            </div>
-          </div>
-        </div>
-
-        <!-- Nom / prénom AR -->
-        <div class="form-row">
-          <div class="form-group">
-            <label dir="rtl">(AR) اللقب</label>
-            <div class="input-wrapper" dir="rtl">
-              <span class="field-icon"><i class="uil uil-user"></i></span>
-              <input type="text" id="nomMembreAr" placeholder="مثال: جبار" />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label dir="rtl">(AR) الاسم</label>
-            <div class="input-wrapper" dir="rtl">
-              <span class="field-icon"><i class="uil uil-user"></i></span>
-              <input type="text" id="prenomMembreAr" placeholder="مثال: بن سالم" />
-            </div>
-          </div>
-        </div>
-
-        <!-- Grade + Sexe -->
-        <div class="form-row">
-          <div class="form-group">
-            <label>Grade</label>
-            <div class="input-wrapper">
-              <span class="field-icon"><i class="uil uil-graduation-cap"></i></span>
-              <select id="gradeMembre">
-                <option value="">Professeur, MCA, MCB…</option>
-                <option value="PROF">Professeur</option>
-                <option value="MCA">MCA</option>
-                <option value="MCB">MCB</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group form-group-sex">
-            <label>Sexe</label>
-            <div class="sex-toggle" id="sexeToggle">
-              <button type="button" class="sex-option sex-option-active" data-sex-value="FEMME">
-                <span class="sex-icon-circle">
-                  <i class="uil uil-female"></i>
-                </span>
-                <span>Femme</span>
-              </button>
-
-              <button type="button" class="sex-option" data-sex-value="HOMME">
-                <span class="sex-icon-circle">
-                  <i class="uil uil-male"></i>
-                </span>
-                <span>Homme</span>
-              </button>
-            </div>
-            <input type="hidden" id="sexeMembre" value="FEMME" />
-          </div>
-        </div>
-        <!-- Rôle dans la CFD (AR) -->
-<div class="form-row">
-  <div class="form-group" style="width:100%;" dir="rtl">
-    <label style="font-weight:600; display:block; margin-bottom:6px;" dir="rtl">
-      الدور في لجنة التكوين في الدكتوراه
-    </label>
-    <div class="input-wrapper" dir="rtl">
-      <span class="field-icon"><i class="uil uil-briefcase"></i></span>
-      <!-- on remplira les options en JS -->
-      <select id="cfdRoleSelect">
-        <option value="">-- اختر الدور --</option>
-      </select>
+  <div class="modal-dialog modal-dialog-large">
+    <div class="modal-header">
+      <h3>Nouveau membre CFD</h3>
+      <button class="btn-icon" data-close-modal type="button">
+        <i class="uil uil-times"></i>
+      </button>
     </div>
-    <small style="font-size:12px; opacity:.8;">
-      الأدوار ترتبط بالأقسام التي أدخلتها في المعلومات العامة.
+
+    <form id="formCfdMembre" class="modal-body account-form">
+
+      <!-- Choix membre existant -->
+<div class="form-row">
+  <div class="form-group combo-search-group">
+    <label>Choisir un membre existant</label>
+
+    <div class="input-wrapper combo-input-wrapper">
+      <span class="field-icon"><i class="uil uil-search"></i></span>
+      <input
+        type="text"
+        id="searchMembreExistant"
+        placeholder="Tapez le début du nom ou prénom..."
+        autocomplete="off"
+      />
+    </div>
+
+    <input type="hidden" id="selectedMembreExistant" value="" />
+
+    <div id="membreSuggestions" class="combo-suggestions"></div>
+
+    <small class="combo-help">
+      Tapez quelques lettres pour rechercher un membre existant.
+      Si vous ne sélectionnez personne, un nouveau membre sera créé
     </small>
   </div>
 </div>
 
-        <div class="account-modal-footer modal-footer-full">
-          <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
-          <button type="submit" class="btn btn-primary" id="btnCfd">
-            Enregistrer le membre CFD
-          </button>
+      <!-- Nom / prénom FR -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nom (FR)</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="nomMembreFr" placeholder="Ex : Djabar" required />
+          </div>
         </div>
-      </form>
-    </div>
+
+        <div class="form-group">
+          <label>Prénom (FR)</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="prenomMembreFr" placeholder="Ex : Bensalem" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- Nom / prénom AR -->
+      <div class="form-row">
+        <div class="form-group">
+          <label dir="rtl">(AR) اللقب</label>
+          <div class="input-wrapper" dir="rtl">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="nomMembreAr" placeholder="مثال: جبار" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label dir="rtl">(AR) الاسم</label>
+          <div class="input-wrapper" dir="rtl">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="prenomMembreAr" placeholder="مثال: بن سالم" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Grade + Sexe -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Grade</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-graduation-cap"></i></span>
+            <select id="gradeMembre">
+              <option value="">Professeur, MCA, MCB…</option>
+              <option value="PROF">Professeur</option>
+              <option value="MCA">MCA</option>
+              <option value="MCB">MCB</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group form-group-sex">
+          <label>Sexe</label>
+          <div class="sex-toggle" id="sexeToggle">
+            <button type="button" class="sex-option sex-option-active" data-sex-value="FEMME">
+              <span class="sex-icon-circle">
+                <i class="uil uil-female"></i>
+              </span>
+              <span>Femme</span>
+            </button>
+
+            <button type="button" class="sex-option" data-sex-value="HOMME">
+              <span class="sex-icon-circle">
+                <i class="uil uil-male"></i>
+              </span>
+              <span>Homme</span>
+            </button>
+          </div>
+          <input type="hidden" id="sexeMembre" value="FEMME" />
+        </div>
+      </div>
+
+      <!-- Rôle dans la CFD -->
+      <div class="form-row">
+        <div class="form-group" style="width:100%;" dir="rtl">
+          <label style="font-weight:600; display:block; margin-bottom:6px;" dir="rtl">
+            الدور في لجنة التكوين في الدكتوراه
+          </label>
+          <div class="input-wrapper" dir="rtl">
+            <span class="field-icon"><i class="uil uil-briefcase"></i></span>
+            <select id="cfdRoleSelect">
+              <option value="">-- اختر الدور --</option>
+            </select>
+          </div>
+          <small style="font-size:12px; opacity:.8;">
+            الأدوار ترتبط بالأقسام التي أدخلتها في المعلومات العامة.
+          </small>
+        </div>
+      </div>
+
+      <div class="account-modal-footer modal-footer-full">
+        <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
+        <button type="submit" class="primary-btn" id="btnCfd">
+          <i class="uil uil-check"></i>
+          Enregistrer le membre CFD
+        </button>
+      </div>
+    </form>
   </div>
+</div>
 
   <!-- ================== MODAL : CORRECTEUR ================== -->
-  <div class="modal" id="modalCorrecteur">
-    <div class="modal-backdrop" data-close-modal></div>
+<div class="modal" id="modalCorrecteur">
+  <div class="modal-backdrop" data-close-modal></div>
 
-    <div class="modal-dialog modal-dialog-large">
-      <div class="modal-header">
-        <h3>Nouveau correcteur</h3>
-        <button class="btn-icon" data-close-modal>
-          <i class="uil uil-times"></i>
-        </button>
-      </div>
-
-      <form id="formCorrecteur" class="modal-body account-form">
-        <!-- Nom / prénom FR -->
-        <div class="form-row">
-          <div class="form-group">
-            <label>Nom (FR)</label>
-            <div class="input-wrapper">
-              <span class="field-icon"><i class="uil uil-user"></i></span>
-              <input type="text" id="corrNomFr" placeholder="Ex : Djabar" required />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>Prénom (FR)</label>
-            <div class="input-wrapper">
-              <span class="field-icon"><i class="uil uil-user"></i></span>
-              <input type="text" id="corrPrenomFr" placeholder="Ex : Bensalem" required />
-            </div>
-          </div>
-        </div>
-
-        <!-- Nom / prénom AR -->
-        <div class="form-row">
-          <div class="form-group">
-            <label dir="rtl">(AR) اللقب</label>
-            <div class="input-wrapper" dir="rtl">
-              <span class="field-icon"><i class="uil uil-user"></i></span>
-              <input type="text" id="corrNomAr" placeholder="مثال: جبار" />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label dir="rtl">(AR) الاسم</label>
-            <div class="input-wrapper" dir="rtl">
-              <span class="field-icon"><i class="uil uil-user"></i></span>
-              <input type="text" id="corrPrenomAr" placeholder="مثال: بن سالم" />
-            </div>
-          </div>
-        </div>
-
-        <!-- Grade + Sexe -->
-        <div class="form-row">
-          <div class="form-group">
-            <label>Grade</label>
-            <div class="input-wrapper">
-              <span class="field-icon"><i class="uil uil-graduation-cap"></i></span>
-              <select id="corrGrade">
-                <option value="">Professeur, MCA, MCB…</option>
-                <option value="PROF">Professeur</option>
-                <option value="MCA">MCA</option>
-                <option value="MCB">MCB</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group form-group-sex">
-            <label>Sexe</label>
-            <div class="sex-toggle" id="sexeToggleCorrecteur">
-              <button type="button" class="sex-option sex-option-active" data-sex-value="FEMME">
-                <span class="sex-icon-circle">
-                  <i class="uil uil-female"></i>
-                </span>
-                <span>Femme</span>
-              </button>
-
-              <button type="button" class="sex-option" data-sex-value="HOMME">
-                <span class="sex-icon-circle">
-                  <i class="uil uil-male"></i>
-                </span>
-                <span>Homme</span>
-              </button>
-            </div>
-            <input type="hidden" id="sexeCorrecteur" value="FEMME" />
-          </div>
-        </div>
-
-        <div class="account-modal-footer modal-footer-full">
-          <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
-          <button type="submit" class="btn btn-primary">
-            Enregistrer le correcteur
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- ================== MODAL : CELLULE D'ANONYMAT ================== -->
-  <div class="modal" id="modalAnonymat">
-    <div class="modal-backdrop" data-close-modal></div>
-
-    <div class="modal-dialog modal-dialog-large">
-      <div class="modal-header">
-        <h3>Nouveau membre – Cellule d’anonymat</h3>
-        <button class="btn-icon" data-close-modal>
-          <i class="uil uil-times"></i>
-        </button>
-      </div>
-
-      <form id="formAnonymat" class="modal-body account-form">
-     
-      
-        <!-- Nom / prénom FR -->
-        <div class="form-row">
-          <div class="form-group">
-            <label>Nom (FR)</label>
-            <div class="input-wrapper">
-              <span class="field-icon"><i class="uil uil-user"></i></span>
-              <input type="text" id="anonyNomFr" placeholder="Ex : Djabar" required />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>Prénom (FR)</label>
-            <div class="input-wrapper">
-              <span class="field-icon"><i class="uil uil-user"></i></span>
-              <input type="text" id="anonyPrenomFr" placeholder="Ex : Bensalem" required />
-            </div>
-          </div>
-        </div>
-
-         <div class="form-row">
-          <div class="form-group">
-            <label dir="rtl">(AR) اللقب</label>
-            <div class="input-wrapper" dir="rtl">
-              <span class="field-icon"><i class="uil uil-user"></i></span>
-              <input type="text" id="anonyNomAr" placeholder="مثال: جبار" />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label dir="rtl">(AR) الاسم</label>
-            <div class="input-wrapper" dir="rtl">
-              <span class="field-icon"><i class="uil uil-user"></i></span>
-              <input type="text" id="anonyPrenomAr" placeholder="مثال: بن سالم" />
-            </div>
-          </div>
-        </div>
-
-        <!-- Grade + Sexe (optionnel) -->
-        <div class="form-row">
-          <div class="form-group">
-            <label>Grade</label>
-            <div class="input-wrapper">
-              <span class="field-icon"><i class="uil uil-graduation-cap"></i></span>
-              <select id="anonyGrade">
-                <option value="">Professeur, MCA, MCB…</option>
-                <option value="PROF">Professeur</option>
-                <option value="MCA">MCA</option>
-                <option value="MCB">MCB</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group form-group-sex">
-            <label>Sexe</label>
-            <div class="sex-toggle" id="sexeToggleAnonymat">
-              <button type="button" class="sex-option sex-option-active" data-sex-value="FEMME">
-                <span class="sex-icon-circle">
-                  <i class="uil uil-female"></i>
-                </span>
-                <span>Femme</span>
-              </button>
-
-              <button type="button" class="sex-option" data-sex-value="HOMME">
-                <span class="sex-icon-circle">
-                  <i class="uil uil-male"></i>
-                </span>
-                <span>Homme</span>
-              </button>
-            </div>
-            <input type="hidden" id="sexeAnonymat" value="FEMME" />
-          </div>
-        </div>
-
-       <div class="form-row">
-  <div class="form-group" dir="rtl">
-    <label for="anonymatRoleSelect">      الدور في لجنة التكوين في الدكتوراه
-</label>
-
-    <div class="input-wrapper" dir="rtl">
-      <span class="field-icon">
-        <i class="uil uil-list-ul"></i>
-      </span>
-
-      <select id="anonymatRoleSelect" required dir="rtl">
-        <option value="">-- اختر الدور --</option>
-        <!-- rempli depuis la base de données -->
-      </select>
+  <div class="modal-dialog modal-dialog-large">
+    <div class="modal-header">
+      <h3>Nouveau correcteur</h3>
+      <button class="btn-icon" data-close-modal type="button">
+        <i class="uil uil-times"></i>
+      </button>
     </div>
 
-    <small style="font-size:12px; opacity:.8;">
-      الأدوار ترتبط بالأقسام التي أدخلتها في المعلومات العامة.
-    </small>
+    <form id="formCorrecteur" class="modal-body account-form">
 
+      <!-- Choix membre existant -->
+      <div class="form-row">
+        <div class="form-group combo-search-group" style="width:100%;">
+          <label>Choisir un membre existant</label>
+
+          <div class="input-wrapper combo-input-wrapper">
+            <span class="field-icon"><i class="uil uil-search"></i></span>
+            <input
+              type="text"
+              id="searchCorrecteurExistant"
+              placeholder="Tapez le début du nom ou prénom..."
+              autocomplete="off"
+            />
+          </div>
+
+          <input type="hidden" id="selectedCorrecteurExistant" value="" />
+
+          <div id="correcteurSuggestions" class="combo-suggestions"></div>
+
+          <small class="combo-help">
+            Tapez quelques lettres pour rechercher un membre existant.
+            Si vous ne sélectionnez personne, un nouveau membre sera créé.
+          </small>
+        </div>
+      </div>
+
+      <!-- Nom / prénom FR -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nom (FR)</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="corrNomFr" placeholder="Ex : Djabar" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Prénom (FR)</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="corrPrenomFr" placeholder="Ex : Bensalem" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- Nom / prénom AR -->
+      <div class="form-row">
+        <div class="form-group">
+          <label dir="rtl">(AR) اللقب</label>
+          <div class="input-wrapper" dir="rtl">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="corrNomAr" placeholder="مثال: جبار" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label dir="rtl">(AR) الاسم</label>
+          <div class="input-wrapper" dir="rtl">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="corrPrenomAr" placeholder="مثال: بن سالم" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Grade + Sexe -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Grade</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-graduation-cap"></i></span>
+            <select id="corrGrade">
+              <option value="">Professeur, MCA, MCB…</option>
+              <option value="PROF">Professeur</option>
+              <option value="MCA">MCA</option>
+              <option value="MCB">MCB</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group form-group-sex">
+          <label>Sexe</label>
+          <div class="sex-toggle" id="sexeToggleCorrecteur">
+            <button type="button" class="sex-option sex-option-active" data-sex-value="FEMME">
+              <span class="sex-icon-circle">
+                <i class="uil uil-female"></i>
+              </span>
+              <span>Femme</span>
+            </button>
+
+            <button type="button" class="sex-option" data-sex-value="HOMME">
+              <span class="sex-icon-circle">
+                <i class="uil uil-male"></i>
+              </span>
+              <span>Homme</span>
+            </button>
+          </div>
+          <input type="hidden" id="sexeCorrecteur" value="FEMME" />
+        </div>
+      </div>
+
+      <div class="account-modal-footer modal-footer-full">
+        <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
+        <button type="submit" class="primary-btn" id="btnSaveCorrecteur">
+          <i class="uil uil-check"></i>
+          Enregistrer le correcteur
+        </button>
+      </div>
+    </form>
   </div>
 </div>
 
-        
+  <!-- ================== MODAL : CELLULE D'ANONYMAT ================== -->
+ <div class="modal" id="modalAnonymat">
+  <div class="modal-backdrop" data-close-modal></div>
 
-       
-
-        <div class="account-modal-footer modal-footer-full">
-          <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
-          <button id="btnSaveAnonymat" type="submit" class="primary-btn">
-            <i class="uil uil-check"></i>
-            Enregistrer le membre
-          </button>
-        </div>
-      </form>
+  <div class="modal-dialog modal-dialog-large">
+    <div class="modal-header">
+      <h3>Nouveau membre – Cellule d’anonymat</h3>
+      <button class="btn-icon" data-close-modal type="button">
+        <i class="uil uil-times"></i>
+      </button>
     </div>
+
+    <form id="formAnonymat" class="modal-body account-form">
+
+      <!-- Choix membre existant -->
+      <div class="form-row">
+        <div class="form-group combo-search-group" style="width:100%;">
+          <label>Choisir un membre existant</label>
+
+          <div class="input-wrapper combo-input-wrapper">
+            <span class="field-icon"><i class="uil uil-search"></i></span>
+            <input
+              type="text"
+              id="searchAnonymatExistant"
+              placeholder="Tapez le début du nom ou prénom..."
+              autocomplete="off"
+            />
+          </div>
+
+          <input type="hidden" id="selectedAnonymatExistant" value="" />
+
+          <div id="anonymatSuggestions" class="combo-suggestions"></div>
+
+          <small class="combo-help">
+            Tapez quelques lettres pour rechercher un membre existant.
+            Si vous ne sélectionnez personne, un nouveau membre sera créé.
+          </small>
+        </div>
+      </div>
+
+      <!-- Nom / prénom FR -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nom (FR)</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="anonyNomFr" placeholder="Ex : Djabar" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Prénom (FR)</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="anonyPrenomFr" placeholder="Ex : Bensalem" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- Nom / prénom AR -->
+      <div class="form-row">
+        <div class="form-group">
+          <label dir="rtl">(AR) اللقب</label>
+          <div class="input-wrapper" dir="rtl">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="anonyNomAr" placeholder="مثال: جبار" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label dir="rtl">(AR) الاسم</label>
+          <div class="input-wrapper" dir="rtl">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="anonyPrenomAr" placeholder="مثال: بن سالم" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Grade + Sexe -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Grade</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-graduation-cap"></i></span>
+            <select id="anonyGrade">
+              <option value="">Professeur, MCA, MCB…</option>
+              <option value="PROF">Professeur</option>
+              <option value="MCA">MCA</option>
+              <option value="MCB">MCB</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group form-group-sex">
+          <label>Sexe</label>
+          <div class="sex-toggle" id="sexeToggleAnonymat">
+            <button type="button" class="sex-option sex-option-active" data-sex-value="FEMME">
+              <span class="sex-icon-circle">
+                <i class="uil uil-female"></i>
+              </span>
+              <span>Femme</span>
+            </button>
+
+            <button type="button" class="sex-option" data-sex-value="HOMME">
+              <span class="sex-icon-circle">
+                <i class="uil uil-male"></i>
+              </span>
+              <span>Homme</span>
+            </button>
+          </div>
+          <input type="hidden" id="sexeAnonymat" value="FEMME" />
+        </div>
+      </div>
+
+      <!-- Rôle -->
+      <div class="form-row">
+        <div class="form-group" style="width:100%;" dir="rtl">
+          <label for="anonymatRoleSelect">الدور في لجنة التكوين في الدكتوراه</label>
+
+          <div class="input-wrapper" dir="rtl">
+            <span class="field-icon">
+              <i class="uil uil-list-ul"></i>
+            </span>
+
+            <select id="anonymatRoleSelect" required dir="rtl">
+              <option value="">-- اختر الدور --</option>
+            </select>
+          </div>
+
+          <small style="font-size:12px; opacity:.8;">
+            الأدوار ترتبط بالأقسام التي أدخلتها في المعلومات العامة.
+          </small>
+        </div>
+      </div>
+
+      <div class="account-modal-footer modal-footer-full">
+        <button type="button" class="btn btn-secondary" data-close-modal>Annuler</button>
+        <button id="btnSaveAnonymat" type="submit" class="primary-btn">
+          <i class="uil uil-check"></i>
+          Enregistrer le membre
+        </button>
+      </div>
+    </form>
   </div>
+</div>
 
   <!-- MODALE ORGANISATION SURVEILLANCE -->
 
@@ -2037,12 +2333,38 @@
   <div class="modal-dialog modal-dialog-large">
     <div class="modal-header">
       <h3>Nouveau membre – Organisation de surveillance</h3>
-      <button class="btn-icon" data-close-modal>
+      <button class="btn-icon" data-close-modal type="button">
         <i class="uil uil-times"></i>
       </button>
     </div>
 
     <form id="formSurveillance" class="modal-body account-form">
+
+      <!-- Choix membre existant -->
+      <div class="form-row">
+        <div class="form-group combo-search-group" style="width:100%;">
+          <label>Choisir un membre existant</label>
+
+          <div class="input-wrapper combo-input-wrapper">
+            <span class="field-icon"><i class="uil uil-search"></i></span>
+            <input
+              type="text"
+              id="searchSurveillanceExistant"
+              placeholder="Tapez le début du nom ou prénom..."
+              autocomplete="off"
+            />
+          </div>
+
+          <input type="hidden" id="selectedSurveillanceExistant" value="" />
+
+          <div id="surveillanceSuggestions" class="combo-suggestions"></div>
+
+          <small class="combo-help">
+            Tapez quelques lettres pour rechercher un membre existant.
+            Si vous ne sélectionnez personne, un nouveau membre sera créé.
+          </small>
+        </div>
+      </div>
 
       <!-- Nom / prénom FR -->
       <div class="form-row">
@@ -2120,64 +2442,37 @@
         </div>
       </div>
 
-      <!-- Salle + Capacité -->
+      <!-- Salle + Rôle -->
       <div class="form-row">
-
         <div class="form-group" dir="rtl">
-          <label for="survSalle">القاعة</label>
+          <label for="survSalleSelect">القاعة</label>
           <div class="input-wrapper" dir="rtl">
             <span class="field-icon"><i class="uil uil-building"></i></span>
-            <input type="text" id="survSalle" placeholder="مثال: A12 / Amphithéâtre 3" required />
+            <select id="survSalleSelect" required>
+              <option value="">-- Choisir une salle --</option>
+            </select>
           </div>
         </div>
 
-        <div class="form-group" dir="rtl">
-          <label for="survCapacite">السعة</label>
-          <div class="input-wrapper" dir="rtl">
-            <span class="field-icon"><i class="uil uil-users-alt"></i></span>
-            <input type="number" id="survCapacite" min="1" step="1" placeholder="مثال: 40" required />
+        <div class="form-group">
+          <label for="survRoleSelect">Rôle</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-briefcase"></i></span>
+            <select id="survRoleSelect" required>
+              <option value="">-- Choisir un rôle --</option>
+              <option value="RESPONSABLE">Responsable</option>
+              <option value="SURVEILLANT">Surveillant</option>
+            </select>
           </div>
-        </div>
-
-      </div>
-
-      <!-- Responsable -->
-      <div class="form-row">
-
-        <div class="form-group" dir="rtl">
-          <label>هل هو مسؤول؟</label>
-
-          <div class="sex-toggle" id="survResponsableToggle">
-
-            <button type="button" class="sex-option sex-option-active" data-resp="YES">
-              <span class="sex-icon-circle">
-                <i class="uil uil-check"></i>
-              </span>
-              <span>نعم (مسؤول)</span>
-            </button>
-
-            <button type="button" class="sex-option" data-resp="NO">
-              <span class="sex-icon-circle">
-                <i class="uil uil-times"></i>
-              </span>
-              <span>لا</span>
-            </button>
-
-          </div>
-
-          <input type="hidden" id="survEstResponsable" value="YES" />
 
           <small style="font-size:12px; opacity:.8;">
-            مسؤول واحد فقط لكل فريق.
+            Choisissez le rôle du membre dans l’organisation de surveillance.
           </small>
-
         </div>
-
       </div>
 
       <!-- Footer -->
       <div class="account-modal-footer modal-footer-full">
-
         <button type="button" class="btn btn-secondary" data-close-modal>
           Annuler
         </button>
@@ -2186,9 +2481,151 @@
           <i class="uil uil-check"></i>
           Enregistrer le membre
         </button>
-
       </div>
 
+    </form>
+  </div>
+</div>
+
+ <!-- MODALE  Commission  Sujets -->
+
+<div class="modal" id="modalCommissionSujets">
+  <div class="modal-backdrop" data-close-modal></div>
+
+  <div class="modal-dialog modal-dialog-large">
+    <div class="modal-header">
+      <h3>Nouveau membre – Commission d’élaboration des sujets</h3>
+      <button class="btn-icon" data-close-modal type="button">
+        <i class="uil uil-times"></i>
+      </button>
+    </div>
+
+    <form id="formCommissionSujets" class="modal-body account-form">
+
+      <div class="form-row">
+        <div class="form-group combo-search-group" style="width:100%;">
+          <label>Choisir un membre existant</label>
+
+          <div class="input-wrapper combo-input-wrapper">
+            <span class="field-icon"><i class="uil uil-search"></i></span>
+            <input
+              type="text"
+              id="searchCommissionSujetsExistant"
+              placeholder="Tapez le début du nom ou prénom..."
+              autocomplete="off"
+            />
+          </div>
+
+          <input type="hidden" id="selectedCommissionSujetsExistant" value="" />
+
+          <div id="commissionSujetsSuggestions" class="combo-suggestions"></div>
+
+          <small class="combo-help">
+            Tapez quelques lettres pour rechercher un membre existant.
+            Si vous ne sélectionnez personne, un nouveau membre sera créé.
+          </small>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nom (FR)</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="csNomFr" placeholder="Ex : Djabar" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Prénom (FR)</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="csPrenomFr" placeholder="Ex : Bensalem" required />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label dir="rtl">(AR) اللقب</label>
+          <div class="input-wrapper" dir="rtl">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="csNomAr" placeholder="مثال: جبار" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label dir="rtl">(AR) الاسم</label>
+          <div class="input-wrapper" dir="rtl">
+            <span class="field-icon"><i class="uil uil-user"></i></span>
+            <input type="text" id="csPrenomAr" placeholder="مثال: بن سالم" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Grade</label>
+          <div class="input-wrapper">
+            <span class="field-icon"><i class="uil uil-graduation-cap"></i></span>
+            <select id="csGrade">
+              <option value="">Professeur, MCA, MCB…</option>
+              <option value="PROF">Professeur</option>
+              <option value="MCA">MCA</option>
+              <option value="MCB">MCB</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group form-group-sex">
+          <label>Sexe</label>
+          <div class="sex-toggle" id="sexeToggleCommissionSujets">
+            <button type="button" class="sex-option sex-option-active" data-sex-value="FEMME">
+              <span class="sex-icon-circle">
+                <i class="uil uil-female"></i>
+              </span>
+              <span>Femme</span>
+            </button>
+
+            <button type="button" class="sex-option" data-sex-value="HOMME">
+              <span class="sex-icon-circle">
+                <i class="uil uil-male"></i>
+              </span>
+              <span>Homme</span>
+            </button>
+          </div>
+          <input type="hidden" id="sexeCommissionSujets" value="FEMME" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group" style="width:100%;" dir="rtl">
+          <label for="universiteCommission">جامعة</label>
+
+          <div class="input-wrapper" dir="rtl">
+            <span class="field-icon">
+              <i class="uil uil-university"></i>
+            </span>
+
+            <input
+              type="text"
+              id="universiteCommission"
+              value="جامعة العلوم والتكنولوجيا محمد بوضياف"
+            
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="account-modal-footer modal-footer-full">
+        <button type="button" class="btn btn-secondary" data-close-modal>
+          Annuler
+        </button>
+        <button id="btnSaveCommissionSujets" type="submit" class="primary-btn">
+          <i class="uil uil-check"></i>
+          Enregistrer le membre
+        </button>
+      </div>
     </form>
   </div>
 </div>

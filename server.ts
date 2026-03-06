@@ -13,9 +13,12 @@ import correcteurRoutes from "./routes/correcteur.routes";
 import viceDoyenRoutes from "./routes/viceDoyen.route";
 import doyenRoutes from "./routes/doyen.route";
 import cfdRoutes from "./routes/cfd.routes";
+import salleRoutes from "./routes/salle.routes";
 import celluleAnonymatRoutes from "./routes/celluleAnonymat.routes";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 import { sanitize } from "./middleware/sanitize";
+import responsableSalleRoutes from "./routes/responsable-salle.routes";
+import commissionElaborationSujetsRoutes from "./routes/commission-elaboration-sujets.routes";
 
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -55,8 +58,9 @@ app.use("/membres", membreRoutes);
 app.use("/vice-doyens", viceDoyenRoutes);
 app.use("/cfds", cfdRoutes);
 app.use("/doyens", doyenRoutes);
-
-
+app.use("/salles", salleRoutes);
+app.use("/responsable-salles", responsableSalleRoutes);
+app.use("/commission-elaboration-sujets", commissionElaborationSujetsRoutes);
 app.use("/cellules-anonymat", celluleAnonymatRoutes);
 app.use("/correcteurs", correcteurRoutes);
 

@@ -254,10 +254,10 @@ export async function getDepartementsByConcours(req: Request, res: Response) {
 
 export async function getConcoursByViceDoyen(req: Request, res: Response) {
     try {
-        const { idUser } = req.params;
+        const {   idMembre } = req.params;
 
-        if (!idUser) {
-            return res.status(400).json({ error: "idUser manquant" });
+        if (!idMembre) {
+            return res.status(400).json({ error: "idMembre manquant" });
         }
 
         const result = await pool.query<{
@@ -291,9 +291,9 @@ export async function getConcoursByViceDoyen(req: Request, res: Response) {
                 ON c.id_departement = d.id_departement
             JOIN specialite AS s
                 ON s.id_concours = c.id_concours
-            WHERE vd.id_user = $1;
+            WHERE vd.id_membre = $1;
             `,
-            [idUser]
+            [idMembre]
         );
 
 
@@ -312,10 +312,10 @@ export async function getConcoursByViceDoyen(req: Request, res: Response) {
 
 export async function getConcoursByDoyen(req: Request, res: Response) {
     try {
-        const { idUser } = req.params;
+        const { idMembre } = req.params;
 
-        if (!idUser) {
-            return res.status(400).json({ error: "idUser manquant" });
+        if (!idMembre) {
+            return res.status(400).json({ error: "idMembre manquant" });
         }
 
         const result = await pool.query<{
@@ -349,9 +349,9 @@ export async function getConcoursByDoyen(req: Request, res: Response) {
                 ON c.id_departement = d.id_departement
             JOIN specialite AS s
                 ON s.id_concours = c.id_concours
-            WHERE vd.id_user = $1;
+            WHERE vd.id_membre = $1;
             `,
-            [idUser]
+            [idMembre]
         );
 
 

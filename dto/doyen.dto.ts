@@ -3,9 +3,9 @@ import { z } from "zod";
 
 
 export const createDoyenSchema = z.object({
-  idUser: z
+  idMembre: z
     .string()
-    .uuid("idUser doit être un UUID valide"),
+    .uuid("idMembre doit être un UUID valide"),
 
   idFaculte: z
     .string()
@@ -18,7 +18,7 @@ export type CreateDoyenInput = z.infer<typeof createDoyenSchema>;
  * DTO pour la mise à jour
  */
 export const updateDoyenSchema = z.object({
-  idUser: z.string().uuid("idUser doit être un UUID valide").optional(),
+  idMembre: z.string().uuid("idMembre doit être un UUID valide").optional(),
   idFaculte: z.string().uuid("idFaculte doit être un UUID valide").optional(),
 });
 

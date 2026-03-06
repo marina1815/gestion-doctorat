@@ -498,7 +498,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             "POST",
                             {
                                 idFaculte: faculteSelect.value,
-                                idUser: createdUser.user.idUser, 
+                                idMembre: createdUser.user.idMembre, 
                             }
                         );
                         // Tu peux afficher un toast si tu veux :
@@ -524,7 +524,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             "POST",
                             {
                                 idFaculte: faculteSelect.value,
-                                idUser: createdUser.user.idUser, 
+                                idMembre: createdUser.user.idMembre, 
                             }
                         );
                         

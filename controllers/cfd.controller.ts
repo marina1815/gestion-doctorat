@@ -11,7 +11,7 @@ export async function getCfds(req: Request, res: Response) {
     const result = await pool.query<CfdRow>(`
       SELECT *
       FROM cfd
-      ORDER BY id_concours, id_user
+      ORDER BY id_concours, id_membre
     `);
 
     const cfds: Cfd[] = result.rows.map(mapCfdRowToModel);
@@ -58,7 +58,7 @@ export async function getCfdsByConcours(req: Request, res: Response) {
       SELECT *
       FROM cfd
       WHERE id_concours = $1
-      ORDER BY id_user
+      ORDER BY id_membre
       `,
       [idConcours]
     );
@@ -74,18 +74,18 @@ export async function getCfdsByConcours(req: Request, res: Response) {
 
 export async function createCfd(req: Request, res: Response) {
   try {
-    const { idConcours, idUser } = req.body as {
+    const { idConcours, idMembre } = req.body as {
       idConcours: string;
-      idUser: string;
+      idMembre: string;
     };
 
     const result = await pool.query<CfdRow>(
       `
-      INSERT INTO cfd (id_concours, id_user)
+      INSERT INTO cfd (id_concours, id_membre)
       VALUES ($1, $2)
       RETURNING *
       `,
-      [idConcours, idUser]
+      [idConcours, idMembre]
     );
      if (!result.rows[0]) {
       return res.status(404).json({ error: "CFD introuvable" });
@@ -113,9 +113,9 @@ export async function createCfd(req: Request, res: Response) {
 export async function updateCfd(req: Request, res: Response) {
   try {
     const { idCfd } = req.params;
-    const { idConcours, idUser } = req.body as {
+    const { idConcours, idMembre } = req.body as {
       idConcours?: string;
-      idUser?: string;
+      idMembre?: string;
     };
 
     
@@ -131,13 +131,13 @@ export async function updateCfd(req: Request, res: Response) {
     const current = existing.rows[0];
 
     const newIdConcours = idConcours ?? current.id_concours;
-    const newIdUser = idUser ?? current.id_user;
+    const newIdUser = idMembre ?? current.id_membre;
 
     const result = await pool.query<CfdRow>(
       `
       UPDATE cfd
       SET id_concours = $1,
-          id_user = $2
+          id_membre = $2
       WHERE id_cfd = $3
       RETURNING *
       `,

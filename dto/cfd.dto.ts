@@ -6,10 +6,10 @@ export const createCfdSchema = z.object({
         .string()
         .uuid("idConcours doit être un UUID valide"),
 
-    idUser: z
+    idMembre: z
         .string(
     )
-        .uuid("idUser doit être un UUID valide"),
+        .uuid("idMembre doit être un UUID valide"),
 });
 
 export const updateCfdSchema = z.object({
@@ -17,9 +17,9 @@ export const updateCfdSchema = z.object({
         .string()
         .uuid("idConcours doit être un UUID valide")
         .optional(),
-    idUser: z
+    idMembre: z
         .string()
-        .uuid("idUser doit être un UUID valide")
+        .uuid("idMembre doit être un UUID valide")
         .optional(),
 });
 

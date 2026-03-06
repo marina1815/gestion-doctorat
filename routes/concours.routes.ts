@@ -29,11 +29,11 @@ router.get(
 );
 
 router.get(
-  "/vicedoyen/:idUser",
+  "/vicedoyen/:idMembre",
   getConcoursByViceDoyen
 );
 router.get(
-  "/doyen/:idUser",
+  "/doyen/:idMembre",
   getConcoursByDoyen
 );
 

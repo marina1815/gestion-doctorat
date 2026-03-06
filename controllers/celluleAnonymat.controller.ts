@@ -14,7 +14,7 @@ export async function getCellulesAnonymat(req: Request, res: Response) {
     const result = await pool.query<CelluleAnonymatRow>(`
       SELECT *
       FROM cellule_anonymat
-      ORDER BY id_concours, id_user
+      ORDER BY id_concours, id_membre
     `);
 
     const items: CelluleAnonymat[] = result.rows.map(mapCelluleAnonymatRowToModel);
@@ -59,7 +59,7 @@ export async function getCellulesAnonymatByConcours(req: Request, res: Response)
       SELECT *
       FROM cellule_anonymat
       WHERE id_concours = $1
-      ORDER BY id_user
+      ORDER BY id_membre
       `,
       [idConcours]
     );
@@ -74,18 +74,18 @@ export async function getCellulesAnonymatByConcours(req: Request, res: Response)
 
 export async function createCelluleAnonymat(req: Request, res: Response) {
   try {
-    const { idConcours, idUser } = req.body as {
+    const { idConcours, idMembre } = req.body as {
       idConcours: string;
-      idUser: string;
+      idMembre: string;
     };
 
     const result = await pool.query<CelluleAnonymatRow>(
       `
-      INSERT INTO cellule_anonymat (id_concours, id_user)
+      INSERT INTO cellule_anonymat (id_concours, id_membre)
       VALUES ($1, $2)
       RETURNING *
       `,
-      [idConcours, idUser]
+      [idConcours, idMembre]
     );
 
     if (!result.rows[0]) {
@@ -97,7 +97,7 @@ export async function createCelluleAnonymat(req: Request, res: Response) {
   } catch (err: any) {
     console.error("Error createCelluleAnonymat:", err);
 
-    // Doublon (si tu as UNIQUE(id_concours, id_user))
+    // Doublon (si tu as UNIQUE(id_concours, id_membre))
     if (err.code === "23505") {
       return res
         .status(400)
@@ -114,9 +114,9 @@ export async function createCelluleAnonymat(req: Request, res: Response) {
 export async function updateCelluleAnonymat(req: Request, res: Response) {
   try {
     const { idCelluleAnonymat } = req.params;
-    const { idConcours, idUser } = req.body as {
+    const { idConcours, idMembre } = req.body as {
       idConcours?: string;
-      idUser?: string;
+      idMembre?: string;
     };
 
     const existing = await pool.query<CelluleAnonymatRow>(
@@ -131,13 +131,13 @@ export async function updateCelluleAnonymat(req: Request, res: Response) {
     const current = existing.rows[0];
 
     const newIdConcours = idConcours ?? current.id_concours;
-    const newIdUser = idUser ?? current.id_user;
+    const newIdUser = idMembre ?? current.id_membre;
 
     const result = await pool.query<CelluleAnonymatRow>(
       `
       UPDATE cellule_anonymat
       SET id_concours = $1,
-          id_user = $2
+          id_membre = $2
       WHERE id_cellule_anonymat = $3
       RETURNING *
       `,
