@@ -6,29 +6,202 @@ document.addEventListener("DOMContentLoaded", () => {
     /* =========================
       FETCH JSON helper
       ========================= */
-    async function fetchJson(url, options = {}) {
-        const finalOptions = {
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-                ...(options.headers || {}),
-            },
-            ...options,
-        };
+   async function fetchJson(url, options = {}, _retry = true) {
+    const finalOptions = {
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {}),
+        },
+        ...options,
+    };
 
-        const res = await fetch(url, finalOptions);
+    let res = await fetch(url, finalOptions);
 
-        if (!res.ok) {
-            let message = "Erreur serveur";
-            try {
-                const data = await res.json();
-                message = data.error || data.message || message;
-            } catch (_) { }
-            throw new Error(message);
+    // ✅ session expirée => tentative de refresh une seule fois
+    if ((res.status === 401 || res.status === 419) && _retry) {
+        try {
+            await refreshSession();
+            res = await fetch(url, finalOptions);
+        } catch (e) {
+            handleSessionExpired?.();
+            showToast("Session expirée", "danger");
+            throw new Error("Session expirée");
+        }
+    }
+
+    // ✅ après retry, toujours expirée
+    if (res.status === 401 || res.status === 419) {
+        handleSessionExpired?.();
+        showToast("Session expirée", "danger");
+        throw new Error("Session expirée");
+    }
+
+    const contentType = res.headers.get("content-type") || "";
+    let data = null;
+    let message = "Erreur serveur";
+
+    try {
+        if (contentType.includes("application/json")) {
+            data = await res.json();
+        } else {
+            const text = await res.text();
+            data = { message: text };
+        }
+    } catch (_) {
+        data = null;
+    }
+
+    // ✅ si erreur backend
+    if (!res.ok) {
+        if (data) {
+            // cas simple: { message: "..." } ou { error: "..." }
+            if (typeof data.message === "string" && data.message.trim()) {
+                message = data.message.trim();
+            } else if (typeof data.error === "string" && data.error.trim()) {
+                message = data.error.trim();
+            }
+            // cas validation: { errors: [...] } ou { errors: { field: ["..."] } }
+            else if (Array.isArray(data.errors) && data.errors.length > 0) {
+                message = data.errors.map(err => {
+                    if (typeof err === "string") return err;
+                    if (err?.message) return err.message;
+                    return JSON.stringify(err);
+                }).join(" | ");
+            } else if (data.errors && typeof data.errors === "object") {
+                const allErrors = Object.values(data.errors).flat().filter(Boolean);
+                if (allErrors.length > 0) {
+                    message = allErrors.join(" | ");
+                }
+            }
         }
 
-        return res.json();
+        // ✅ messages plus lisibles selon status
+        if (res.status === 409 && message === "Erreur serveur") {
+            message = "Conflit détecté";
+        } else if (res.status === 404 && message === "Erreur serveur") {
+            message = "Ressource introuvable";
+        } else if (res.status === 403 && message === "Erreur serveur") {
+            message = "Accès refusé";
+        } else if (res.status >= 500 && message === "Erreur serveur") {
+            message = "Erreur interne du serveur";
+        }
+
+        showToast(message, "danger");
+        throw new Error(message);
     }
+
+    return data;
+}
+
+    async function refreshSession() {
+  const res = await fetch(`${API_BASE}/auth/refresh`, {
+    method: "POST",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error("Refresh token invalide");
+  }
+}
+
+// ✅ fallback si tu ne l'as pas ailleurs
+function handleSessionExpired() {
+  try {
+    showToast("Session expirée. Merci de vous reconnecter.", "error");
+  } catch (_) {}
+  // optionnel : rediriger vers login
+  // window.location.href = "/login.html";
+}
+
+ async function fetchJson(url, options = {}, _retry = true) {
+    const finalOptions = {
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {}),
+        },
+        ...options,
+    };
+
+    let res = await fetch(url, finalOptions);
+
+    // ✅ session expirée => tentative de refresh une seule fois
+    if ((res.status === 401 || res.status === 419) && _retry) {
+        try {
+            await refreshSession();
+            res = await fetch(url, finalOptions);
+        } catch (e) {
+            handleSessionExpired?.();
+            showToast("Session expirée", "danger");
+            throw new Error("Session expirée");
+        }
+    }
+
+    // ✅ après retry, toujours expirée
+    if (res.status === 401 || res.status === 419) {
+        handleSessionExpired?.();
+        showToast("Session expirée", "danger");
+        throw new Error("Session expirée");
+    }
+
+    const contentType = res.headers.get("content-type") || "";
+    let data = null;
+    let message = "Erreur serveur";
+
+    try {
+        if (contentType.includes("application/json")) {
+            data = await res.json();
+        } else {
+            const text = await res.text();
+            data = { message: text };
+        }
+    } catch (_) {
+        data = null;
+    }
+
+    // ✅ si erreur backend
+    if (!res.ok) {
+        if (data) {
+            // cas simple: { message: "..." } ou { error: "..." }
+            if (typeof data.message === "string" && data.message.trim()) {
+                message = data.message.trim();
+            } else if (typeof data.error === "string" && data.error.trim()) {
+                message = data.error.trim();
+            }
+            // cas validation: { errors: [...] } ou { errors: { field: ["..."] } }
+            else if (Array.isArray(data.errors) && data.errors.length > 0) {
+                message = data.errors.map(err => {
+                    if (typeof err === "string") return err;
+                    if (err?.message) return err.message;
+                    return JSON.stringify(err);
+                }).join(" | ");
+            } else if (data.errors && typeof data.errors === "object") {
+                const allErrors = Object.values(data.errors).flat().filter(Boolean);
+                if (allErrors.length > 0) {
+                    message = allErrors.join(" | ");
+                }
+            }
+        }
+
+        // ✅ messages plus lisibles selon status
+        if (res.status === 409 && message === "Erreur serveur") {
+            message = "Conflit détecté";
+        } else if (res.status === 404 && message === "Erreur serveur") {
+            message = "Ressource introuvable";
+        } else if (res.status === 403 && message === "Erreur serveur") {
+            message = "Accès refusé";
+        } else if (res.status >= 500 && message === "Erreur serveur") {
+            message = "Erreur interne du serveur";
+        }
+
+        showToast(message, "danger");
+        throw new Error(message);
+    }
+
+    return data;
+}
+
 
     /* =========================
        TOASTS
@@ -2463,9 +2636,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return btoa(binary);
     }
 
-    /* =========================
-       PRINT CFD MEMBERS (conservé, juste robustesse)
-       ========================= */
     const btnPrintCfdMembers = document.getElementById("btnPrintCfdMembers");
     const pvPrintArea = document.getElementById("pvPrintArea");
 
@@ -2484,34 +2654,46 @@ document.addEventListener("DOMContentLoaded", () => {
             const sheet = document.createElement("div");
             sheet.className = "pv-sheet";
             sheet.style.direction = "rtl";
-            sheet.style.fontFamily = "'Cairo','Tajawal','Times New Roman',serif";
-            sheet.style.fontSize = "11pt";
-            sheet.style.lineHeight = "1.9";
+            sheet.style.fontFamily = "'Arial','Tahoma','Cairo','Tajawal','Times New Roman',serif";
+            sheet.style.fontSize = "12pt";
+            sheet.style.lineHeight = "1.6";
+            sheet.style.background = "#fff";
+            sheet.style.color = "#000";
+            sheet.style.width = "100%";
+            sheet.style.maxWidth = "210mm";
+            sheet.style.padding = "12mm 14mm 10mm 14mm";
+            sheet.style.margin = "0 auto";
+            sheet.style.boxSizing = "border-box";
 
-            const title = document.createElement("h3");
+            const title = document.createElement("div");
             const faculteAR = JSON.parse(localStorage.getItem("dg-faculte") || "null");
             const faculteARar = faculteAR?.faculte?.nomFaculte || "";
-            const num = localStorage.getItem("dg-numeroConcours");
+            const num = localStorage.getItem("dg-numeroConcours") || "";
             title.textContent = `الجزائرية الديمقراطية الشعبية\nوزارة التعليم العالي والبحث العلمي\nجامعة العلوم والتكنولوجيا محمد بوضياف\n${faculteARar}\n${num}\n`;
             title.style.textAlign = "center";
-            title.style.margin = "10px 0 14px";
-            title.style.fontSize = "11px";
+            title.style.margin = "0 0 12px 0";
+            title.style.fontSize = "13px";
             title.style.fontWeight = "700";
+            title.style.whiteSpace = "pre-line";
+            title.style.lineHeight = "1.6";
             sheet.appendChild(title);
 
-            const title2 = document.createElement("h3");
+            const title2 = document.createElement("div");
             title2.textContent = "إنشاء لجنة الإشراف على مسابقة الدكتوراه";
             title2.style.textAlign = "center";
-            title2.style.margin = "10px 0 14px";
-            title2.style.fontSize = "16px";
+            title2.style.margin = "0 0 12px 0";
+            title2.style.fontSize = "18px";
             title2.style.fontWeight = "700";
+            title2.style.lineHeight = "1.5";
             sheet.appendChild(title2);
 
             if (ARtext) {
                 const p = document.createElement("p");
                 p.style.whiteSpace = "pre-wrap";
-                p.style.marginBottom = "20px";
+                p.style.margin = "0 0 10px 0";
                 p.style.textAlign = "justify";
+                p.style.fontSize = "12pt";
+                p.style.lineHeight = "1.6";
                 p.textContent = ARtext;
                 sheet.appendChild(p);
             }
@@ -2523,10 +2705,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const p1 = document.createElement("p");
             p1.style.whiteSpace = "pre-wrap";
-            p1.style.marginBottom = "20px";
+            p1.style.margin = "0 0 10px 0";
             p1.style.textAlign = "justify";
             p1.style.direction = "rtl";
             p1.style.fontFamily = "Cairo, 'Tajawal', sans-serif";
+            p1.style.fontSize = "12pt";
+            p1.style.lineHeight = "1.7";
             p1.textContent =
                 `المادة الأولى: تنشأ لجنة الإشراف على مسابقة الدكتوراه للسنة الجامعية ${anneeUniversitaire}.\n` +
                 `المادة الثانية: تشكل هذه اللجنة من السادة الأساتذة التالية أسماؤهم:`;
@@ -2535,15 +2719,20 @@ document.addEventListener("DOMContentLoaded", () => {
             const table = document.createElement("table");
             table.style.width = "100%";
             table.style.borderCollapse = "collapse";
-            table.style.marginTop = "4px";
+            table.style.marginTop = "6px";
+            table.style.marginBottom = "6px";
             table.style.border = "1px solid #000";
+            table.style.fontSize = "12pt";
 
             function makeTd(text) {
                 const td = document.createElement("td");
-                td.textContent = text;
+                td.textContent = text ?? "";
                 td.style.border = "1px solid #000";
-                td.style.padding = "6px 6px";
+                td.style.padding = "8px 8px";
                 td.style.textAlign = "right";
+                td.style.verticalAlign = "middle";
+                td.style.fontSize = "12pt";
+                td.style.lineHeight = "1.5";
                 return td;
             }
 
@@ -2560,7 +2749,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     `${member.nomFr || ""} ${member.prenomFr || ""}`.trim();
 
                 const grade = member.role || "";
-                const fonction = isPresident ? "رئيسا" : "عضو";
+                const fonction = isPresident ? "رئيسا" : "عضوا";
 
                 tr.appendChild(makeTd(nomAr));
                 tr.appendChild(makeTd(grade));
@@ -2576,8 +2765,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const foote = document.createElement("p");
             foote.textContent = `المادة الثالثة: يكلف الأمين العام الكلية بتنفيذ هذا المقرر.`;
-            foote.style.marginTop = "11px";
+            foote.style.marginTop = "8px";
+            foote.style.marginBottom = "0";
             foote.style.textAlign = "right";
+            foote.style.fontSize = "12pt";
+            foote.style.lineHeight = "1.6";
             sheet.appendChild(foote);
 
             const footer = document.createElement("p");
@@ -2585,14 +2777,18 @@ document.addEventListener("DOMContentLoaded", () => {
             const mm = String(now.getMonth() + 1).padStart(2, "0");
             const dd = String(now.getDate()).padStart(2, "0");
             footer.textContent = `حرّر في: ${yyyy}/${mm}/${dd}`;
-            footer.style.marginTop = "32px";
+            footer.style.marginTop = "14px";
+            footer.style.marginBottom = "0";
             footer.style.textAlign = "left";
+            footer.style.fontSize = "12pt";
             sheet.appendChild(footer);
 
             const footer2 = document.createElement("p");
             footer2.textContent = "عميد الكلية";
-            footer2.style.marginTop = "50px";
+            footer2.style.marginTop = "18px";
+            footer2.style.marginBottom = "0";
             footer2.style.textAlign = "left";
+            footer2.style.fontSize = "12pt";
             sheet.appendChild(footer2);
 
             pvPrintArea.appendChild(sheet);
@@ -2627,7 +2823,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
-    // ===== Déclarations =====
+  
     const btnOpenModalSalle = document.getElementById("btnOpenModalSalle");
     const modalSurveillance = document.getElementById("modalSurveillance");
     const formSurveillance = document.getElementById("formSurveillance");
@@ -3182,21 +3378,21 @@ document.addEventListener("DOMContentLoaded", () => {
        ========================================================= */
 
     function saveCommissionSujetsToLocalStorage() {
-    localStorage.setItem(
-        "dg-membreComitSujet",
-        JSON.stringify(commissionSujetsMembers || [])
-    );
-}
-
-function loadCommissionSujetsFromLocalStorage() {
-    try {
-        const raw = localStorage.getItem("dg-membreComitSujet");
-        commissionSujetsMembers = raw ? JSON.parse(raw) : [];
-    } catch (err) {
-        console.error("Erreur lecture localStorage dg-membreComitSujet :", err);
-        commissionSujetsMembers = [];
+        localStorage.setItem(
+            "dg-membreComitSujet",
+            JSON.stringify(commissionSujetsMembers || [])
+        );
     }
-}
+
+    function loadCommissionSujetsFromLocalStorage() {
+        try {
+            const raw = localStorage.getItem("dg-membreComitSujet");
+            commissionSujetsMembers = raw ? JSON.parse(raw) : [];
+        } catch (err) {
+            console.error("Erreur lecture localStorage dg-membreComitSujet :", err);
+            commissionSujetsMembers = [];
+        }
+    }
     async function loadMembresForCommissionSujetsModal() {
         try {
             const data = await fetchJson(`${API_BASE}/membres`, {
@@ -3708,7 +3904,6 @@ function loadCommissionSujetsFromLocalStorage() {
 
     if (btnPrintCorrecteursMembers && pvPrintArea) {
         btnPrintCorrecteursMembers.addEventListener("click", async () => {
-            // ✅ spécialité: texte option sélectionnée + value input AR
             const specFR = getSelectedSpecialiteLabelFR();
             const specId = getSelectedSpecialiteId();
             const specAR = inputSpecialiteAr ? inputSpecialiteAr.value.trim() : "";
@@ -3731,35 +3926,47 @@ function loadCommissionSujetsFromLocalStorage() {
             const sheet = document.createElement("div");
             sheet.className = "pv-sheet";
             sheet.style.direction = "rtl";
-            sheet.style.fontFamily = "'Cairo','Tajawal','Times New Roman',serif";
-            sheet.style.fontSize = "11pt";
-            sheet.style.lineHeight = "1.9";
+            sheet.style.fontFamily = "'Arial','Tahoma','Cairo','Tajawal','Times New Roman',serif";
+            sheet.style.fontSize = "12pt";
+            sheet.style.lineHeight = "1.6";
+            sheet.style.background = "#fff";
+            sheet.style.color = "#000";
+            sheet.style.width = "100%";
+            sheet.style.maxWidth = "210mm";
+            sheet.style.padding = "12mm 14mm 10mm 14mm";
+            sheet.style.margin = "0 auto";
+            sheet.style.boxSizing = "border-box";
 
-            const title = document.createElement("h3");
+            const title = document.createElement("div");
             const faculteAR = JSON.parse(localStorage.getItem("dg-faculte") || "null");
             const faculteARar = faculteAR?.faculte?.nomFaculte || "";
-            const num = localStorage.getItem("dg-numeroConcours");
+            const num = localStorage.getItem("dg-numeroConcours") || "";
             title.textContent =
                 `الجزائرية الديمقراطية الشعبية\nوزارة التعليم العالي والبحث العلمي\nجامعة العلوم والتكنولوجيا محمد بوضياف\n${faculteARar}\n${num}\n`;
             title.style.textAlign = "center";
-            title.style.margin = "10px 0 14px";
-            title.style.fontSize = "11px";
+            title.style.margin = "0 0 12px 0";
+            title.style.fontSize = "13px";
             title.style.fontWeight = "700";
+            title.style.whiteSpace = "pre-line";
+            title.style.lineHeight = "1.6";
             sheet.appendChild(title);
 
-            const title2 = document.createElement("h3");
+            const title2 = document.createElement("div");
             title2.textContent = "إنشاء لجنة المصححين على مسابقة الدكتوراه";
             title2.style.textAlign = "center";
-            title2.style.margin = "10px 0 14px";
-            title2.style.fontSize = "16px";
+            title2.style.margin = "0 0 12px 0";
+            title2.style.fontSize = "18px";
             title2.style.fontWeight = "700";
+            title2.style.lineHeight = "1.5";
             sheet.appendChild(title2);
 
             if (ARtext) {
                 const p = document.createElement("p");
                 p.style.whiteSpace = "pre-wrap";
-                p.style.marginBottom = "20px";
+                p.style.margin = "0 0 10px 0";
                 p.style.textAlign = "justify";
+                p.style.fontSize = "12pt";
+                p.style.lineHeight = "1.6";
                 p.textContent = ARtext;
                 sheet.appendChild(p);
             }
@@ -3771,11 +3978,12 @@ function loadCommissionSujetsFromLocalStorage() {
 
             const p1 = document.createElement("p");
             p1.style.whiteSpace = "pre-wrap";
-            p1.style.marginBottom = "20px";
+            p1.style.margin = "0 0 10px 0";
             p1.style.textAlign = "justify";
             p1.style.direction = "rtl";
             p1.style.fontFamily = "Cairo, 'Tajawal', sans-serif";
-
+            p1.style.fontSize = "12pt";
+            p1.style.lineHeight = "1.7";
             p1.textContent =
                 `المادة الأولى: تُنشأ لجنة المصححين على مسابقة الدكتوراه تخصص ${specAR || "........"} (${specFR}) للسنة الجامعية ${anneeUniversitaire}.\n` +
                 `المادة الثانية: تُشكل هذه اللجنة من السادة الأساتذة التالية أسماؤهم:`;
@@ -3784,15 +3992,20 @@ function loadCommissionSujetsFromLocalStorage() {
             const table = document.createElement("table");
             table.style.width = "100%";
             table.style.borderCollapse = "collapse";
-            table.style.marginTop = "4px";
+            table.style.marginTop = "6px";
+            table.style.marginBottom = "6px";
             table.style.border = "1px solid #000";
+            table.style.fontSize = "12pt";
 
             function makeTd(text) {
                 const td = document.createElement("td");
-                td.textContent = text;
+                td.textContent = text ?? "";
                 td.style.border = "1px solid #000";
-                td.style.padding = "6px 6px";
+                td.style.padding = "8px 8px";
                 td.style.textAlign = "right";
+                td.style.verticalAlign = "middle";
+                td.style.fontSize = "12pt";
+                td.style.lineHeight = "1.5";
                 return td;
             }
 
@@ -3833,14 +4046,18 @@ function loadCommissionSujetsFromLocalStorage() {
 
             const footer = document.createElement("p");
             footer.textContent = `حرّر في: ${yyyy}/${mm}/${dd}`;
-            footer.style.marginTop = "32px";
+            footer.style.marginTop = "14px";
+            footer.style.marginBottom = "0";
             footer.style.textAlign = "left";
+            footer.style.fontSize = "12pt";
             sheet.appendChild(footer);
 
             const footer2 = document.createElement("p");
             footer2.textContent = "عميد الكلية";
-            footer2.style.marginTop = "50px";
+            footer2.style.marginTop = "18px";
+            footer2.style.marginBottom = "0";
             footer2.style.textAlign = "left";
+            footer2.style.fontSize = "12pt";
             sheet.appendChild(footer2);
 
             pvPrintArea.appendChild(sheet);
@@ -3874,12 +4091,10 @@ function loadCommissionSujetsFromLocalStorage() {
             } finally {
                 localStorage.removeItem("dg-selected-spec");
                 if (selectSpecialite) {
-                    selectSpecialite.selectedIndex = 0; // revient sur la 1ère option
-                    // ou : selectSpecialite.value = "";
-                    selectSpecialite.dispatchEvent(new Event("change")); // applique ton onChange (désactive l'input AR)
+                    selectSpecialite.selectedIndex = 0;
+                    selectSpecialite.dispatchEvent(new Event("change"));
                 }
                 pvPrintArea.innerHTML = "";
-
             }
         });
     }
@@ -3888,8 +4103,6 @@ function loadCommissionSujetsFromLocalStorage() {
 
     if (btnPrintAnonymatMembers && pvPrintArea) {
         btnPrintAnonymatMembers.addEventListener("click", async () => {
-
-
             if (!anonymatMembers || anonymatMembers.length === 0) {
                 showToast("لا يوجد المشرفين للطباعة.", "warning");
                 return;
@@ -3903,35 +4116,47 @@ function loadCommissionSujetsFromLocalStorage() {
             const sheet = document.createElement("div");
             sheet.className = "pv-sheet";
             sheet.style.direction = "rtl";
-            sheet.style.fontFamily = "'Cairo','Tajawal','Times New Roman',serif";
-            sheet.style.fontSize = "11pt";
-            sheet.style.lineHeight = "1.9";
+            sheet.style.fontFamily = "'Arial','Tahoma','Cairo','Tajawal','Times New Roman',serif";
+            sheet.style.fontSize = "12pt";
+            sheet.style.lineHeight = "1.6";
+            sheet.style.background = "#fff";
+            sheet.style.color = "#000";
+            sheet.style.width = "100%";
+            sheet.style.maxWidth = "210mm";
+            sheet.style.padding = "12mm 14mm 10mm 14mm";
+            sheet.style.margin = "0 auto";
+            sheet.style.boxSizing = "border-box";
 
-            const title = document.createElement("h3");
+            const title = document.createElement("div");
             const faculteAR = JSON.parse(localStorage.getItem("dg-faculte") || "null");
             const faculteARar = faculteAR?.faculte?.nomFaculte || "";
-            const num = localStorage.getItem("dg-numeroConcours");
+            const num = localStorage.getItem("dg-numeroConcours") || "";
             title.textContent =
                 `الجزائرية الديمقراطية الشعبية\nوزارة التعليم العالي والبحث العلمي\nجامعة العلوم والتكنولوجيا محمد بوضياف\n${faculteARar}\n${num}`;
             title.style.textAlign = "center";
-            title.style.margin = "10px 0 14px";
-            title.style.fontSize = "11px";
+            title.style.margin = "0 0 12px 0";
+            title.style.fontSize = "13px";
             title.style.fontWeight = "700";
+            title.style.whiteSpace = "pre-line";
+            title.style.lineHeight = "1.6";
             sheet.appendChild(title);
 
-            const title2 = document.createElement("h3");
+            const title2 = document.createElement("div");
             title2.textContent = "إنشاء لجنة التشفير على مسابقة الدكتوراه";
             title2.style.textAlign = "center";
-            title2.style.margin = "10px 0 14px";
-            title2.style.fontSize = "16px";
+            title2.style.margin = "0 0 12px 0";
+            title2.style.fontSize = "18px";
             title2.style.fontWeight = "700";
+            title2.style.lineHeight = "1.5";
             sheet.appendChild(title2);
 
             if (ARtext) {
                 const p = document.createElement("p");
                 p.style.whiteSpace = "pre-wrap";
-                p.style.marginBottom = "20px";
+                p.style.margin = "0 0 10px 0";
                 p.style.textAlign = "justify";
+                p.style.fontSize = "12pt";
+                p.style.lineHeight = "1.6";
                 p.textContent = ARtext;
                 sheet.appendChild(p);
             }
@@ -3943,28 +4168,34 @@ function loadCommissionSujetsFromLocalStorage() {
 
             const p1 = document.createElement("p");
             p1.style.whiteSpace = "pre-wrap";
-            p1.style.marginBottom = "20px";
+            p1.style.margin = "0 0 10px 0";
             p1.style.textAlign = "justify";
             p1.style.direction = "rtl";
             p1.style.fontFamily = "Cairo, 'Tajawal', sans-serif";
-
+            p1.style.fontSize = "12pt";
+            p1.style.lineHeight = "1.7";
             p1.textContent =
-                `المادة الأولى: تُنشأ لجنة التشفير على مسابقة الدكتوراه   للسنة الجامعية ${anneeUniversitaire}.\n` +
+                `المادة الأولى: تُنشأ لجنة التشفير على مسابقة الدكتوراه للسنة الجامعية ${anneeUniversitaire}.\n` +
                 `المادة الثانية: تُشكل هذه اللجنة من السادة الأساتذة التالية أسماؤهم:`;
             sheet.appendChild(p1);
 
             const table = document.createElement("table");
             table.style.width = "100%";
             table.style.borderCollapse = "collapse";
-            table.style.marginTop = "4px";
+            table.style.marginTop = "6px";
+            table.style.marginBottom = "6px";
             table.style.border = "1px solid #000";
+            table.style.fontSize = "12pt";
 
             function makeTd(text) {
                 const td = document.createElement("td");
-                td.textContent = text;
+                td.textContent = text ?? "";
                 td.style.border = "1px solid #000";
-                td.style.padding = "6px 6px";
+                td.style.padding = "8px 8px";
                 td.style.textAlign = "right";
+                td.style.verticalAlign = "middle";
+                td.style.fontSize = "12pt";
+                td.style.lineHeight = "1.5";
                 return td;
             }
 
@@ -3980,9 +4211,6 @@ function loadCommissionSujetsFromLocalStorage() {
 
                 const fonction = member.role || "";
                 const institution = "";
-
-
-
 
                 tr.appendChild(makeTd(nomAr));
                 tr.appendChild(makeTd(institution));
@@ -4003,14 +4231,18 @@ function loadCommissionSujetsFromLocalStorage() {
 
             const footer = document.createElement("p");
             footer.textContent = `حرّر في: ${yyyy}/${mm}/${dd}`;
-            footer.style.marginTop = "32px";
+            footer.style.marginTop = "14px";
+            footer.style.marginBottom = "0";
             footer.style.textAlign = "left";
+            footer.style.fontSize = "12pt";
             sheet.appendChild(footer);
 
             const footer2 = document.createElement("p");
             footer2.textContent = "عميد الكلية";
-            footer2.style.marginTop = "50px";
+            footer2.style.marginTop = "18px";
+            footer2.style.marginBottom = "0";
             footer2.style.textAlign = "left";
+            footer2.style.fontSize = "12pt";
             sheet.appendChild(footer2);
 
             pvPrintArea.appendChild(sheet);
@@ -4044,12 +4276,10 @@ function loadCommissionSujetsFromLocalStorage() {
             } finally {
                 localStorage.removeItem("dg-selected-spec");
                 if (selectSpecialite) {
-                    selectSpecialite.selectedIndex = 0; // revient sur la 1ère option
-                    // ou : selectSpecialite.value = "";
-                    selectSpecialite.dispatchEvent(new Event("change")); // applique ton onChange (désactive l'input AR)
+                    selectSpecialite.selectedIndex = 0;
+                    selectSpecialite.dispatchEvent(new Event("change"));
                 }
                 pvPrintArea.innerHTML = "";
-
             }
         });
     }
@@ -4058,7 +4288,6 @@ function loadCommissionSujetsFromLocalStorage() {
 
     if (btnPrintSujetMembers && pvPrintArea) {
         btnPrintSujetMembers.addEventListener("click", async () => {
-            // ✅ spécialité: texte option sélectionnée + value input AR
             const specFR = getSelectedSpecialiteLabelFR();
             const specId = getSelectedSpecialiteId();
             const specAR = inputSpecialiteAr ? inputSpecialiteAr.value.trim() : "";
@@ -4073,8 +4302,6 @@ function loadCommissionSujetsFromLocalStorage() {
                 return;
             }
 
-            localStorage.removeIte("dg-membreComitSujet");
-
             const ARtextArea = document.getElementById("infosTexteAr");
             const ARtext = ARtextArea ? ARtextArea.value.trim() : "";
 
@@ -4083,35 +4310,47 @@ function loadCommissionSujetsFromLocalStorage() {
             const sheet = document.createElement("div");
             sheet.className = "pv-sheet";
             sheet.style.direction = "rtl";
-            sheet.style.fontFamily = "'Cairo','Tajawal','Times New Roman',serif";
-            sheet.style.fontSize = "11pt";
-            sheet.style.lineHeight = "1.9";
+            sheet.style.fontFamily = "'Arial','Tahoma','Cairo','Tajawal','Times New Roman',serif";
+            sheet.style.fontSize = "12pt";
+            sheet.style.lineHeight = "1.6";
+            sheet.style.background = "#fff";
+            sheet.style.color = "#000";
+            sheet.style.width = "100%";
+            sheet.style.maxWidth = "210mm";
+            sheet.style.padding = "12mm 14mm 10mm 14mm";
+            sheet.style.margin = "0 auto";
+            sheet.style.boxSizing = "border-box";
 
-            const title = document.createElement("h3");
+            const title = document.createElement("div");
             const faculteAR = JSON.parse(localStorage.getItem("dg-faculte") || "null");
             const faculteARar = faculteAR?.faculte?.nomFaculte || "";
-            const num = localStorage.getItem("dg-numeroConcours");
+            const num = localStorage.getItem("dg-numeroConcours") || "";
             title.textContent =
                 `الجزائرية الديمقراطية الشعبية\nوزارة التعليم العالي والبحث العلمي\nجامعة العلوم والتكنولوجيا محمد بوضياف\n${faculteARar}\n${num}\n`;
             title.style.textAlign = "center";
-            title.style.margin = "10px 0 14px";
-            title.style.fontSize = "11px";
+            title.style.margin = "0 0 12px 0";
+            title.style.fontSize = "13px";
             title.style.fontWeight = "700";
+            title.style.whiteSpace = "pre-line";
+            title.style.lineHeight = "1.6";
             sheet.appendChild(title);
 
-            const title2 = document.createElement("h3");
-            title2.textContent = "إنشاء لجنة المصححين على مسابقة الدكتوراه";
+            const title2 = document.createElement("div");
+            title2.textContent = "إنشاء لجنة إعداد المواضيع على مسابقة الدكتوراه";
             title2.style.textAlign = "center";
-            title2.style.margin = "10px 0 14px";
-            title2.style.fontSize = "16px";
+            title2.style.margin = "0 0 12px 0";
+            title2.style.fontSize = "18px";
             title2.style.fontWeight = "700";
+            title2.style.lineHeight = "1.5";
             sheet.appendChild(title2);
 
             if (ARtext) {
                 const p = document.createElement("p");
                 p.style.whiteSpace = "pre-wrap";
-                p.style.marginBottom = "20px";
+                p.style.margin = "0 0 10px 0";
                 p.style.textAlign = "justify";
+                p.style.fontSize = "12pt";
+                p.style.lineHeight = "1.6";
                 p.textContent = ARtext;
                 sheet.appendChild(p);
             }
@@ -4123,28 +4362,34 @@ function loadCommissionSujetsFromLocalStorage() {
 
             const p1 = document.createElement("p");
             p1.style.whiteSpace = "pre-wrap";
-            p1.style.marginBottom = "20px";
+            p1.style.margin = "0 0 10px 0";
             p1.style.textAlign = "justify";
             p1.style.direction = "rtl";
             p1.style.fontFamily = "Cairo, 'Tajawal', sans-serif";
-
+            p1.style.fontSize = "12pt";
+            p1.style.lineHeight = "1.7";
             p1.textContent =
-                `المادة الأولى: تُنشأ لجنة إعداد المواضيع  على مسابقة الدكتوراه تخصص ${specAR || "........"} (${specFR}) للسنة الجامعية ${anneeUniversitaire}.\n` +
+                `المادة الأولى: تُنشأ لجنة إعداد المواضيع على مسابقة الدكتوراه تخصص ${specAR || "........"} (${specFR}) للسنة الجامعية ${anneeUniversitaire}.\n` +
                 `المادة الثانية: تُشكل هذه اللجنة من السادة الأساتذة التالية أسماؤهم:`;
             sheet.appendChild(p1);
 
             const table = document.createElement("table");
             table.style.width = "100%";
             table.style.borderCollapse = "collapse";
-            table.style.marginTop = "4px";
+            table.style.marginTop = "6px";
+            table.style.marginBottom = "6px";
             table.style.border = "1px solid #000";
+            table.style.fontSize = "12pt";
 
             function makeTd(text) {
                 const td = document.createElement("td");
-                td.textContent = text;
+                td.textContent = text ?? "";
                 td.style.border = "1px solid #000";
-                td.style.padding = "6px 6px";
+                td.style.padding = "8px 8px";
                 td.style.textAlign = "right";
+                td.style.verticalAlign = "middle";
+                td.style.fontSize = "12pt";
+                td.style.lineHeight = "1.5";
                 return td;
             }
 
@@ -4158,16 +4403,13 @@ function loadCommissionSujetsFromLocalStorage() {
                     `${member.nomAr || ""} ${member.prenomAr || ""}`.trim() ||
                     `${member.nomFr || ""} ${member.prenomFr || ""}`.trim();
 
-
-                const institution = member.universite;
+                const institution = member.universite || "";
 
                 const tdNum = makeTd(String(rowIndex));
                 tdNum.style.textAlign = "center";
 
-
                 tr.appendChild(makeTd(nomAr));
                 tr.appendChild(makeTd(institution));
-
 
                 tbody.appendChild(tr);
                 rowIndex++;
@@ -4184,14 +4426,18 @@ function loadCommissionSujetsFromLocalStorage() {
 
             const footer = document.createElement("p");
             footer.textContent = `حرّر في: ${yyyy}/${mm}/${dd}`;
-            footer.style.marginTop = "32px";
+            footer.style.marginTop = "14px";
+            footer.style.marginBottom = "0";
             footer.style.textAlign = "left";
+            footer.style.fontSize = "12pt";
             sheet.appendChild(footer);
 
             const footer2 = document.createElement("p");
             footer2.textContent = "عميد الكلية";
-            footer2.style.marginTop = "50px";
+            footer2.style.marginTop = "18px";
+            footer2.style.marginBottom = "0";
             footer2.style.textAlign = "left";
+            footer2.style.fontSize = "12pt";
             sheet.appendChild(footer2);
 
             pvPrintArea.appendChild(sheet);
@@ -4225,23 +4471,20 @@ function loadCommissionSujetsFromLocalStorage() {
             } finally {
                 localStorage.removeItem("dg-selected-spec");
                 if (selectSpecialite) {
-                    selectSpecialite.selectedIndex = 0; // revient sur la 1ère option
-                    // ou : selectSpecialite.value = "";
-                    selectSpecialite.dispatchEvent(new Event("change")); // applique ton onChange (désactive l'input AR)
+                    selectSpecialite.selectedIndex = 0;
+                    selectSpecialite.dispatchEvent(new Event("change"));
                 }
                 pvPrintArea.innerHTML = "";
-
             }
         });
     }
+
 
 
     const btnPrintSurveillancesMembers = document.getElementById("btnPrintSurveillancesMembers");
 
     if (btnPrintSurveillancesMembers && pvPrintArea) {
         btnPrintSurveillancesMembers.addEventListener("click", async () => {
-
-
             if (!surveillanceMembers || surveillanceMembers.length === 0) {
                 showToast("لا يوجد اعضاء للطباعة.", "warning");
                 return;
@@ -4255,35 +4498,47 @@ function loadCommissionSujetsFromLocalStorage() {
             const sheet = document.createElement("div");
             sheet.className = "pv-sheet";
             sheet.style.direction = "rtl";
-            sheet.style.fontFamily = "'Cairo','Tajawal','Times New Roman',serif";
-            sheet.style.fontSize = "11pt";
-            sheet.style.lineHeight = "1.9";
+            sheet.style.fontFamily = "'Arial','Tahoma','Cairo','Tajawal','Times New Roman',serif";
+            sheet.style.fontSize = "12pt";
+            sheet.style.lineHeight = "1.6";
+            sheet.style.background = "#fff";
+            sheet.style.color = "#000";
+            sheet.style.width = "100%";
+            sheet.style.maxWidth = "210mm";
+            sheet.style.padding = "12mm 14mm 10mm 14mm";
+            sheet.style.margin = "0 auto";
+            sheet.style.boxSizing = "border-box";
 
-            const title = document.createElement("h3");
+            const title = document.createElement("div");
             const faculteAR = JSON.parse(localStorage.getItem("dg-faculte") || "null");
             const faculteARar = faculteAR?.faculte?.nomFaculte || "";
-            const num = localStorage.getItem("dg-numeroConcours");
+            const num = localStorage.getItem("dg-numeroConcours") || "";
             title.textContent =
                 `الجزائرية الديمقراطية الشعبية\nوزارة التعليم العالي والبحث العلمي\nجامعة العلوم والتكنولوجيا محمد بوضياف\n${faculteARar}\n${num}`;
             title.style.textAlign = "center";
-            title.style.margin = "10px 0 14px";
-            title.style.fontSize = "11px";
+            title.style.margin = "0 0 12px 0";
+            title.style.fontSize = "13px";
             title.style.fontWeight = "700";
+            title.style.whiteSpace = "pre-line";
+            title.style.lineHeight = "1.6";
             sheet.appendChild(title);
 
-            const title2 = document.createElement("h3");
-            title2.textContent = "إنشاء لجنة التشفير على مسابقة الدكتوراه";
+            const title2 = document.createElement("div");
+            title2.textContent = "إنشاء لجنة الحراسة على مسابقة الدكتوراه";
             title2.style.textAlign = "center";
-            title2.style.margin = "10px 0 14px";
-            title2.style.fontSize = "16px";
+            title2.style.margin = "0 0 10px 0";
+            title2.style.fontSize = "15px";
             title2.style.fontWeight = "700";
+            title2.style.lineHeight = "1.4";
             sheet.appendChild(title2);
 
             if (ARtext) {
                 const p = document.createElement("p");
                 p.style.whiteSpace = "pre-wrap";
-                p.style.marginBottom = "20px";
+                p.style.margin = "0 0 10px 0";
                 p.style.textAlign = "justify";
+                p.style.fontSize = "11pt";
+                p.style.lineHeight = "1.5";
                 p.textContent = ARtext;
                 sheet.appendChild(p);
             }
@@ -4295,28 +4550,34 @@ function loadCommissionSujetsFromLocalStorage() {
 
             const p1 = document.createElement("p");
             p1.style.whiteSpace = "pre-wrap";
-            p1.style.marginBottom = "20px";
+            p1.style.margin = "0 0 10px 0";
             p1.style.textAlign = "justify";
             p1.style.direction = "rtl";
             p1.style.fontFamily = "Cairo, 'Tajawal', sans-serif";
-
+            p1.style.fontSize = "11pt";
+            p1.style.lineHeight = "1.5";
             p1.textContent =
-                `المادة الأولى: تُنشأ لجنة التشفير على مسابقة الدكتوراه   للسنة الجامعية ${anneeUniversitaire}.\n` +
+                `المادة الأولى: تُنشأ لجنة الحراسة على مسابقة الدكتوراه للسنة الجامعية ${anneeUniversitaire}.\n` +
                 `المادة الثانية: تُشكل هذه اللجنة من السادة الأساتذة التالية أسماؤهم:`;
             sheet.appendChild(p1);
 
             const table = document.createElement("table");
             table.style.width = "100%";
             table.style.borderCollapse = "collapse";
-            table.style.marginTop = "4px";
+            table.style.marginTop = "6px";
+            table.style.marginBottom = "6px";
             table.style.border = "1px solid #000";
+            table.style.fontSize = "11pt";
 
             function makeTd(text) {
                 const td = document.createElement("td");
-                td.textContent = text;
+                td.textContent = text ?? "";
                 td.style.border = "1px solid #000";
-                td.style.padding = "6px 6px";
+                td.style.padding = "5px 6px";
                 td.style.textAlign = "right";
+                td.style.verticalAlign = "middle";
+                td.style.fontSize = "11pt";
+                td.style.lineHeight = "1.35";
                 return td;
             }
 
@@ -4330,95 +4591,543 @@ function loadCommissionSujetsFromLocalStorage() {
                     `${member.nomAr || ""} ${member.prenomAr || ""}`.trim() ||
                     `${member.nomFr || ""} ${member.prenomFr || ""}`.trim();
 
-                let  fonction = "";
-                const institution = member.survUnive;
-                const  salle  = member.salle || "";
-                if (member.salle === "SURVEILLANT") {
-                    if (member.sexe === "FEMME") {
-                        institution = "حارسة";
-                    } else {
-                        institution = "حارس";
-                    }
-                }
-                else  {
-                  
-                        institution = " مسؤول القاعة";
-                    }
-                    const tdNum = makeTd(String(rowIndex));
-                    tdNum.style.textAlign = "center";
+                let fonction = "";
+                let institution = member.survUnive || "";
+                const salle = member.salle || "";
 
-
-                    tr.appendChild(tdNum);
-                    tr.appendChild(makeTd(nomAr));
-                    tr.appendChild(makeTd(institution));
-                    tr.appendChild(makeTd(fonction));
-                    tr.appendChild(makeTd(salle));
-
-                    tbody.appendChild(tr);
-                    rowIndex++;
+                if (member.role === "SURVEILLANT") {
+                    institution = member.sexe === "FEMME" ? "حارسة" : "حارس";
+                } else {
+                    institution = "مسؤول القاعة";
                 }
 
-                surveillanceMembers.forEach(addMemberRow);
+                const tdNum = makeTd(String(rowIndex));
+                tdNum.style.textAlign = "center";
 
-                table.appendChild(tbody);
-                sheet.appendChild(table);
+                tr.appendChild(tdNum);
+                tr.appendChild(makeTd(nomAr));
+                tr.appendChild(makeTd(institution));
+                tr.appendChild(makeTd(fonction));
+                tr.appendChild(makeTd(salle));
 
+                tbody.appendChild(tr);
+                rowIndex++;
+            }
+
+            surveillanceMembers.forEach(addMemberRow);
+
+            table.appendChild(tbody);
+            sheet.appendChild(table);
+
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, "0");
+            const dd = String(today.getDate()).padStart(2, "0");
+
+            const footer = document.createElement("p");
+            footer.textContent = `حرّر في: ${yyyy}/${mm}/${dd}`;
+            footer.style.marginTop = "14px";
+            footer.style.marginBottom = "0";
+            footer.style.textAlign = "left";
+            footer.style.fontSize = "11pt";
+            sheet.appendChild(footer);
+
+            const footer2 = document.createElement("p");
+            footer2.textContent = "عميد الكلية";
+            footer2.style.marginTop = "18px";
+            footer2.style.marginBottom = "0";
+            footer2.style.textAlign = "left";
+            footer2.style.fontSize = "11pt";
+            sheet.appendChild(footer2);
+
+            pvPrintArea.appendChild(sheet);
+
+            try {
+                const pvText = sheet.innerText;
+                const hash = await sha256Base64(pvText);
+
+                const userJson = localStorage.getItem("dg-user");
+                if (!userJson) return;
+
+                const user = JSON.parse(userJson);
+                const idMembre = user.idMembre;
+                if (!idMembre) return;
+
+                const membre = await fetchJson(`${API_BASE}/membres/${idMembre}`);
+                const nomFr = membre.nomMembre || "";
+                const prenomFr = membre.prenomMembre || "";
+
+                addSignatureAndQR(sheet, {
+                    signerName: `${nomFr} ${prenomFr}`,
+                    verifyTextOrUrl: `HashSHA256: ${hash}`,
+                });
+
+                await new Promise((r) => setTimeout(r, 300));
+                window.print();
+                showToast("Impression terminée.", "success");
+            } catch (e) {
+                console.error(e);
+                showToast("❌ " + e.message, "danger");
+            } finally {
+                localStorage.removeItem("dg-selected-spec");
+                if (selectSpecialite) {
+                    selectSpecialite.selectedIndex = 0;
+                    selectSpecialite.dispatchEvent(new Event("change"));
+                }
+                pvPrintArea.innerHTML = "";
+            }
+        });
+    }
+
+
+    const btnPrintAllArretDecision = document.getElementById("btnPrintAllArretDecision");
+
+    if (btnPrintAllArretDecision && pvPrintArea) {
+        btnPrintAllArretDecision.addEventListener("click", async () => {
+            try {
+                const specFR = getSelectedSpecialiteLabelFR ? getSelectedSpecialiteLabelFR() : "";
+                const specAR = inputSpecialiteAr ? inputSpecialiteAr.value.trim() : "";
+
+                const hasCfd = Array.isArray(cfdMembers) && cfdMembers.length > 0;
+                const hasCorrecteurs = Array.isArray(correcteurs) && correcteurs.length > 0;
+                const hasAnonymat = Array.isArray(anonymatMembers) && anonymatMembers.length > 0;
+                const hasSujets = Array.isArray(commissionSujetsMembers) && commissionSujetsMembers.length > 0;
+                const hasSurveillance = Array.isArray(surveillanceMembers) && surveillanceMembers.length > 0;
+
+                if (!hasCfd && !hasCorrecteurs && !hasAnonymat && !hasSujets && !hasSurveillance) {
+                    showToast("لا توجد بيانات للطباعة.", "warning");
+                    return;
+                }
+
+                if ((hasCorrecteurs || hasSujets) && (!specFR || !specAR)) {
+                    showToast("Veuillez sélectionner la spécialité en FR et saisir sa traduction en AR.", "warning");
+                    return;
+                }
+
+                pvPrintArea.innerHTML = "";
+                pvPrintArea.style.direction = "rtl";
+                pvPrintArea.style.background = "#fff";
+                pvPrintArea.style.padding = "0";
+                pvPrintArea.style.margin = "0";
+                pvPrintArea.style.width = "100%";
+
+                const today = new Date();
                 const yyyy = today.getFullYear();
                 const mm = String(today.getMonth() + 1).padStart(2, "0");
                 const dd = String(today.getDate()).padStart(2, "0");
+                const currentYear = today.getFullYear();
+                const previousYear = currentYear - 1;
+                const anneeUniversitaire = `${previousYear}-${currentYear}`;
 
-                const footer = document.createElement("p");
-                footer.textContent = `حرّر في: ${yyyy}/${mm}/${dd}`;
-                footer.style.marginTop = "32px";
-                footer.style.textAlign = "left";
-                sheet.appendChild(footer);
+                const faculteData = JSON.parse(localStorage.getItem("dg-faculte") || "null");
+                const faculteAR = faculteData?.faculte?.nomFaculte || "";
+                const num = localStorage.getItem("dg-numeroConcours") || "";
 
-                const footer2 = document.createElement("p");
-                footer2.textContent = "عميد الكلية";
-                footer2.style.marginTop = "50px";
-                footer2.style.textAlign = "left";
-                sheet.appendChild(footer2);
+                const ARtextArea = document.getElementById("infosTexteAr");
+                const ARtext = ARtextArea ? ARtextArea.value.trim() : "";
 
-                pvPrintArea.appendChild(sheet);
+                const userJson = localStorage.getItem("dg-user");
+                let signerName = "";
+                if (userJson) {
+                    const user = JSON.parse(userJson);
+                    const idMembre = user.idMembre;
+                    if (idMembre) {
+                        const membre = await fetchJson(`${API_BASE}/membres/${idMembre}`);
+                        const nomFr = membre.nomMembre || "";
+                        const prenomFr = membre.prenomMembre || "";
+                        signerName = `${nomFr} ${prenomFr}`.trim();
+                    }
+                }
 
-                try {
+                function createBaseSheet(mainTitle) {
+                    const sheet = document.createElement("div");
+                    sheet.className = "pv-sheet";
+                    sheet.style.direction = "rtl";
+                    sheet.style.fontFamily = "'Arial','Tahoma','Cairo','Tajawal','Times New Roman',serif";
+                    sheet.style.fontSize = "11pt";
+                    sheet.style.lineHeight = "1.45";
+                    sheet.style.background = "#fff";
+                    sheet.style.color = "#000";
+                    sheet.style.width = "190mm";
+                    sheet.style.padding = "8mm 10mm 6mm 10mm";
+                    sheet.style.margin = "0 auto 4mm auto";
+                    sheet.style.boxSizing = "border-box";
+                    sheet.style.pageBreakAfter = "always";
+
+                    const title = document.createElement("div");
+                    title.textContent =
+                        `الجزائرية الديمقراطية الشعبية\nوزارة التعليم العالي والبحث العلمي\nجامعة العلوم والتكنولوجيا محمد بوضياف\n${faculteAR}\n${num}`;
+                    title.style.textAlign = "center";
+                    title.style.margin = "0 0 10px 0";
+                    title.style.fontSize = "11px";
+                    title.style.fontWeight = "700";
+                    title.style.whiteSpace = "pre-line";
+                    title.style.lineHeight = "1.5";
+                    sheet.appendChild(title);
+
+                    const title2 = document.createElement("div");
+                    title2.textContent = mainTitle;
+                    title2.style.textAlign = "center";
+                    title2.style.margin = "0 0 10px 0";
+                    title2.style.fontSize = "15px";
+                    title2.style.fontWeight = "700";
+                    title2.style.lineHeight = "1.4";
+                    sheet.appendChild(title2);
+
+                    if (ARtext) {
+                        const p = document.createElement("p");
+                        p.style.whiteSpace = "pre-wrap";
+                        p.style.margin = "0 0 10px 0";
+                        p.style.textAlign = "justify";
+                        p.style.lineHeight = "1.5";
+                        p.style.fontSize = "11pt";
+                        p.textContent = ARtext;
+                        sheet.appendChild(p);
+                    }
+
+                    return sheet;
+                }
+
+                function createTable(headers) {
+                    const table = document.createElement("table");
+                    table.style.width = "100%";
+                    table.style.borderCollapse = "collapse";
+                    table.style.marginTop = "6px";
+                    table.style.marginBottom = "6px";
+                    table.style.border = "1px solid #000";
+                    table.style.fontSize = "11pt";
+
+                    const thead = document.createElement("thead");
+                    const headRow = document.createElement("tr");
+
+                    headers.forEach((h) => {
+                        const th = document.createElement("th");
+                        th.textContent = h;
+                        th.style.border = "1px solid #000";
+                        th.style.padding = "5px 6px";
+                        th.style.textAlign = "center";
+                        th.style.fontWeight = "700";
+                        th.style.fontSize = "11pt";
+                        th.style.lineHeight = "1.3";
+                        headRow.appendChild(th);
+                    });
+
+                    thead.appendChild(headRow);
+
+
+                    const tbody = document.createElement("tbody");
+                    table.appendChild(tbody);
+
+                    return { table, tbody };
+                }
+
+                function makeTd(text, align = "right") {
+                    const td = document.createElement("td");
+                    td.textContent = text ?? "";
+                    td.style.border = "1px solid #000";
+                    td.style.padding = "5px 6px";
+                    td.style.textAlign = align;
+                    td.style.verticalAlign = "middle";
+                    td.style.fontSize = "11pt";
+                    td.style.lineHeight = "1.35";
+                    return td;
+                }
+
+                function createArticleParagraph(text) {
+                    const p = document.createElement("p");
+                    p.style.whiteSpace = "pre-wrap";
+                    p.style.marginTop = "0";
+                    p.style.marginBottom = "10px";
+                    p.style.textAlign = "justify";
+                    p.style.direction = "rtl";
+                    p.style.fontFamily = "Cairo, 'Tajawal', sans-serif";
+                    p.style.lineHeight = "1.5";
+                    p.style.fontSize = "11pt";
+                    p.textContent = text;
+                    return p;
+                }
+
+                async function finalizeSheet(sheet) {
+                    const footer = document.createElement("p");
+                    footer.textContent = `حرّر في: ${yyyy}/${mm}/${dd}`;
+                    footer.style.marginTop = "14px";
+                    footer.style.marginBottom = "0";
+                    footer.style.textAlign = "left";
+                    footer.style.fontSize = "11pt";
+                    sheet.appendChild(footer);
+
+                    const footer2 = document.createElement("p");
+                    footer2.textContent = "عميد الكلية";
+                    footer2.style.marginTop = "18px";
+                    footer2.style.marginBottom = "0";
+                    footer2.style.textAlign = "left";
+                    footer2.style.fontSize = "11pt";
+                    sheet.appendChild(footer2);
+
                     const pvText = sheet.innerText;
                     const hash = await sha256Base64(pvText);
 
-                    const userJson = localStorage.getItem("dg-user");
-                    if (!userJson) return;
+                    if (signerName) {
+                        addSignatureAndQR(sheet, {
+                            signerName,
+                            verifyTextOrUrl: `HashSHA256: ${hash}`,
+                        });
+                    }
+                }
 
-                    const user = JSON.parse(userJson);
-                    const idMembre = user.idMembre;
-                    if (!idMembre) return;
+                async function addCfdSheet() {
+                    if (!hasCfd) return;
 
-                    const membre = await fetchJson(`${API_BASE}/membres/${idMembre}`);
-                    const nomFr = membre.nomMembre || "";
-                    const prenomFr = membre.prenomMembre || "";
+                    const sheet = createBaseSheet("إنشاء لجنة الإشراف على مسابقة الدكتوراه");
 
-                    addSignatureAndQR(sheet, {
-                        signerName: `${nomFr} ${prenomFr}`,
-                        verifyTextOrUrl: `HashSHA256: ${hash}`,
+                    const p1 = createArticleParagraph(
+                        `المادة الأولى: تنشأ لجنة الإشراف على مسابقة الدكتوراه للسنة الجامعية ${anneeUniversitaire}.\n` +
+                        `المادة الثانية: تشكل هذه اللجنة من السادة الأساتذة التالية أسماؤهم:`
+                    );
+                    sheet.appendChild(p1);
+
+                    const { table, tbody } = createTable(["الاسم واللقب", "الرتبة / الصفة", "الوظيفة"]);
+
+                    const president = cfdMembers.find((m) => m.isDoyen);
+                    const others = cfdMembers.filter((m) => !m.isDoyen);
+
+                    function addMemberRow(member, isPresident) {
+                        const tr = document.createElement("tr");
+
+                        const nomAr =
+                            `${member.nomAr || ""} ${member.prenomAr || ""}`.trim() ||
+                            `${member.nomFr || ""} ${member.prenomFr || ""}`.trim();
+
+                        const grade = member.role || "";
+                        const fonction = isPresident ? "رئيسا" : "عضوا";
+
+                        tr.appendChild(makeTd(nomAr));
+                        tr.appendChild(makeTd(grade));
+                        tr.appendChild(makeTd(fonction));
+
+                        tbody.appendChild(tr);
+                    }
+
+                    if (president) addMemberRow(president, true);
+                    others.forEach((m) => addMemberRow(m, false));
+
+                    sheet.appendChild(table);
+
+                    const article3 = document.createElement("p");
+                    article3.textContent = "المادة الثالثة: يكلف الأمين العام الكلية بتنفيذ هذا المقرر.";
+                    article3.style.marginTop = "8px";
+                    article3.style.marginBottom = "0";
+                    article3.style.textAlign = "right";
+                    article3.style.fontSize = "11pt";
+                    article3.style.lineHeight = "1.5";
+                    sheet.appendChild(article3);
+
+                    await finalizeSheet(sheet);
+                    pvPrintArea.appendChild(sheet);
+                }
+
+                async function addCorrecteursSheet() {
+                    if (!hasCorrecteurs) return;
+
+                    const sheet = createBaseSheet("إنشاء لجنة المصححين على مسابقة الدكتوراه");
+
+                    const p1 = createArticleParagraph(
+                        `المادة الأولى: تُنشأ لجنة المصححين على مسابقة الدكتوراه تخصص ${specAR || "........"} (${specFR}) للسنة الجامعية ${anneeUniversitaire}.\n` +
+                        `المادة الثانية: تُشكل هذه اللجنة من السادة الأساتذة التالية أسماؤهم:`
+                    );
+                    sheet.appendChild(p1);
+
+                    const { table, tbody } = createTable(["الرقم", "الاسم واللقب", "المؤسسة", "الصفة"]);
+
+                    let rowIndex = 1;
+                    correcteurs.forEach((member) => {
+                        const tr = document.createElement("tr");
+
+                        const nomAr =
+                            `${member.nomAr || ""} ${member.prenomAr || ""}`.trim() ||
+                            `${member.nomFr || ""} ${member.prenomFr || ""}`.trim();
+
+                        const sexe = (member.sexe || "").toUpperCase();
+                        const fonction = sexe === "FEMME" ? "مصححة" : "مصحح";
+                        const institution = "جامعة العلوم و التكنولوجيا محمد بوضياف";
+
+                        tr.appendChild(makeTd(String(rowIndex), "center"));
+                        tr.appendChild(makeTd(nomAr));
+                        tr.appendChild(makeTd(institution));
+                        tr.appendChild(makeTd(fonction));
+
+                        tbody.appendChild(tr);
+                        rowIndex++;
                     });
 
-                    await new Promise((r) => setTimeout(r, 300));
-                    window.print();
-                    showToast("Impression terminée.", "success");
-                } catch (e) {
-                    console.error(e);
-                    showToast("❌ " + e.message, "danger");
-                } finally {
-                    localStorage.removeItem("dg-selected-spec");
-                    if (selectSpecialite) {
-                        selectSpecialite.selectedIndex = 0; // revient sur la 1ère option
-                        // ou : selectSpecialite.value = "";
-                        selectSpecialite.dispatchEvent(new Event("change")); // applique ton onChange (désactive l'input AR)
-                    }
-                    pvPrintArea.innerHTML = "";
-
+                    sheet.appendChild(table);
+                    await finalizeSheet(sheet);
+                    pvPrintArea.appendChild(sheet);
                 }
-            });
-    }
 
+                async function addAnonymatSheet() {
+                    if (!hasAnonymat) return;
+
+                    const sheet = createBaseSheet("إنشاء لجنة التشفير على مسابقة الدكتوراه");
+
+                    const p1 = createArticleParagraph(
+                        `المادة الأولى: تُنشأ لجنة التشفير على مسابقة الدكتوراه للسنة الجامعية ${anneeUniversitaire}.\n` +
+                        `المادة الثانية: تُشكل هذه اللجنة من السادة الأساتذة التالية أسماؤهم:`
+                    );
+                    sheet.appendChild(p1);
+
+                    const { table, tbody } = createTable(["الاسم واللقب", "المؤسسة", "الصفة"]);
+
+                    anonymatMembers.forEach((member) => {
+                        const tr = document.createElement("tr");
+
+                        const nomAr =
+                            `${member.nomAr || ""} ${member.prenomAr || ""}`.trim() ||
+                            `${member.nomFr || ""} ${member.prenomFr || ""}`.trim();
+
+                        const fonction = member.role || "";
+                        const institution = member.universite || "";
+
+                        tr.appendChild(makeTd(nomAr));
+                        tr.appendChild(makeTd(institution));
+                        tr.appendChild(makeTd(fonction));
+
+                        tbody.appendChild(tr);
+                    });
+
+                    sheet.appendChild(table);
+                    await finalizeSheet(sheet);
+                    pvPrintArea.appendChild(sheet);
+                }
+
+                async function addSujetsSheet() {
+                    if (!hasSujets) return;
+
+                    const sheet = createBaseSheet("إنشاء لجنة إعداد المواضيع على مسابقة الدكتوراه");
+
+                    const p1 = createArticleParagraph(
+                        `المادة الأولى: تُنشأ لجنة إعداد المواضيع على مسابقة الدكتوراه تخصص ${specAR || "........"} (${specFR}) للسنة الجامعية ${anneeUniversitaire}.\n` +
+                        `المادة الثانية: تُشكل هذه اللجنة من السادة الأساتذة التالية أسماؤهم:`
+                    );
+                    sheet.appendChild(p1);
+
+                    const { table, tbody } = createTable(["الاسم واللقب", "المؤسسة"]);
+
+                    commissionSujetsMembers.forEach((member) => {
+                        const tr = document.createElement("tr");
+
+                        const nomAr =
+                            `${member.nomAr || ""} ${member.prenomAr || ""}`.trim() ||
+                            `${member.nomFr || ""} ${member.prenomFr || ""}`.trim();
+
+                        const institution = member.universite || "";
+
+                        tr.appendChild(makeTd(nomAr));
+                        tr.appendChild(makeTd(institution));
+
+                        tbody.appendChild(tr);
+                    });
+
+                    sheet.appendChild(table);
+                    await finalizeSheet(sheet);
+                    pvPrintArea.appendChild(sheet);
+                }
+
+                async function addSurveillanceSheet() {
+                    if (!hasSurveillance) return;
+
+                    const sheet = createBaseSheet("إنشاء لجنة الحراسة على مسابقة الدكتوراه");
+
+                    const p1 = createArticleParagraph(
+                        `المادة الأولى: تُنشأ لجنة الحراسة على مسابقة الدكتوراه للسنة الجامعية ${anneeUniversitaire}.\n` +
+                        `المادة الثانية: تُشكل هذه اللجنة من السادة الأساتذة التالية أسماؤهم:`
+                    );
+                    sheet.appendChild(p1);
+
+                    const { table, tbody } = createTable(["الرقم", "الاسم واللقب", "الصفة", "المكان", "القاعة"]);
+
+                    let rowIndex = 1;
+
+                    surveillanceMembers.forEach((member) => {
+                        const tr = document.createElement("tr");
+
+                        const nomAr =
+                            `${member.nomAr || ""} ${member.prenomAr || ""}`.trim() ||
+                            `${member.nomFr || ""} ${member.prenomFr || ""}`.trim();
+
+                        const sexe = (member.sexe || "").toUpperCase();
+                        const salle = member.salle || "";
+                        const lieu = member.survUnive || "";
+
+                        let fonction = "";
+                        if (member.role === "RESPONSABLE_SALLE") {
+                            fonction = "مسؤول القاعة";
+                        } else if (member.role === "SURVEILLANT") {
+                            fonction = sexe === "FEMME" ? "حارسة" : "حارس";
+                        } else {
+                            fonction = member.role || "";
+                        }
+
+                        tr.appendChild(makeTd(String(rowIndex), "center"));
+                        tr.appendChild(makeTd(nomAr));
+                        tr.appendChild(makeTd(fonction));
+                        tr.appendChild(makeTd(lieu));
+                        tr.appendChild(makeTd(salle));
+
+                        tbody.appendChild(tr);
+                        rowIndex++;
+                    });
+
+                    sheet.appendChild(table);
+                    await finalizeSheet(sheet);
+                    pvPrintArea.appendChild(sheet);
+                }
+
+                await addCfdSheet();
+                await addCorrecteursSheet();
+                await addAnonymatSheet();
+                await addSujetsSheet();
+                await addSurveillanceSheet();
+
+                const sheets = pvPrintArea.querySelectorAll(".pv-sheet");
+                if (sheets.length > 0) {
+                    sheets[sheets.length - 1].style.pageBreakAfter = "auto";
+                }
+
+                const opt = {
+                    margin: [3, 4, 3, 4],
+                    filename: "ARRET_decision.pdf",
+                    image: { type: "jpeg", quality: 0.98 },
+                    html2canvas: {
+                        scale: 2,
+                        useCORS: true,
+                        scrollX: 0,
+                        scrollY: 0
+                    },
+                    jsPDF: {
+                        unit: "mm",
+                        format: "a4",
+                        orientation: "portrait"
+                    },
+                    pagebreak: { mode: ["css", "legacy"] }
+                };
+
+                await html2pdf().set(opt).from(pvPrintArea).save();
+
+                showToast("PDF généré avec succès : ARRET_decision.pdf", "success");
+            } catch (e) {
+                console.error(e);
+                showToast("❌ " + (e.message || "Erreur lors de la génération du PDF"), "danger");
+            } finally {
+                localStorage.removeItem("dg-selected-spec");
+
+                if (selectSpecialite) {
+                    selectSpecialite.selectedIndex = 0;
+                    selectSpecialite.dispatchEvent(new Event("change"));
+                }
+
+                pvPrintArea.innerHTML = "";
+            }
+        });
+    }
 
 });
