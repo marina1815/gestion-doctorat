@@ -527,6 +527,83 @@
         padding-bottom: 8px;
       }
     }
+
+.declaration-page {
+    width: 794px;
+    min-height: 1123px;
+    background: #fff;
+    margin: 0 auto;
+    padding: 24px 40px 40px 40px;
+    box-sizing: border-box;
+    font-family: "Times New Roman", serif;
+    color: #111;
+}
+
+.declaration-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.header-left {
+    width: 34%;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.55;
+    text-align: left;
+}
+
+.header-center {
+    width: 18%;
+    text-align: center;
+}
+
+.header-center img {
+    width: 92px;
+    height: 92px;
+    object-fit: contain;
+}
+
+.header-right {
+    width: 34%;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.7;
+    text-align: right;
+    direction: rtl;
+    unicode-bidi: plaintext;
+    font-family: Tahoma, Arial, sans-serif;
+}
+
+.declaration-title {
+    width: 360px;
+    margin: 55px auto 90px auto;
+    padding: 12px 20px;
+    text-align: center;
+    background: #cfe0ef;
+    border: 1px solid #7aa2c7;
+    border-radius: 14px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.declaration-body {
+    margin-top: 10px;
+    font-size: 18px;
+    line-height: 2;
+}
+
+.declaration-line {
+    margin-bottom: 16px;
+}
+
+.signature {
+    margin-top: 85px;
+    text-align: right;
+    font-size: 18px;
+    padding-right: 65px;
+}
   </style>
 </head>
 
@@ -1644,9 +1721,19 @@
               <th class="col-actions"></th>
             </tr>
           </thead>
-          <tbody id="sallesBody"></tbody>
+          <tbody id="surveillanceBody"></tbody>
         </table>
       </div>
+
+      
+        <div class="form-actions" style="text-align:right; margin-bottom:12px;">
+      <button type="button" class="primary-btn" id="btnPrintSurveillancesMembers">
+        <i class="uil uil-print"></i>  طباعة أعضاء لجنة الحراسة 
+      </button>
+      
+
+    </div>
+
     </div>
   </section>
 
@@ -1908,6 +1995,9 @@
 
 </div>
  <section id="pvPrintArea" class="pv-print-area"></section>
+   <button id="btnGenerateDeclarations" type="button">
+  Générer les déclarations PDF
+</button>
     </main>
   </div>
 
@@ -2469,6 +2559,25 @@
             Choisissez le rôle du membre dans l’organisation de surveillance.
           </small>
         </div>
+
+         <div class="form-row">
+        <div class="form-group" style="width:100%;" dir="rtl">
+          <label for="universiteSurveillance">جامعة</label>
+
+          <div class="input-wrapper" dir="rtl">
+            <span class="field-icon">
+              <i class="uil uil-university"></i>
+            </span>
+
+            <input
+              type="text"
+              id="universiteSurveillance"
+              value="جامعة العلوم والتكنولوجيا محمد بوضياف"
+            
+            />
+          </div>
+        </div>
+      </div>
       </div>
 
       <!-- Footer -->
@@ -2626,8 +2735,10 @@
           Enregistrer le membre
         </button>
       </div>
+
     </form>
   </div>
+
 </div>
    
 
@@ -2640,9 +2751,10 @@
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="pdf.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 </body>

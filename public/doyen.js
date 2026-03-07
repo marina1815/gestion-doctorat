@@ -86,12 +86,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Crée une ligne <tr> comme ton exemple
     function createSalleRow({ idSalle = "", nom = "", nomAr = "", capacite = 25 } = {}) {
-    const tr = document.createElement("tr");
+        const tr = document.createElement("tr");
 
-    // même nom partout
-    tr.dataset.idSalle = idSalle || "";
+        // même nom partout
+        tr.dataset.idSalle = idSalle || "";
 
-    tr.innerHTML = `
+        tr.innerHTML = `
         <td>
             <input
                 type="text"
@@ -137,8 +137,8 @@ document.addEventListener("DOMContentLoaded", () => {
         </td>
     `;
 
-    return tr;
-}
+        return tr;
+    }
 
 
 
@@ -154,18 +154,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function readSallesFromDOM(tbody) {
-    const rows = Array.from(tbody.querySelectorAll("tr"));
+        const rows = Array.from(tbody.querySelectorAll("tr"));
 
-    return rows.map((tr) => {
-        const nom = tr.querySelector(".input-salle-nom")?.value.trim() || "";
-        const nomAr = tr.querySelector(".input-salle-nom-ar")?.value.trim() || "";
-        const capRaw = tr.querySelector(".input-salle-cap")?.value;
-        const capacite = Math.max(0, Number(capRaw || 0) || 0);
-        const idSalle = tr.dataset.idSalle || "";
+        return rows.map((tr) => {
+            const nom = tr.querySelector(".input-salle-nom")?.value.trim() || "";
+            const nomAr = tr.querySelector(".input-salle-nom-ar")?.value.trim() || "";
+            const capRaw = tr.querySelector(".input-salle-cap")?.value;
+            const capacite = Math.max(0, Number(capRaw || 0) || 0);
+            const idSalle = tr.dataset.idSalle || "";
 
-        return { idSalle, nom, nomAr, capacite };
-    });
-}
+            return { idSalle, nom, nomAr, capacite };
+        });
+    }
 
     function saveSallesToLS(salles) {
         const concoursId = getConcoursIdSafe();
@@ -202,198 +202,198 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-   function bindSalleTableEvents(tableEl) {
-    if (!tableEl) return;
-    const tbody = tableEl.querySelector("tbody");
-    if (!tbody) return;
+    function bindSalleTableEvents(tableEl) {
+        if (!tableEl) return;
+        const tbody = tableEl.querySelector("tbody");
+        if (!tbody) return;
 
-    // éviter double bind si la fonction est rappelée
-    if (tbody.dataset.boundSalleEvents === "true") return;
-    tbody.dataset.boundSalleEvents = "true";
+        // éviter double bind si la fonction est rappelée
+        if (tbody.dataset.boundSalleEvents === "true") return;
+        tbody.dataset.boundSalleEvents = "true";
 
-    tbody.addEventListener("click", async (e) => {
-        const btnMinus = e.target.closest(".places-minus");
-        const btnPlus = e.target.closest(".places-plus");
-        const btnDel = e.target.closest(".btn-delete-row");
-        const btnSave = e.target.closest(".btn-save-row");
+        tbody.addEventListener("click", async (e) => {
+            const btnMinus = e.target.closest(".places-minus");
+            const btnPlus = e.target.closest(".places-plus");
+            const btnDel = e.target.closest(".btn-delete-row");
+            const btnSave = e.target.closest(".btn-save-row");
 
-        /* ---------------------------
-           - capacité
-        --------------------------- */
-        if (btnMinus) {
-            const tr = btnMinus.closest("tr");
-            const input = tr?.querySelector(".input-salle-cap");
-            if (!input) return;
+            /* ---------------------------
+               - capacité
+            --------------------------- */
+            if (btnMinus) {
+                const tr = btnMinus.closest("tr");
+                const input = tr?.querySelector(".input-salle-cap");
+                if (!input) return;
 
-            const v = Math.max(0, (Number(input.value) || 0) - 1);
-            input.value = String(v);
-            return;
-        }
+                const v = Math.max(0, (Number(input.value) || 0) - 1);
+                input.value = String(v);
+                return;
+            }
 
-        /* ---------------------------
-           + capacité
-        --------------------------- */
-        if (btnPlus) {
-            const tr = btnPlus.closest("tr");
-            const input = tr?.querySelector(".input-salle-cap");
-            if (!input) return;
+            /* ---------------------------
+               + capacité
+            --------------------------- */
+            if (btnPlus) {
+                const tr = btnPlus.closest("tr");
+                const input = tr?.querySelector(".input-salle-cap");
+                if (!input) return;
 
-            const v = Math.max(0, (Number(input.value) || 0) + 1);
-            input.value = String(v);
-            return;
-        }
+                const v = Math.max(0, (Number(input.value) || 0) + 1);
+                input.value = String(v);
+                return;
+            }
 
-        /* ---------------------------
-           DELETE salle
-        --------------------------- */
-        if (btnDel) {
-            const tr = btnDel.closest("tr");
-            if (!tr) return;
+            /* ---------------------------
+               DELETE salle
+            --------------------------- */
+            if (btnDel) {
+                const tr = btnDel.closest("tr");
+                if (!tr) return;
 
-            const idSalle = tr.dataset.idSalle || "";
+                const idSalle = tr.dataset.idSalle || "";
 
-            try {
-                btnDel.disabled = true;
+                try {
+                    btnDel.disabled = true;
 
-                // si la salle n'est pas encore sauvegardée côté serveur
-                if (!idSalle) {
+                    // si la salle n'est pas encore sauvegardée côté serveur
+                    if (!idSalle) {
+                        tr.remove();
+                        showToast("Ligne supprimée.", "danger");
+                        return;
+                    }
+
+                    await fetchJson(`${API_BASE}/salles/${encodeURIComponent(idSalle)}`, {
+                        method: "DELETE",
+                    });
+
                     tr.remove();
-                    showToast("Ligne supprimée.", "danger");
+                    showToast("Salle supprimée avec succès.", "success");
+                } catch (err) {
+                    console.error("Erreur suppression salle:", err);
+                    showToast("Erreur lors de la suppression de la salle.", "error");
+                } finally {
+                    btnDel.disabled = false;
+                }
+
+                return;
+            }
+
+            /* ---------------------------
+               SAVE salle
+            --------------------------- */
+            if (btnSave) {
+                const tr = btnSave.closest("tr");
+                if (!tr) return;
+
+                const inputNom = tr.querySelector(".input-salle-nom");
+                const inputCap = tr.querySelector(".input-salle-cap");
+                console.log("inputNom");
+                console.log(inputNom);
+
+                if (!inputNom || !inputCap) {
+                    showToast("Champs salle introuvables.", "error");
                     return;
                 }
 
-                await fetchJson(`${API_BASE}/salles/${encodeURIComponent(idSalle)}`, {
-                    method: "DELETE",
-                });
+                const nomSalle = inputNom.value.trim();
+                const capaciteSalle = Number(inputCap.value || 0);
+                const idSalle = tr.dataset.idSalle || "";
 
-                tr.remove();
-                showToast("Salle supprimée avec succès.", "success");
-            } catch (err) {
-                console.error("Erreur suppression salle:", err);
-                showToast("Erreur lors de la suppression de la salle.", "error");
-            } finally {
-                btnDel.disabled = false;
+                if (!nomSalle) {
+                    showToast("Le nom de la salle est obligatoire.", "warning");
+                    inputNom.focus();
+                    return;
+                }
+
+                if (Number.isNaN(capaciteSalle) || capaciteSalle < 0) {
+                    showToast("La capacité doit être un nombre positif.", "warning");
+                    inputCap.focus();
+                    return;
+                }
+
+                try {
+                    btnSave.disabled = true;
+                    btnSave.innerHTML = `<i class="uil uil-spinner-alt"></i>`;
+
+                    const payload = {
+                        nomSalle,
+                        capaciteSalle,
+                    };
+
+                    let saved;
+
+                    // UPDATE si la ligne a déjà un id
+                    if (idSalle) {
+                        saved = await fetchJson(`${API_BASE}/salles/${encodeURIComponent(idSalle)}`, {
+                            method: "PUT",
+                            body: JSON.stringify(payload),
+                        });
+                    } else {
+                        // CREATE sinon
+                        saved = await fetchJson(`${API_BASE}/salles`, {
+                            method: "POST",
+                            body: JSON.stringify(payload),
+                        });
+                    }
+
+                    const salle =
+                        saved?.salle ||
+                        saved?.data ||
+                        saved;
+
+                    const savedId =
+                        salle?.idSalle ||
+                        salle?.id_salle ||
+                        idSalle;
+
+                    const savedNom =
+                        salle?.nomSalle ||
+                        salle?.nom_salle ||
+                        nomSalle;
+
+                    const savedCap =
+                        salle?.capaciteSalle ??
+                        salle?.capacite_salle ??
+                        capaciteSalle;
+
+                    if (savedId) {
+                        tr.dataset.idSalle = String(savedId);
+                    }
+
+                    inputNom.value = savedNom;
+                    inputCap.value = String(savedCap);
+
+                    showToast(
+                        idSalle
+                            ? "Salle mise à jour avec succès."
+                            : "Salle enregistrée avec succès.",
+                        "success"
+                    );
+                } catch (err) {
+                    console.error("Erreur sauvegarde salle:", err);
+                    showToast("Erreur lors de l'enregistrement de la salle.", "error");
+                } finally {
+                    btnSave.disabled = false;
+                    btnSave.innerHTML = `<i class="uil uil-check-circle"></i>`;
+                }
+
+                return;
             }
-
-            return;
-        }
+        });
 
         /* ---------------------------
-           SAVE salle
+           empêcher capacité négative
         --------------------------- */
-        if (btnSave) {
-            const tr = btnSave.closest("tr");
-            if (!tr) return;
+        tbody.addEventListener("input", (e) => {
+            const capInput = e.target.closest(".input-salle-cap");
+            if (!capInput) return;
 
-            const inputNom = tr.querySelector(".input-salle-nom");
-            const inputCap = tr.querySelector(".input-salle-cap");
-            console.log("inputNom");
-            console.log(inputNom);
-
-            if (!inputNom || !inputCap) {
-                showToast("Champs salle introuvables.", "error");
-                return;
+            const v = Number(capInput.value);
+            if (Number.isNaN(v) || v < 0) {
+                capInput.value = "0";
             }
-
-            const nomSalle = inputNom.value.trim();
-            const capaciteSalle = Number(inputCap.value || 0);
-            const idSalle = tr.dataset.idSalle || "";
-
-            if (!nomSalle) {
-                showToast("Le nom de la salle est obligatoire.", "warning");
-                inputNom.focus();
-                return;
-            }
-
-            if (Number.isNaN(capaciteSalle) || capaciteSalle < 0) {
-                showToast("La capacité doit être un nombre positif.", "warning");
-                inputCap.focus();
-                return;
-            }
-
-            try {
-                btnSave.disabled = true;
-                btnSave.innerHTML = `<i class="uil uil-spinner-alt"></i>`;
-
-                const payload = {
-                    nomSalle,
-                    capaciteSalle,
-                };
-
-                let saved;
-
-                // UPDATE si la ligne a déjà un id
-                if (idSalle) {
-                    saved = await fetchJson(`${API_BASE}/salles/${encodeURIComponent(idSalle)}`, {
-                        method: "PUT",
-                        body: JSON.stringify(payload),
-                    });
-                } else {
-                    // CREATE sinon
-                    saved = await fetchJson(`${API_BASE}/salles`, {
-                        method: "POST",
-                        body: JSON.stringify(payload),
-                    });
-                }
-
-                const salle =
-                    saved?.salle ||
-                    saved?.data ||
-                    saved;
-
-                const savedId =
-                    salle?.idSalle ||
-                    salle?.id_salle ||
-                    idSalle;
-
-                const savedNom =
-                    salle?.nomSalle ||
-                    salle?.nom_salle ||
-                    nomSalle;
-
-                const savedCap =
-                    salle?.capaciteSalle ??
-                    salle?.capacite_salle ??
-                    capaciteSalle;
-
-                if (savedId) {
-                    tr.dataset.idSalle = String(savedId);
-                }
-
-                inputNom.value = savedNom;
-                inputCap.value = String(savedCap);
-
-                showToast(
-                    idSalle
-                        ? "Salle mise à jour avec succès."
-                        : "Salle enregistrée avec succès.",
-                    "success"
-                );
-            } catch (err) {
-                console.error("Erreur sauvegarde salle:", err);
-                showToast("Erreur lors de l'enregistrement de la salle.", "error");
-            } finally {
-                btnSave.disabled = false;
-                btnSave.innerHTML = `<i class="uil uil-check-circle"></i>`;
-            }
-
-            return;
-        }
-    });
-
-    /* ---------------------------
-       empêcher capacité négative
-    --------------------------- */
-    tbody.addEventListener("input", (e) => {
-        const capInput = e.target.closest(".input-salle-cap");
-        if (!capInput) return;
-
-        const v = Number(capInput.value);
-        if (Number.isNaN(v) || v < 0) {
-            capInput.value = "0";
-        }
-    });
-}
+        });
+    }
 
     function initSallesTable() {
         // Ta table "Salles et capacités"
@@ -2656,7 +2656,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const survNomArInput = document.getElementById("survNomAr");
     const survPrenomArInput = document.getElementById("survPrenomAr");
     const survGradeSelect = document.getElementById("survGrade");
-
+    const survUniversite = document.getElementById("universiteSurveillance");
     const survSalleSelect = document.getElementById("survSalleSelect");
     const survRoleSelect = document.getElementById("survRoleSelect");
 
@@ -2675,6 +2675,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (survNomArInput) survNomArInput.value = "";
         if (survPrenomArInput) survPrenomArInput.value = "";
         if (survGradeSelect) survGradeSelect.value = "";
+        if (survUniversite) survUniversite.value = "";
 
         if (sexeSurveillanceHidden) sexeSurveillanceHidden.value = "FEMME";
 
@@ -2956,7 +2957,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const grade = survGradeSelect?.value.trim() || "";
             const sexe = sexeSurveillanceHidden?.value || "FEMME";
             const idConcours = localStorage.getItem("dg-id");
-
+            const survUnive = survUniversite?.value.trim() || "";
             const idSalle = survSalleSelect?.value || "";
             const salleLabel =
                 survSalleSelect?.options?.[survSalleSelect.selectedIndex]?.dataset?.label ||
@@ -3024,54 +3025,54 @@ document.addEventListener("DOMContentLoaded", () => {
                     showToast("Ce membre existe déjà dans l’organisation de surveillance.", "warning");
                     return;
                 }
-if (role === "RESPONSABLE") {
-const username = `${nomFr}.${prenomFr}`.replace(/\s+/g, "").toLowerCase();
-                const password = `${nomFr}_${prenomFr}_RESPONSABLE_SALLE`;
+                if (role === "RESPONSABLE") {
+                    const username = `${nomFr}.${prenomFr}`.replace(/\s+/g, "").toLowerCase();
+                    const password = `${nomFr}_${prenomFr}_RESPONSABLE_SALLE`;
 
-                const userPayload = {
-                    username,
-                    password,
-                    role: "RESPONSABLE_SALLE",
-                    idMembre,
-                };
+                    const userPayload = {
+                        username,
+                        password,
+                        role: "RESPONSABLE_SALLE",
+                        idMembre,
+                    };
 
-                const createdUser = await fetchJson(`${API_BASE}/users`, {
-                    method: "POST",
-                    body: JSON.stringify(userPayload),
-                });
+                    const createdUser = await fetchJson(`${API_BASE}/users`, {
+                        method: "POST",
+                        body: JSON.stringify(userPayload),
+                    });
 
-                const idUser =
-                    createdUser?.user?.idUser ||
-                    createdUser?.user?.id_user ||
-                    createdUser?.idUser ||
-                    createdUser?.id_user;
+                    const idUser =
+                        createdUser?.user?.idUser ||
+                        createdUser?.user?.id_user ||
+                        createdUser?.idUser ||
+                        createdUser?.id_user;
 
-                if (!idUser) {
-                    throw new Error("idUser manquant après création du user");
+                    if (!idUser) {
+                        throw new Error("idUser manquant après création du user");
+                    }
+
                 }
 
-                }
 
-                
 
-            /*    const surveillancePayload = {
-                    idMembre,
-                    idConcours,
-                    idSalle,
-                };
+                /*    const surveillancePayload = {
+                        idMembre,
+                        idConcours,
+                        idSalle,
+                    };
+    
+                    const createdSurveillance = await fetchJson(`${API_BASE}/responsable-salles`, {
+                        method: "POST",
+                        body: JSON.stringify(surveillancePayload),
+                    });
+                     const idSurveillance =
+                        createdSurveillance?.idSurveillance ||
+                        createdSurveillance?.id_surveillance ||
+                        createdSurveillance?.surveillance?.idSurveillance ||
+                        null;
+                    */
 
-                const createdSurveillance = await fetchJson(`${API_BASE}/responsable-salles`, {
-                    method: "POST",
-                    body: JSON.stringify(surveillancePayload),
-                });
-                 const idSurveillance =
-                    createdSurveillance?.idSurveillance ||
-                    createdSurveillance?.id_surveillance ||
-                    createdSurveillance?.surveillance?.idSurveillance ||
-                    null;
-                */
 
-               
 
                 surveillanceMembers.push({
                     localId: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
@@ -3082,6 +3083,7 @@ const username = `${nomFr}.${prenomFr}`.replace(/\s+/g, "").toLowerCase();
                     prenomAr,
                     grade,
                     sexe,
+                    survUnive,
                     idSalle,
                     salle: salleLabel,
                     role,
@@ -3149,18 +3151,7 @@ const username = `${nomFr}.${prenomFr}`.replace(/\s+/g, "").toLowerCase();
 
     /* =========================================================
    COMMISSION D'ÉLABORATION DES SUJETS
-   Utilise la même liste globale : membresExistants
-   HTML requis :
-   - #modalCommissionSujets
-   - #formCommissionSujets
-   - #searchCommissionSujetsExistant
-   - #selectedCommissionSujetsExistant
-   - #commissionSujetsSuggestions
-   - #csNomFr, #csPrenomFr, #csNomAr, #csPrenomAr, #csGrade
-   - #sexeToggleCommissionSujets, #sexeCommissionSujets
-   - #universiteCommission
-   - #btnOpenModalCommissionSujets
-   - #commissionSujetsBody
+
    ========================================================= */
 
     let commissionSujetsMembers = [];
@@ -3189,6 +3180,23 @@ const username = `${nomFr}.${prenomFr}`.replace(/\s+/g, "").toLowerCase();
     /* =========================================================
        HELPERS MEMBRES PARTAGÉS
        ========================================================= */
+
+    function saveCommissionSujetsToLocalStorage() {
+    localStorage.setItem(
+        "dg-membreComitSujet",
+        JSON.stringify(commissionSujetsMembers || [])
+    );
+}
+
+function loadCommissionSujetsFromLocalStorage() {
+    try {
+        const raw = localStorage.getItem("dg-membreComitSujet");
+        commissionSujetsMembers = raw ? JSON.parse(raw) : [];
+    } catch (err) {
+        console.error("Erreur lecture localStorage dg-membreComitSujet :", err);
+        commissionSujetsMembers = [];
+    }
+}
     async function loadMembresForCommissionSujetsModal() {
         try {
             const data = await fetchJson(`${API_BASE}/membres`, {
@@ -3514,7 +3522,7 @@ const username = `${nomFr}.${prenomFr}`.replace(/\s+/g, "").toLowerCase();
                     sexe,
                     universite,
                 });
-
+                saveCommissionSujetsToLocalStorage();
                 renderCommissionSujets();
                 updateCommissionSujetsSuggestions();
                 closeModal(modalCommissionSujets);
@@ -3566,7 +3574,7 @@ const username = `${nomFr}.${prenomFr}`.replace(/\s+/g, "").toLowerCase();
             });
         });
     }
-
+    loadCommissionSujetsFromLocalStorage();
     renderCommissionSujets();
 
 
@@ -4065,6 +4073,8 @@ const username = `${nomFr}.${prenomFr}`.replace(/\s+/g, "").toLowerCase();
                 return;
             }
 
+            localStorage.removeIte("dg-membreComitSujet");
+
             const ARtextArea = document.getElementById("infosTexteAr");
             const ARtext = ARtextArea ? ARtextArea.value.trim() : "";
 
@@ -4223,6 +4233,191 @@ const username = `${nomFr}.${prenomFr}`.replace(/\s+/g, "").toLowerCase();
 
             }
         });
+    }
+
+
+    const btnPrintSurveillancesMembers = document.getElementById("btnPrintSurveillancesMembers");
+
+    if (btnPrintSurveillancesMembers && pvPrintArea) {
+        btnPrintSurveillancesMembers.addEventListener("click", async () => {
+
+
+            if (!surveillanceMembers || surveillanceMembers.length === 0) {
+                showToast("لا يوجد اعضاء للطباعة.", "warning");
+                return;
+            }
+
+            const ARtextArea = document.getElementById("infosTexteAr");
+            const ARtext = ARtextArea ? ARtextArea.value.trim() : "";
+
+            pvPrintArea.innerHTML = "";
+
+            const sheet = document.createElement("div");
+            sheet.className = "pv-sheet";
+            sheet.style.direction = "rtl";
+            sheet.style.fontFamily = "'Cairo','Tajawal','Times New Roman',serif";
+            sheet.style.fontSize = "11pt";
+            sheet.style.lineHeight = "1.9";
+
+            const title = document.createElement("h3");
+            const faculteAR = JSON.parse(localStorage.getItem("dg-faculte") || "null");
+            const faculteARar = faculteAR?.faculte?.nomFaculte || "";
+            const num = localStorage.getItem("dg-numeroConcours");
+            title.textContent =
+                `الجزائرية الديمقراطية الشعبية\nوزارة التعليم العالي والبحث العلمي\nجامعة العلوم والتكنولوجيا محمد بوضياف\n${faculteARar}\n${num}`;
+            title.style.textAlign = "center";
+            title.style.margin = "10px 0 14px";
+            title.style.fontSize = "11px";
+            title.style.fontWeight = "700";
+            sheet.appendChild(title);
+
+            const title2 = document.createElement("h3");
+            title2.textContent = "إنشاء لجنة التشفير على مسابقة الدكتوراه";
+            title2.style.textAlign = "center";
+            title2.style.margin = "10px 0 14px";
+            title2.style.fontSize = "16px";
+            title2.style.fontWeight = "700";
+            sheet.appendChild(title2);
+
+            if (ARtext) {
+                const p = document.createElement("p");
+                p.style.whiteSpace = "pre-wrap";
+                p.style.marginBottom = "20px";
+                p.style.textAlign = "justify";
+                p.textContent = ARtext;
+                sheet.appendChild(p);
+            }
+
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            const previousYear = currentYear - 1;
+            const anneeUniversitaire = `${previousYear}-${currentYear}`;
+
+            const p1 = document.createElement("p");
+            p1.style.whiteSpace = "pre-wrap";
+            p1.style.marginBottom = "20px";
+            p1.style.textAlign = "justify";
+            p1.style.direction = "rtl";
+            p1.style.fontFamily = "Cairo, 'Tajawal', sans-serif";
+
+            p1.textContent =
+                `المادة الأولى: تُنشأ لجنة التشفير على مسابقة الدكتوراه   للسنة الجامعية ${anneeUniversitaire}.\n` +
+                `المادة الثانية: تُشكل هذه اللجنة من السادة الأساتذة التالية أسماؤهم:`;
+            sheet.appendChild(p1);
+
+            const table = document.createElement("table");
+            table.style.width = "100%";
+            table.style.borderCollapse = "collapse";
+            table.style.marginTop = "4px";
+            table.style.border = "1px solid #000";
+
+            function makeTd(text) {
+                const td = document.createElement("td");
+                td.textContent = text;
+                td.style.border = "1px solid #000";
+                td.style.padding = "6px 6px";
+                td.style.textAlign = "right";
+                return td;
+            }
+
+            const tbody = document.createElement("tbody");
+            let rowIndex = 1;
+
+            function addMemberRow(member) {
+                const tr = document.createElement("tr");
+
+                const nomAr =
+                    `${member.nomAr || ""} ${member.prenomAr || ""}`.trim() ||
+                    `${member.nomFr || ""} ${member.prenomFr || ""}`.trim();
+
+                let  fonction = "";
+                const institution = member.survUnive;
+                const  salle  = member.salle || "";
+                if (member.salle === "SURVEILLANT") {
+                    if (member.sexe === "FEMME") {
+                        institution = "حارسة";
+                    } else {
+                        institution = "حارس";
+                    }
+                }
+                else  {
+                  
+                        institution = " مسؤول القاعة";
+                    }
+                    const tdNum = makeTd(String(rowIndex));
+                    tdNum.style.textAlign = "center";
+
+
+                    tr.appendChild(tdNum);
+                    tr.appendChild(makeTd(nomAr));
+                    tr.appendChild(makeTd(institution));
+                    tr.appendChild(makeTd(fonction));
+                    tr.appendChild(makeTd(salle));
+
+                    tbody.appendChild(tr);
+                    rowIndex++;
+                }
+
+                surveillanceMembers.forEach(addMemberRow);
+
+                table.appendChild(tbody);
+                sheet.appendChild(table);
+
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, "0");
+                const dd = String(today.getDate()).padStart(2, "0");
+
+                const footer = document.createElement("p");
+                footer.textContent = `حرّر في: ${yyyy}/${mm}/${dd}`;
+                footer.style.marginTop = "32px";
+                footer.style.textAlign = "left";
+                sheet.appendChild(footer);
+
+                const footer2 = document.createElement("p");
+                footer2.textContent = "عميد الكلية";
+                footer2.style.marginTop = "50px";
+                footer2.style.textAlign = "left";
+                sheet.appendChild(footer2);
+
+                pvPrintArea.appendChild(sheet);
+
+                try {
+                    const pvText = sheet.innerText;
+                    const hash = await sha256Base64(pvText);
+
+                    const userJson = localStorage.getItem("dg-user");
+                    if (!userJson) return;
+
+                    const user = JSON.parse(userJson);
+                    const idMembre = user.idMembre;
+                    if (!idMembre) return;
+
+                    const membre = await fetchJson(`${API_BASE}/membres/${idMembre}`);
+                    const nomFr = membre.nomMembre || "";
+                    const prenomFr = membre.prenomMembre || "";
+
+                    addSignatureAndQR(sheet, {
+                        signerName: `${nomFr} ${prenomFr}`,
+                        verifyTextOrUrl: `HashSHA256: ${hash}`,
+                    });
+
+                    await new Promise((r) => setTimeout(r, 300));
+                    window.print();
+                    showToast("Impression terminée.", "success");
+                } catch (e) {
+                    console.error(e);
+                    showToast("❌ " + e.message, "danger");
+                } finally {
+                    localStorage.removeItem("dg-selected-spec");
+                    if (selectSpecialite) {
+                        selectSpecialite.selectedIndex = 0; // revient sur la 1ère option
+                        // ou : selectSpecialite.value = "";
+                        selectSpecialite.dispatchEvent(new Event("change")); // applique ton onChange (désactive l'input AR)
+                    }
+                    pvPrintArea.innerHTML = "";
+
+                }
+            });
     }
 
 
